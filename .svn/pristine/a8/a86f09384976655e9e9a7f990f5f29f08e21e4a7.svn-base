@@ -1,0 +1,369 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/plantillas_ec1/templateMantenimiento.xhtml">
+
+	<ui:define name="title">Producto Liq</ui:define>
+
+	<ui:define name="head">
+
+		<style type="text/css">
+td.foo {
+	background-color: yellow;
+}
+
+td.foo1 {
+	background-color: green;
+}
+
+.oldAmarillo {
+	background-color: #FFE001 !important;
+	background-image: none !important;
+	color: #000000 !important;
+}
+
+.rotate {
+	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=0.083);
+	/* IE6,IE7 */
+	-ms-filter:
+		"progid:DXImageTransform.Microsoft.BasicImage(rotation=0.083)";
+	/* IE8 */
+	-moz-transform: rotate(-90.0deg); /* FF3.5+ */
+	-ms-transform: rotate(-90.0deg); /* IE9+ */
+	-o-transform: rotate(-90.0deg); /* Opera 10.5 */
+	-webkit-transform: rotate(-90.0deg); /* Safari 3.1+, Chrome */
+	transform: rotate(-90.0deg); /* Standard */
+}
+
+.ui-datatable-frozenlayout-left td
+    {
+    height: 24px;
+    }
+
+.ui-datatable-frozenlayout-right td
+    {
+    height: 24px;
+    }
+}
+</style>
+	</ui:define>
+	<ui:define name="content">
+		<p:growl id="growl" showDetail="true" sticky="true" autoUpdate="true" />
+		<h:form id="frmClouster">
+			<p:growl id="growl" showDetail="true" sticky="true" autoUpdate="true" />
+
+			<p:panelGrid>
+				<p:row>
+					<p:column>
+						<p:dataTable id="dtClouster" var="var" scrollable="true"
+							scrollHeight="150" frozenRows="2" scrollWidth="30%"
+							frozenColumns="2" style="font-family:Verdana; font-size: 10px;"
+							value="#{controladorProductoLiquiTbl.lstClusterProducto}"
+							selectionMode="single"
+							selection="#{controladorProductoLiquiTbl.objClusterProductoSelected}"
+							rowKey="#{var.cd_cls_prod_liq}">
+
+							<p:ajax event="rowSelect"
+								listener="#{controladorProductoLiquiTbl.onRowSelect}"
+								process="@this,:frmClouster:dtDetalleProLiq"
+								update=":frmClouster:growl" />
+							<p:ajax event="rowUnselect"
+								listener="#{controladorProductoLiquiTbl.onRowUnselect}"
+								update=":frmClouster:growl" />
+
+							<p:column
+								headerText="Codigo Modelo Producto"
+								style="width:150px" >
+								<h:outputText value="#{var.cod_modelo}" />
+							</p:column>
+							<p:column headerText="Descripción Modelo" style="width:200px">
+								<h:outputText value="#{var.descrip_modelo}" />
+							</p:column>
+							<p:column visible="#{controladorProductoLiquiTbl.flagdb1}"
+								style="width:60px">
+								<h:outputText value="#{var.cluster_1_bd}" />
+							</p:column>
+							<p:column visible="#{controladorProductoLiquiTbl.flagdb2}"
+								style="width:60px">
+								<h:outputText value="#{var.cluster_2_bd}" />
+							</p:column>
+							<p:column visible="#{controladorProductoLiquiTbl.flagou1}"
+								style="width:60px">
+								<h:outputText value="#{var.cluster_1_ou}" />
+							</p:column>
+							<p:column visible="#{controladorProductoLiquiTbl.flagou2}"
+								style="width:60px">
+								<h:outputText value="#{var.cluster_2_ou}" />
+							</p:column>
+							<p:column headerText="Total Stock Bodega" style="width:100px"
+								visible="#{controladorProductoLiquiTbl.flagdb3}">
+								<h:outputText value="#{var.total_stock_bo}" />
+							</p:column>
+							<p:column headerText="Total Stock Outlet" style="width:100px"
+								visible="#{controladorProductoLiquiTbl.flagou3}">
+								<h:outputText value="#{var.total_stock_ou}" />
+							</p:column>
+							<p:column headerText="Total" style="width:25px">
+								<h:outputText value="#{var.total}" />
+							</p:column>
+							<p:column headerText="Stock Centro Liquidador" style="width:100px">
+								<h:outputText value="#{var.stock_centro_liquidador}" />
+							</p:column>
+							<p:column headerText="Precio Original MT" style="width:100px">
+								<h:outputText value="#{var.precio_original_mt}" />
+							</p:column>
+							<p:column headerText="Precio Promoción MT" style="width:100px">
+								<h:outputText value="#{var.precio_promo_mt}" />
+							</p:column>
+							<p:column headerText="Descuento MT" style="width:60px">
+								<h:outputText value="#{var.descuento_mt}" />
+							</p:column>
+							<p:column headerText="Precio Original BD" style="width:100px"
+								visible="#{controladorProductoLiquiTbl.flagdb4}">
+								<h:outputText value="#{var.precio_original_bd}" />
+							</p:column>
+							<p:column headerText="Precio Promoción BD" style="width:100px"
+								visible="#{controladorProductoLiquiTbl.flagdb5}">
+								<h:outputText value="#{var.precio_promo_bd}" />
+							</p:column>
+							<p:column headerText="Descuento BD" style="width:75px"
+								visible="#{controladorProductoLiquiTbl.flagdb6}">
+								<h:outputText value="#{var.descuento_bd}" />
+							</p:column>
+							<p:column headerText="Precio Original OU" style="width:100px"
+								visible="#{controladorProductoLiquiTbl.flagou4}">
+								<h:outputText value="#{var.precio_original_ou}" />
+							</p:column>
+							<p:column headerText="Precio Promoción OU" style="width:100px"
+								visible="#{controladorProductoLiquiTbl.flagou5}">
+								<h:outputText value="#{var.precio_promo_ou}" />
+							</p:column>
+							<p:column headerText="Descuento OU" style="width:50px"
+								visible="#{controladorProductoLiquiTbl.flagou6}">
+								<h:outputText value="#{var.descuento_ou}" />
+							</p:column>
+							<p:column headerText="Stock Cluster1 MT" style="width:100px">
+								<h:outputText value="#{var.stock_cluster_1_mt}" />
+							</p:column>
+							<p:column headerText="Stock Cluster2 MT" style="width:100px">
+								<h:outputText value="#{var.stock_cluster_2_mt}" />
+							</p:column>
+							<p:column headerText="Línea" style="width:35px">
+								<h:outputText value="#{var.linea}" />
+							</p:column>
+							<p:column headerText="Descripción Marca" style="width:100px">
+								<h:outputText value="#{var.descrip_marca}" />
+							</p:column>
+							<p:column headerText="Genero" style="width:35px">
+								<h:outputText value="#{var.genero}" />
+							</p:column>
+							<p:column headerText="Descripción Actividad" style="width:180px">
+								<h:outputText value="#{var.descrip_actividad}" />
+							</p:column>
+						</p:dataTable>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="hight:50px">
+						<pe:sheet id="dtDetalleProLiq" var="var"
+							value="#{controladorProductoLiquiTbl.lstDetalleProductoLiqui}"
+							fixedCols="1" fixedRows="1" showRowHeaders="true"
+							rowKey="#{var.cd_det_prod_liq}" resizableCols="true"
+							resizableRows="true" readOnly="false">
+
+							<pe:sheetcolumn style="width:75px;"
+								value="#{var.cod_sap_generico}" readOnly="true" />
+
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_1}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_2}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_3}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_4}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_5}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_6}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_7}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_8}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_9}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_10}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_11}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_12}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_13}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_14}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_15}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_16}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_17}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_18}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_19}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_20}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_21}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_22}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_23}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_24}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_25}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_26}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_27}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_28}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_29}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_30}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_31}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_32}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_33}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_34}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_35}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_36}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_37}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_38}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_39}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_40}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_41}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_42}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_43}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_44}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_45}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_46}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_47}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_48}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_49}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_50}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_51}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_52}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_53}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_54}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_55}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_56}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_57}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_58}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_59}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_60}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_61}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_62}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_63}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_64}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_65}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_66}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_67}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_68}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_69}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_70}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_71}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_72}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_73}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_74}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_75}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_76}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_77}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_78}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_79}"
+								readOnly="true" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.centro_80}"
+								readOnly="true" />
+
+							<pe:sheetcolumn style="width:75px;" value="#{var.talla}"
+								readOnly="true" headerText="Talla" />
+							<pe:sheetcolumn style="width:75px;" value="#{var.ean}"
+								headerText="Ean" readOnly="true" />
+							<pe:sheetcolumn style="width:75px;"
+								headerText="Stock Cluster 1 MT"
+								value="#{var.stock_cluster_1_mt}" readOnly="true" />
+							<pe:sheetcolumn style="width:75px;"
+								headerText="Stock Cluster 2 MT"
+								value="#{var.stock_cluster_2_mt}" readOnly="true" />
+							<pe:sheetcolumn style="width:75px;"
+								headerText="Stock Cluster 1 BD"
+								value="#{var.stock_cluster_1_bd}" readOnly="true" />
+							<pe:sheetcolumn style="width:75px;"
+								headerText="Stock Cluster 2 BD"
+								value="#{var.stock_cluster_2_bd}" readOnly="true" />
+							<pe:sheetcolumn style="width:75px;"
+								headerText="Stock Cluster 1 OU"
+								value="#{var.stock_cluster_1_ou}" readOnly="true" />
+							<pe:sheetcolumn style="width:75px;"
+								headerText="Stock Cluster 2 OU"
+								value="#{var.stock_cluster_2_ou}" readOnly="true" />
+						</pe:sheet>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</h:form>
+	</ui:define>
+</ui:composition>

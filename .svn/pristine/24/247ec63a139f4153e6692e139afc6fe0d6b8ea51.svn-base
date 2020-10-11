@@ -1,0 +1,94 @@
+package mac.controladores;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+
+import org.apache.taglibs.standard.lang.jstl.BooleanLiteral;
+import org.primefaces.PrimeFaces;
+
+import mac.servicios.ServicioLiquidacionesTienda;
+import mac.servicios.ServicioVerLiquidaciones;
+import mac.entidades.LiquidacionesTienda;
+
+
+@ManagedBean
+@ViewScoped	
+public class ControladorVerLiquidaciones {
+	@EJB
+	private ServicioVerLiquidaciones srvLiquiUsuario;
+	private String usuario;
+	private String codigoUsuario;
+	private List<LiquidacionesTienda> lstLiquidaciones;
+	private List<LiquidacionesTienda> lstLiquiSelected;
+	private Integer liquiSelected;
+	
+	public ControladorVerLiquidaciones(){
+		usuario=FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("Usuario").toString();
+		codigoUsuario ="";
+		lstLiquidaciones = new ArrayList<LiquidacionesTienda>();
+		liquiSelected =0;
+		lstLiquiSelected = new ArrayList<LiquidacionesTienda>();
+		
+	}
+	
+	@PostConstruct
+	public void inicia(){
+		System.out.println("usuario: " + usuario);
+		codigoUsuario= srvLiquiUsuario.consultaCodUser(usuario);
+		System.out.println("Codigo usuario: " + codigoUsuario);
+		lstLiquidaciones=srvLiquiUsuario.recuperaNumLiqui(codigoUsuario);
+	}
+	
+	public void recuperaLiquidacion(){
+		System.out.println("Liquidacion número: " + getLiquiSelected());
+		lstLiquiSelected=srvLiquiUsuario.recuperaLiquidaciones(codigoUsuario, getLiquiSelected());
+	}
+
+	public String getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
+	}
+
+	public String getCodigoUsuario() {
+		return codigoUsuario;
+	}
+
+	public void setCodigoUsuario(String codigoUsuario) {
+		this.codigoUsuario = codigoUsuario;
+	}
+
+	public List<LiquidacionesTienda> getLstLiquidaciones() {
+		return lstLiquidaciones;
+	}
+
+	public void setLstLiquidaciones(List<LiquidacionesTienda> lstLiquidaciones) {
+		this.lstLiquidaciones = lstLiquidaciones;
+	}
+
+	public List<LiquidacionesTienda> getLstLiquiSelected() {
+		return lstLiquiSelected;
+	}
+
+	public void setLstLiquiSelected(List<LiquidacionesTienda> lstLiquiSelected) {
+		this.lstLiquiSelected = lstLiquiSelected;
+	}
+
+	public Integer getLiquiSelected() {
+		return liquiSelected;
+	}
+
+	public void setLiquiSelected(Integer liquiSelected) {
+		this.liquiSelected = liquiSelected;
+	}
+
+	
+}

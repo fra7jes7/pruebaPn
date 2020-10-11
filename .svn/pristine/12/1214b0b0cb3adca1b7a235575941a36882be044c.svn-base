@@ -1,0 +1,69 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/plantillas_ec1/template.xhtml">
+
+	<ui:define name="title">Liquidación</ui:define>
+
+	<ui:define name="head">
+		<style type="text/css">
+.nba-grid {
+	width: 100%;
+	table-layout: fixed;
+	word-wrap: break-word;
+	margin-top: 15px;
+}
+
+.ui-scrollpanel-content p:first-child {
+	margin: 0;
+}
+</style>
+	</ui:define>
+
+	<ui:define name="content">
+
+		<h:form id="frmModLiq">
+			<p:growl id="growl" showDetail="true" sticky="true" autoUpdate="true" />
+
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+
+						<h:form>
+							<p:dataTable var="car"
+								value="#{controladorModelosAliquidar.lstModelosAliquidar}">
+								<f:facet name="header">
+            Expand rows to see detailed information
+        </f:facet>
+								<p:column style="width:16px">
+									<p:rowToggler />
+								</p:column>
+								<p:column headerText="Id">
+									<h:outputText value="#{car.cod_modelo}" />
+								</p:column>
+
+								<p:rowExpansion>
+									<p:panelGrid columns="2" columnClasses="label,value">
+										<p:dataTable var="var"
+											value="#{controladorModelosAliquidar.lstModelosAliquidar}">
+											<p:column headerText="Id">
+												<h:outputText value="#{var.cod_modelo}" />
+											</p:column>
+
+										</p:dataTable>
+									</p:panelGrid>
+								</p:rowExpansion>
+							</p:dataTable>
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>
+

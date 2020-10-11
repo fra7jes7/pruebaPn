@@ -1,0 +1,1163 @@
+package mac.controladores;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+
+import org.primefaces.PrimeFaces;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
+
+import mac.entidades.ClusterProducto;
+import mac.entidades.DetalleProductoLiqui;
+import mac.servicios.ServicioProductoTbl;
+
+@ViewScoped
+@ManagedBean
+public class ControladorProductoLiquiTbl implements Serializable {
+
+	@EJB
+	ServicioProductoTbl srvServicioProductoTbl;
+
+	private List<ClusterProducto> lstClusterProducto;
+	private List<ClusterProducto> lstClusterfilter;
+	private List<DetalleProductoLiqui> lstDetalleProductoLiqui;
+	private ClusterProducto objClusterProductoSelected;
+	
+	private Boolean flag1;
+	private Boolean flag2;
+	private Boolean flag3;
+	private Boolean flag4;
+	private Boolean flag5;
+	private Boolean flag6;
+	private Boolean flag7;
+	private Boolean flag8;
+	private Boolean flag9;
+	private Boolean flag10;
+	private Boolean flag11;
+	private Boolean flag12;
+	private Boolean flag13;
+	private Boolean flag14;
+	private Boolean flag15;
+	private Boolean flag16;
+	private Boolean flag17;
+	private Boolean flag18;
+	private Boolean flag19;
+	private Boolean flag20;
+	private Boolean flag21;
+	private Boolean flag22;
+	private Boolean flag23;
+	private Boolean flag24;
+	private Boolean flag25;
+	private Boolean flag26;
+	private Boolean flag27;
+	private Boolean flag28;
+	private Boolean flag29;
+	private Boolean flag30;
+	private Boolean flag31;
+	private Boolean flag32;
+	private Boolean flag33;
+	private Boolean flag34;
+	private Boolean flag35;
+	private Boolean flag36;
+	private Boolean flag37;
+	private Boolean flag38;
+	private Boolean flag39;
+	private Boolean flag40;
+	private Boolean flag41;
+	private Boolean flag42;
+	private Boolean flag43;
+	private Boolean flag44;
+	private Boolean flag45;
+	private Boolean flag46;
+	private Boolean flag47;
+	private Boolean flag48;
+	private Boolean flag49;
+	private Boolean flag50;
+	private Boolean flag51;
+	private Boolean flag52;
+	private Boolean flag53;
+	private Boolean flag54;
+	private Boolean flag55;
+	private Boolean flag56;
+	private Boolean flag57;
+	private Boolean flag58;
+	private Boolean flag59;
+	private Boolean flag60;
+	private Boolean flag61;
+	private Boolean flag62;
+	private Boolean flag63;
+	private Boolean flag64;
+	private Boolean flag65;
+	private Boolean flag66;
+	private Boolean flag67;
+	private Boolean flag68;
+	private Boolean flag69;
+	private Boolean flag70;
+	private Boolean flag71;
+	private Boolean flag72;
+	private Boolean flag73;
+	private Boolean flag74;
+	private Boolean flag75;
+	private Boolean flag76;
+	private Boolean flag77;
+	private Boolean flag78;
+	private Boolean flag79;
+	private Boolean flag80;
+	
+	
+	public ControladorProductoLiquiTbl() {
+		lstClusterProducto = new ArrayList<ClusterProducto>();
+		objClusterProductoSelected = new ClusterProducto();
+		lstClusterfilter = new ArrayList<ClusterProducto>();
+		lstDetalleProductoLiqui = new ArrayList<DetalleProductoLiqui>();
+		encerar();
+	}
+	
+	public void encerar (){
+		flag1 = false;
+		flag2 = false;
+		flag3 = false;
+		flag4 = false;
+		flag5 = false;
+		flag6 = false;
+		flag7 = false;
+		flag8 = false;
+		flag9 = false;
+		flag10 = false;
+		flag11 = false;
+		flag12 = false;
+		flag13 = false;
+		flag14 = false;
+		flag15 = false;
+		flag16 = false;
+		flag17 = false;
+		flag18 = false;
+		flag19 = false;
+		flag20 = false;
+		flag21 = false;
+		flag22 = false;
+		flag23 = false;
+		flag24 = false;
+		flag25 = false;
+		flag26 = false;
+		flag27 = false;
+		flag28 = false;
+		flag29 = false;
+		flag30 = false;
+		flag31 = false;
+		flag32 = false;
+		flag33 = false;
+		flag34 = false;
+		flag35 = false;
+		flag36 = false;
+		flag37 = false;
+		flag38 = false;
+		flag39 = false;
+		flag40 = false;
+		flag41 = false;
+		flag42 = false;
+		flag43 = false;
+		flag44 = false;
+		flag45 = false;
+		flag46 = false;
+		flag47 = false;
+		flag48 = false;
+		flag49 = false;
+		flag50 = false;
+		flag51 = false;
+		flag52 = false;
+		flag53 = false;
+		flag54 = false;
+		flag55 = false;
+		flag56 = false;
+		flag57 = false;
+		flag58 = false;
+		flag59 = false;
+		flag60 = false;
+		flag61 = false;
+		flag62 = false;
+		flag63 = false;
+		flag64 = false;
+		flag65 = false;
+		flag66 = false;
+		flag67 = false;
+		flag68 = false;
+		flag69 = false;
+		flag70 = false;
+		flag71 = false;
+		flag72 = false;
+		flag73 = false;
+		flag74 = false;
+		flag75 = false;
+		flag76 = false;
+		flag77 = false;
+		flag78 = false;
+		flag79 = false;
+		flag80 = false;
+	}
+
+	@PostConstruct
+	public void constructorInicial() {
+		lstClusterProducto = srvServicioProductoTbl.recuperarCluster();
+	}
+
+	public void onRowSelect(SelectEvent event) {
+		System.out.println("onRowSelect");
+		// FacesMessage msg = new FacesMessage("Car Selected",
+		// ((ClusterProducto) event.getObject()).getCod_modelo());
+		// FacesContext.getCurrentInstance().addMessage(null, msg);
+		Integer cdDetalle = Integer.valueOf(((ClusterProducto) event.getObject()).getCd_cls_prod_liq());
+		lstDetalleProductoLiqui = srvServicioProductoTbl.recuperarDetalleProductoLiqui(cdDetalle);
+		//activarColumnas();
+		System.out.println("tam:" + lstDetalleProductoLiqui.size());
+		PrimeFaces.current().ajax().update(":frmClouster:dtDetalleProLiq");
+		
+	}
+
+	public void onRowUnselect(UnselectEvent event) {
+		System.out.println("onRowUnselect");
+		FacesMessage msg = new FacesMessage("Car Unselected", ((ClusterProducto) event.getObject()).getCod_modelo());
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+	}
+
+	
+	public void consultaTablaDeta(ClusterProducto obj) {
+		System.out.println("consultaTablaDeta:" + obj.getCd_cls_prod_liq());
+	}
+
+	public void activarColumnas() {
+		encerar();
+		int cont = 0;
+		for (DetalleProductoLiqui objDetalleLiqui : lstDetalleProductoLiqui) {
+			if (cont > 0) {
+				if (objDetalleLiqui.getCentro_1() != null) {
+					flag1 = true;
+				}
+				if (objDetalleLiqui.getCentro_2() != null) {
+					flag2 = true;
+				}
+				if (objDetalleLiqui.getCentro_3() != null) {
+					flag3 = true;
+				}
+				if (objDetalleLiqui.getCentro_4() != null) {
+					flag4 = true;
+				}
+				if (objDetalleLiqui.getCentro_5() != null) {
+					flag5 = true;
+				}
+				if (objDetalleLiqui.getCentro_6() != null) {
+					flag6 = true;
+				}
+				if (objDetalleLiqui.getCentro_7() != null) {
+					flag7 = true;
+				}
+				if (objDetalleLiqui.getCentro_8() != null) {
+					flag8 = true;
+				}
+				if (objDetalleLiqui.getCentro_9() != null) {
+					flag9 = true;
+				}
+				if (objDetalleLiqui.getCentro_10() != null) {
+					flag10 = true;
+				}
+				if (objDetalleLiqui.getCentro_11() != null) {
+					flag11 = true;
+				}
+				if (objDetalleLiqui.getCentro_12() != null) {
+					flag12 = true;
+				}
+				if (objDetalleLiqui.getCentro_13() != null) {
+					flag13 = true;
+				}
+				if (objDetalleLiqui.getCentro_14() != null) {
+					flag14 = true;
+				}
+				if (objDetalleLiqui.getCentro_15() != null) {
+					flag15 = true;
+				}
+				if (objDetalleLiqui.getCentro_16() != null) {
+					flag16 = true;
+				}
+				if (objDetalleLiqui.getCentro_17() != null) {
+					flag17 = true;
+				}
+				if (objDetalleLiqui.getCentro_18() != null) {
+					flag18 = true;
+				}
+				if (objDetalleLiqui.getCentro_19() != null) {
+					flag19 = true;
+				}
+				if (objDetalleLiqui.getCentro_20() != null) {
+					flag20 = true;
+				}
+				if (objDetalleLiqui.getCentro_21() != null) {
+					flag21 = true;
+				}
+				if (objDetalleLiqui.getCentro_22() != null) {
+					flag22 = true;
+				}
+				if (objDetalleLiqui.getCentro_23() != null) {
+					flag23 = true;
+				}
+				if (objDetalleLiqui.getCentro_24() != null) {
+					flag24 = true;
+				}
+				if (objDetalleLiqui.getCentro_25() != null) {
+					flag25 = true;
+				}
+				if (objDetalleLiqui.getCentro_26() != null) {
+					flag26 = true;
+				}
+				if (objDetalleLiqui.getCentro_27() != null) {
+					flag27 = true;
+				}
+				if (objDetalleLiqui.getCentro_28() != null) {
+					flag28 = true;
+				}
+				if (objDetalleLiqui.getCentro_29() != null) {
+					flag29 = true;
+				}
+				if (objDetalleLiqui.getCentro_30() != null) {
+					flag30 = true;
+				}
+				if (objDetalleLiqui.getCentro_31() != null) {
+					flag31 = true;
+				}
+				if (objDetalleLiqui.getCentro_32() != null) {
+					flag32 = true;
+				}
+				if (objDetalleLiqui.getCentro_33() != null) {
+					flag33 = true;
+				}
+				if (objDetalleLiqui.getCentro_34() != null) {
+					flag34 = true;
+				}
+				if (objDetalleLiqui.getCentro_35() != null) {
+					flag35 = true;
+				}
+				if (objDetalleLiqui.getCentro_36() != null) {
+					flag36 = true;
+				}
+				if (objDetalleLiqui.getCentro_37() != null) {
+					flag37 = true;
+				}
+				if (objDetalleLiqui.getCentro_38() != null) {
+					flag38 = true;
+				}
+				if (objDetalleLiqui.getCentro_39() != null) {
+					flag39 = true;
+				}
+				if (objDetalleLiqui.getCentro_40() != null) {
+					flag40 = true;
+				}
+				if (objDetalleLiqui.getCentro_41() != null) {
+					flag41 = true;
+				}
+				if (objDetalleLiqui.getCentro_42() != null) {
+					flag42 = true;
+				}
+				if (objDetalleLiqui.getCentro_43() != null) {
+					flag43 = true;
+				}
+				if (objDetalleLiqui.getCentro_44() != null) {
+					flag44 = true;
+				}
+				if (objDetalleLiqui.getCentro_45() != null) {
+					flag45 = true;
+				}
+				if (objDetalleLiqui.getCentro_46() != null) {
+					flag46 = true;
+				}
+				if (objDetalleLiqui.getCentro_47() != null) {
+					flag47 = true;
+				}
+				if (objDetalleLiqui.getCentro_48() != null) {
+					flag48 = true;
+				}
+				if (objDetalleLiqui.getCentro_49() != null) {
+					flag49 = true;
+				}
+				if (objDetalleLiqui.getCentro_50() != null) {
+					flag50 = true;
+				}
+				if (objDetalleLiqui.getCentro_51() != null) {
+					flag51 = true;
+				}
+				if (objDetalleLiqui.getCentro_52() != null) {
+					flag52 = true;
+				}
+				if (objDetalleLiqui.getCentro_53() != null) {
+					flag53 = true;
+				}
+				if (objDetalleLiqui.getCentro_54() != null) {
+					flag54 = true;
+				}
+				if (objDetalleLiqui.getCentro_55() != null) {
+					flag55 = true;
+				}
+				if (objDetalleLiqui.getCentro_56() != null) {
+					flag56 = true;
+				}
+				if (objDetalleLiqui.getCentro_57() != null) {
+					flag57 = true;
+				}
+				if (objDetalleLiqui.getCentro_58() != null) {
+					flag58 = true;
+				}
+				if (objDetalleLiqui.getCentro_59() != null) {
+					flag59 = true;
+				}
+				if (objDetalleLiqui.getCentro_60() != null) {
+					flag60 = true;
+				}
+				if (objDetalleLiqui.getCentro_61() != null) {
+					flag61 = true;
+				}
+				if (objDetalleLiqui.getCentro_62() != null) {
+					flag62 = true;
+				}
+				if (objDetalleLiqui.getCentro_63() != null) {
+					flag63 = true;
+				}
+				if (objDetalleLiqui.getCentro_64() != null) {
+					flag64 = true;
+				}
+				if (objDetalleLiqui.getCentro_65() != null) {
+					flag65 = true;
+				}
+				if (objDetalleLiqui.getCentro_66() != null) {
+					flag66 = true;
+				}
+				if (objDetalleLiqui.getCentro_67() != null) {
+					flag67 = true;
+				}
+				if (objDetalleLiqui.getCentro_68() != null) {
+					flag68 = true;
+				}
+				if (objDetalleLiqui.getCentro_69() != null) {
+					flag69 = true;
+				}
+				if (objDetalleLiqui.getCentro_70() != null) {
+					flag70 = true;
+				}
+				if (objDetalleLiqui.getCentro_71() != null) {
+					flag71 = true;
+				}
+				if (objDetalleLiqui.getCentro_72() != null) {
+					flag72 = true;
+				}
+				if (objDetalleLiqui.getCentro_73() != null) {
+					flag73 = true;
+				}
+				if (objDetalleLiqui.getCentro_74() != null) {
+					flag74 = true;
+				}
+				if (objDetalleLiqui.getCentro_75() != null) {
+					flag75 = true;
+				}
+				if (objDetalleLiqui.getCentro_76() != null) {
+					flag76 = true;
+				}
+				if (objDetalleLiqui.getCentro_77() != null) {
+					flag77 = true;
+				}
+				if (objDetalleLiqui.getCentro_78() != null) {
+					flag78 = true;
+				}
+				if (objDetalleLiqui.getCentro_79() != null) {
+					flag79 = true;
+				}
+				if (objDetalleLiqui.getCentro_80() != null) {
+					flag80 = true;
+				}
+			}
+
+			cont++;
+		}
+
+	}
+
+	public List<ClusterProducto> getLstClusterProducto() {
+		return lstClusterProducto;
+	}
+
+	public void setLstClusterProducto(List<ClusterProducto> lstClusterProducto) {
+		this.lstClusterProducto = lstClusterProducto;
+	}
+
+	public ClusterProducto getObjClusterProductoSelected() {
+		return objClusterProductoSelected;
+	}
+
+	public void setObjClusterProductoSelected(ClusterProducto objClusterProductoSelected) {
+		this.objClusterProductoSelected = objClusterProductoSelected;
+	}
+
+	public List<DetalleProductoLiqui> getLstDetalleProductoLiqui() {
+		return lstDetalleProductoLiqui;
+	}
+
+	public void setLstDetalleProductoLiqui(List<DetalleProductoLiqui> lstDetalleProductoLiqui) {
+		this.lstDetalleProductoLiqui = lstDetalleProductoLiqui;
+	}
+
+	public List<ClusterProducto> getLstClusterfilter() {
+		return lstClusterfilter;
+	}
+
+	public void setLstClusterfilter(List<ClusterProducto> lstClusterfilter) {
+		this.lstClusterfilter = lstClusterfilter;
+	}
+
+	public Boolean getFlag1() {
+		return flag1;
+	}
+
+	public void setFlag1(Boolean flag1) {
+		this.flag1 = flag1;
+	}
+
+	public Boolean getFlag2() {
+		return flag2;
+	}
+
+	public void setFlag2(Boolean flag2) {
+		this.flag2 = flag2;
+	}
+
+	public Boolean getFlag3() {
+		return flag3;
+	}
+
+	public void setFlag3(Boolean flag3) {
+		this.flag3 = flag3;
+	}
+
+	public Boolean getFlag4() {
+		return flag4;
+	}
+
+	public void setFlag4(Boolean flag4) {
+		this.flag4 = flag4;
+	}
+
+	public Boolean getFlag5() {
+		return flag5;
+	}
+
+	public void setFlag5(Boolean flag5) {
+		this.flag5 = flag5;
+	}
+
+	public Boolean getFlag6() {
+		return flag6;
+	}
+
+	public void setFlag6(Boolean flag6) {
+		this.flag6 = flag6;
+	}
+
+	public Boolean getFlag7() {
+		return flag7;
+	}
+
+	public void setFlag7(Boolean flag7) {
+		this.flag7 = flag7;
+	}
+
+	public Boolean getFlag8() {
+		return flag8;
+	}
+
+	public void setFlag8(Boolean flag8) {
+		this.flag8 = flag8;
+	}
+
+	public Boolean getFlag9() {
+		return flag9;
+	}
+
+	public void setFlag9(Boolean flag9) {
+		this.flag9 = flag9;
+	}
+
+	public Boolean getFlag10() {
+		return flag10;
+	}
+
+	public void setFlag10(Boolean flag10) {
+		this.flag10 = flag10;
+	}
+
+	public Boolean getFlag11() {
+		return flag11;
+	}
+
+	public void setFlag11(Boolean flag11) {
+		this.flag11 = flag11;
+	}
+
+	public Boolean getFlag12() {
+		return flag12;
+	}
+
+	public void setFlag12(Boolean flag12) {
+		this.flag12 = flag12;
+	}
+
+	public Boolean getFlag13() {
+		return flag13;
+	}
+
+	public void setFlag13(Boolean flag13) {
+		this.flag13 = flag13;
+	}
+
+	public Boolean getFlag14() {
+		return flag14;
+	}
+
+	public void setFlag14(Boolean flag14) {
+		this.flag14 = flag14;
+	}
+
+	public Boolean getFlag15() {
+		return flag15;
+	}
+
+	public void setFlag15(Boolean flag15) {
+		this.flag15 = flag15;
+	}
+
+	public Boolean getFlag16() {
+		return flag16;
+	}
+
+	public void setFlag16(Boolean flag16) {
+		this.flag16 = flag16;
+	}
+
+	public Boolean getFlag17() {
+		return flag17;
+	}
+
+	public void setFlag17(Boolean flag17) {
+		this.flag17 = flag17;
+	}
+
+	public Boolean getFlag18() {
+		return flag18;
+	}
+
+	public void setFlag18(Boolean flag18) {
+		this.flag18 = flag18;
+	}
+
+	public Boolean getFlag19() {
+		return flag19;
+	}
+
+	public void setFlag19(Boolean flag19) {
+		this.flag19 = flag19;
+	}
+
+	public Boolean getFlag20() {
+		return flag20;
+	}
+
+	public void setFlag20(Boolean flag20) {
+		this.flag20 = flag20;
+	}
+
+	public Boolean getFlag21() {
+		return flag21;
+	}
+
+	public void setFlag21(Boolean flag21) {
+		this.flag21 = flag21;
+	}
+
+	public Boolean getFlag22() {
+		return flag22;
+	}
+
+	public void setFlag22(Boolean flag22) {
+		this.flag22 = flag22;
+	}
+
+	public Boolean getFlag23() {
+		return flag23;
+	}
+
+	public void setFlag23(Boolean flag23) {
+		this.flag23 = flag23;
+	}
+
+	public Boolean getFlag24() {
+		return flag24;
+	}
+
+	public void setFlag24(Boolean flag24) {
+		this.flag24 = flag24;
+	}
+
+	public Boolean getFlag25() {
+		return flag25;
+	}
+
+	public void setFlag25(Boolean flag25) {
+		this.flag25 = flag25;
+	}
+
+	public Boolean getFlag26() {
+		return flag26;
+	}
+
+	public void setFlag26(Boolean flag26) {
+		this.flag26 = flag26;
+	}
+
+	public Boolean getFlag27() {
+		return flag27;
+	}
+
+	public void setFlag27(Boolean flag27) {
+		this.flag27 = flag27;
+	}
+
+	public Boolean getFlag28() {
+		return flag28;
+	}
+
+	public void setFlag28(Boolean flag28) {
+		this.flag28 = flag28;
+	}
+
+	public Boolean getFlag29() {
+		return flag29;
+	}
+
+	public void setFlag29(Boolean flag29) {
+		this.flag29 = flag29;
+	}
+
+	public Boolean getFlag30() {
+		return flag30;
+	}
+
+	public void setFlag30(Boolean flag30) {
+		this.flag30 = flag30;
+	}
+
+	public Boolean getFlag31() {
+		return flag31;
+	}
+
+	public void setFlag31(Boolean flag31) {
+		this.flag31 = flag31;
+	}
+
+	public Boolean getFlag32() {
+		return flag32;
+	}
+
+	public void setFlag32(Boolean flag32) {
+		this.flag32 = flag32;
+	}
+
+	public Boolean getFlag33() {
+		return flag33;
+	}
+
+	public void setFlag33(Boolean flag33) {
+		this.flag33 = flag33;
+	}
+
+	public Boolean getFlag34() {
+		return flag34;
+	}
+
+	public void setFlag34(Boolean flag34) {
+		this.flag34 = flag34;
+	}
+
+	public Boolean getFlag35() {
+		return flag35;
+	}
+
+	public void setFlag35(Boolean flag35) {
+		this.flag35 = flag35;
+	}
+
+	public Boolean getFlag36() {
+		return flag36;
+	}
+
+	public void setFlag36(Boolean flag36) {
+		this.flag36 = flag36;
+	}
+
+	public Boolean getFlag37() {
+		return flag37;
+	}
+
+	public void setFlag37(Boolean flag37) {
+		this.flag37 = flag37;
+	}
+
+	public Boolean getFlag38() {
+		return flag38;
+	}
+
+	public void setFlag38(Boolean flag38) {
+		this.flag38 = flag38;
+	}
+
+	public Boolean getFlag39() {
+		return flag39;
+	}
+
+	public void setFlag39(Boolean flag39) {
+		this.flag39 = flag39;
+	}
+
+	public Boolean getFlag40() {
+		return flag40;
+	}
+
+	public void setFlag40(Boolean flag40) {
+		this.flag40 = flag40;
+	}
+
+	public Boolean getFlag41() {
+		return flag41;
+	}
+
+	public void setFlag41(Boolean flag41) {
+		this.flag41 = flag41;
+	}
+
+	public Boolean getFlag42() {
+		return flag42;
+	}
+
+	public void setFlag42(Boolean flag42) {
+		this.flag42 = flag42;
+	}
+
+	public Boolean getFlag43() {
+		return flag43;
+	}
+
+	public void setFlag43(Boolean flag43) {
+		this.flag43 = flag43;
+	}
+
+	public Boolean getFlag44() {
+		return flag44;
+	}
+
+	public void setFlag44(Boolean flag44) {
+		this.flag44 = flag44;
+	}
+
+	public Boolean getFlag45() {
+		return flag45;
+	}
+
+	public void setFlag45(Boolean flag45) {
+		this.flag45 = flag45;
+	}
+
+	public Boolean getFlag46() {
+		return flag46;
+	}
+
+	public void setFlag46(Boolean flag46) {
+		this.flag46 = flag46;
+	}
+
+	public Boolean getFlag47() {
+		return flag47;
+	}
+
+	public void setFlag47(Boolean flag47) {
+		this.flag47 = flag47;
+	}
+
+	public Boolean getFlag48() {
+		return flag48;
+	}
+
+	public void setFlag48(Boolean flag48) {
+		this.flag48 = flag48;
+	}
+
+	public Boolean getFlag49() {
+		return flag49;
+	}
+
+	public void setFlag49(Boolean flag49) {
+		this.flag49 = flag49;
+	}
+
+	public Boolean getFlag50() {
+		return flag50;
+	}
+
+	public void setFlag50(Boolean flag50) {
+		this.flag50 = flag50;
+	}
+
+	public Boolean getFlag51() {
+		return flag51;
+	}
+
+	public void setFlag51(Boolean flag51) {
+		this.flag51 = flag51;
+	}
+
+	public Boolean getFlag52() {
+		return flag52;
+	}
+
+	public void setFlag52(Boolean flag52) {
+		this.flag52 = flag52;
+	}
+
+	public Boolean getFlag53() {
+		return flag53;
+	}
+
+	public void setFlag53(Boolean flag53) {
+		this.flag53 = flag53;
+	}
+
+	public Boolean getFlag54() {
+		return flag54;
+	}
+
+	public void setFlag54(Boolean flag54) {
+		this.flag54 = flag54;
+	}
+
+	public Boolean getFlag55() {
+		return flag55;
+	}
+
+	public void setFlag55(Boolean flag55) {
+		this.flag55 = flag55;
+	}
+
+	public Boolean getFlag56() {
+		return flag56;
+	}
+
+	public void setFlag56(Boolean flag56) {
+		this.flag56 = flag56;
+	}
+
+	public Boolean getFlag57() {
+		return flag57;
+	}
+
+	public void setFlag57(Boolean flag57) {
+		this.flag57 = flag57;
+	}
+
+	public Boolean getFlag58() {
+		return flag58;
+	}
+
+	public void setFlag58(Boolean flag58) {
+		this.flag58 = flag58;
+	}
+
+	public Boolean getFlag59() {
+		return flag59;
+	}
+
+	public void setFlag59(Boolean flag59) {
+		this.flag59 = flag59;
+	}
+
+	public Boolean getFlag60() {
+		return flag60;
+	}
+
+	public void setFlag60(Boolean flag60) {
+		this.flag60 = flag60;
+	}
+
+	public Boolean getFlag61() {
+		return flag61;
+	}
+
+	public void setFlag61(Boolean flag61) {
+		this.flag61 = flag61;
+	}
+
+	public Boolean getFlag62() {
+		return flag62;
+	}
+
+	public void setFlag62(Boolean flag62) {
+		this.flag62 = flag62;
+	}
+
+	public Boolean getFlag63() {
+		return flag63;
+	}
+
+	public void setFlag63(Boolean flag63) {
+		this.flag63 = flag63;
+	}
+
+	public Boolean getFlag64() {
+		return flag64;
+	}
+
+	public void setFlag64(Boolean flag64) {
+		this.flag64 = flag64;
+	}
+
+	public Boolean getFlag65() {
+		return flag65;
+	}
+
+	public void setFlag65(Boolean flag65) {
+		this.flag65 = flag65;
+	}
+
+	public Boolean getFlag66() {
+		return flag66;
+	}
+
+	public void setFlag66(Boolean flag66) {
+		this.flag66 = flag66;
+	}
+
+	public Boolean getFlag67() {
+		return flag67;
+	}
+
+	public void setFlag67(Boolean flag67) {
+		this.flag67 = flag67;
+	}
+
+	public Boolean getFlag68() {
+		return flag68;
+	}
+
+	public void setFlag68(Boolean flag68) {
+		this.flag68 = flag68;
+	}
+
+	public Boolean getFlag69() {
+		return flag69;
+	}
+
+	public void setFlag69(Boolean flag69) {
+		this.flag69 = flag69;
+	}
+
+	public Boolean getFlag70() {
+		return flag70;
+	}
+
+	public void setFlag70(Boolean flag70) {
+		this.flag70 = flag70;
+	}
+
+	public Boolean getFlag71() {
+		return flag71;
+	}
+
+	public void setFlag71(Boolean flag71) {
+		this.flag71 = flag71;
+	}
+
+	public Boolean getFlag72() {
+		return flag72;
+	}
+
+	public void setFlag72(Boolean flag72) {
+		this.flag72 = flag72;
+	}
+
+	public Boolean getFlag73() {
+		return flag73;
+	}
+
+	public void setFlag73(Boolean flag73) {
+		this.flag73 = flag73;
+	}
+
+	public Boolean getFlag74() {
+		return flag74;
+	}
+
+	public void setFlag74(Boolean flag74) {
+		this.flag74 = flag74;
+	}
+
+	public Boolean getFlag75() {
+		return flag75;
+	}
+
+	public void setFlag75(Boolean flag75) {
+		this.flag75 = flag75;
+	}
+
+	public Boolean getFlag76() {
+		return flag76;
+	}
+
+	public void setFlag76(Boolean flag76) {
+		this.flag76 = flag76;
+	}
+
+	public Boolean getFlag77() {
+		return flag77;
+	}
+
+	public void setFlag77(Boolean flag77) {
+		this.flag77 = flag77;
+	}
+
+	public Boolean getFlag78() {
+		return flag78;
+	}
+
+	public void setFlag78(Boolean flag78) {
+		this.flag78 = flag78;
+	}
+
+	public Boolean getFlag79() {
+		return flag79;
+	}
+
+	public void setFlag79(Boolean flag79) {
+		this.flag79 = flag79;
+	}
+
+	public Boolean getFlag80() {
+		return flag80;
+	}
+
+	public void setFlag80(Boolean flag80) {
+		this.flag80 = flag80;
+	}
+
+
+
+}

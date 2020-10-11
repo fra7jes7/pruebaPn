@@ -1,0 +1,209 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/plantillas_ec1/template.xhtml">
+
+	<ui:define name="title">Liquidación</ui:define>
+
+	<ui:define name="head">
+		<style type="text/css">
+.nba-grid {
+	width: 100%;
+	table-layout: fixed;
+	word-wrap: break-word;
+	margin-top: 15px;
+}
+
+.ui-scrollpanel-content p:first-child {
+	margin: 0;
+}
+</style>
+	</ui:define>
+
+	<ui:define name="content">
+
+		<h:form id="frmModLiq" enctype="multipart/form-data">
+			<p:growl id="growl" showDetail="true" sticky="true" autoUpdate="true" />
+
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<p:panelGrid id="pnParametros" style="margin-top:20px; "
+							styleClass="nba-grid">
+							<f:facet name="header">
+								<p:row>
+									<p:column>Seleccionar</p:column>
+									<p:column>Adjuntar archivo .csv</p:column>
+									<p:column>Acciones</p:column>
+								</p:row>
+							</f:facet>
+
+							<p:row>
+								<p:column style="font-weight: bold;">
+
+									<h:panelGrid columns="1" styleClass="nba-grid">
+
+										<p:selectOneMenu id="MenConcepto" required="true"
+											requiredMessage="Es obligatorio seleccionar un concepto"
+											styleClass="nba-grid"
+											value="#{controladorModelosAliquidar.descripcionConcepto}">
+											<f:selectItem itemLabel="SELECCIONE EL CONCEPTO" itemValue="" />
+											<f:selectItem itemLabel="BODEGAS Y OUTLETS" itemValue="mixto" />
+											<f:selectItems
+												value="#{controladorModelosAliquidar.lstConcepto}" var="con"
+												itemValue="#{con.descrip_concepto}"
+												itemLabel="#{con.descrip_concepto}" />
+										</p:selectOneMenu>
+
+										<p:selectOneMenu id="MenMeses" required="true"
+											requiredMessage="Es obligatorio seleccionar el mes de carga"
+											value="#{controladorModelosAliquidar.mesLiq}"
+											styleClass="nba-grid">
+											<f:selectItem itemLabel="SELECCIONE EL MES" itemValue="" />
+											<f:selectItem itemLabel="Enero" itemValue="1" />
+											<f:selectItem itemLabel="Febrero" itemValue="2" />
+											<f:selectItem itemLabel="Marzo" itemValue="3" />
+											<f:selectItem itemLabel="Abril" itemValue="4" />
+											<f:selectItem itemLabel="Mayo" itemValue="5" />
+											<f:selectItem itemLabel="Junio" itemValue="6" />
+											<f:selectItem itemLabel="Julio" itemValue="7" />
+											<f:selectItem itemLabel="Agosto" itemValue="8" />
+											<f:selectItem itemLabel="Septiembre" itemValue="9" />
+											<f:selectItem itemLabel="Octubre" itemValue="10" />
+											<f:selectItem itemLabel="Noviembre" itemValue="11" />
+											<f:selectItem itemLabel="Diciembre" itemValue="12" />
+										</p:selectOneMenu>
+
+									</h:panelGrid>
+
+								</p:column>
+
+								<p:column style="font-weight: bold;">
+									<p:fileUpload id="uploadCsv" styleClass="nba-grid"
+										listener="#{controladorModelosAliquidar.subirArchivoModeloLiquidacion}"
+										label="Seleccionar" mode="advanced" auto="true"
+										sizeLimit="100000" update="@this,growl" fileLimit="1"
+										allowTypes="/(\.|\/)(csv)$/" process="@this">
+									</p:fileUpload>
+								</p:column>
+
+								<p:column style="font-weight: bold;">
+									<h:panelGrid columns="1" styleClass="nba-grid">
+										<p:commandButton id="btnSubirArchivos" styleClass="nba-grid"
+											value="Cargar Informacion"
+											action="#{controladorModelosAliquidar.subirInformacion}"
+											process="@this,growl,MenConcepto,MenMeses,uploadCsv"
+											update="@this,growl,MenConcepto,MenMeses,uploadCsv"
+											icon="fa fa-floppy-o"></p:commandButton>
+										<br></br>
+										<br></br>
+										<p:commandButton id="btnConsultarMod" styleClass="nba-grid"
+											value="Consultar" title="Modelos pendientes de liquidación"
+											action="#{controladorModelosAliquidar.recuperarModelosPendientes}"
+											process="@this,frmDataModeloAli:tableModelosPen"
+											update="@this,frmDataModeloAli:tableModelosPen"
+											oncomplete="PF('wdtModpenLiq').clearFilters()"></p:commandButton>
+									</h:panelGrid>
+
+								</p:column>
+							</p:row>
+
+							<f:facet name="footer">
+							</f:facet>
+						</p:panelGrid>
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+		<h:form id="frmDataModeloAli">
+			<p:growl id="growltwo" showDetail="true" sticky="true"
+				autoUpdate="true" />
+
+
+			<p:dataTable id="tableModelosPen" var="var" widgetVar="wdtModpenLiq"
+				style="margin-top: 25px;"
+				value="#{controladorModelosAliquidar.lstModelosAliquidar}"
+				filteredValue="#{controladorModelosAliquidar.lstModelosAliquidarFilter}"
+				scrollable="true" scrollHeight="500">
+
+				<f:facet name="header">
+                                Lista de modelos pendientes a liquidar 
+                                <h:commandLink>
+						<p:graphicImage title="Presione aquí para exportar"
+							name="images/icons8-csv-48.png" library="ecuador-layout" />
+						<p:dataExporter type="csv" target="tableModelosPen"
+							fileName="Modelos-Pendientes" />
+					</h:commandLink>
+				</f:facet>
+
+				<p:column id="colFil" filterBy="#{var.cod_modelo}"
+					headerText="Código Modelo" filterMatchMode="contains">
+					<h:outputText value="#{var.cod_modelo}" />
+				</p:column>
+
+				<p:column headerText="Descripción Modelo"
+					filterBy="#{var.descrip_concepto}" filterMatchMode="contains">
+					<h:outputText value="#{var.descrip_concepto}" />
+				</p:column>
+
+				<p:column headerText="Mes" filterBy="#{var.mes_carga}"
+					filterMatchMode="contains">
+					<h:outputText value="#{var.mes_carga}" />
+				</p:column>
+
+				<p:column headerText="Eliminar Registro">
+					<p:commandButton id="btnDeleMod" value="Eliminar"
+						icon="fa fa-trash"
+						actionListener="#{controladorModelosAliquidar.eliminarRegistrosPendientes(var)}"
+						oncomplete="PF('wdtModpenLiq').clearFilters()"
+						process="@this,frmDataModeloAli:growltwo"
+						update="@this,frmDataModeloAli:growltwo">
+					</p:commandButton>
+				</p:column>
+
+			</p:dataTable>
+
+		</h:form>
+
+		<p:dialog header="Modelos ya registrados" widgetVar="dlgModReg" width="800" height="500"
+			closable="true" maximizable="true" minimizable="true" modal="true">
+			<h:form id="frmDglModReg">
+				<p:outputLabel
+					value="Los siguientes modelos ya fueron ingresados a continuación se detalla el ingreso de los mismos"></p:outputLabel>
+				<p:dataTable var="var" id="dtModelosIng"
+					value="#{controladorModelosAliquidar.lstViewModAliqUsuarios}">
+					<p:column headerText="Código Modelo">
+						<h:outputText value="#{var.cod_modelo}" />
+					</p:column>
+
+					<p:column headerText="Descripción Concepto">
+						<h:outputText value="#{var.descrip_concepto}" />
+					</p:column>
+
+					<p:column headerText="Estado">
+						<h:outputText value="#{var.estado}" />
+					</p:column>
+
+					<p:column headerText="Mes">
+						<h:outputText value="#{var.mes_carga}" />
+					</p:column>
+
+					<p:column headerText="Nombre usuario">
+						<h:outputText value="#{var.nm_usuario}" />
+					</p:column>
+
+					<p:column headerText="Apellido Usuario">
+						<h:outputText value="#{var.ap_usuario}" />
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+		</p:dialog>
+
+	</ui:define>
+
+</ui:composition>
+

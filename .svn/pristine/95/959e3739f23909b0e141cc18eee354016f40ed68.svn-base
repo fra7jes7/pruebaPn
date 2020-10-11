@@ -1,0 +1,101 @@
+package mac.controladores;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+
+import org.primefaces.PrimeFaces;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
+
+import mac.entidades.ClusterProducto;
+import mac.entidades.DetalleProductoLiqui;
+import mac.servicios.ServicioProductoTbl;
+
+@ViewScoped
+@ManagedBean
+public class ControladorProductoLiquiTbl implements Serializable {
+
+	@EJB
+	ServicioProductoTbl srvServicioProductoTbl;
+
+	private List<ClusterProducto> lstClusterProducto;
+	private List<ClusterProducto> lstClusterfilter;
+	private List<DetalleProductoLiqui> lstDetalleProductoLiqui;
+	private ClusterProducto objClusterProductoSelected;
+
+	public ControladorProductoLiquiTbl() {
+		lstClusterProducto = new ArrayList<ClusterProducto>();
+		objClusterProductoSelected = new ClusterProducto();
+		lstClusterfilter = new ArrayList<ClusterProducto>();
+		lstDetalleProductoLiqui = new ArrayList<DetalleProductoLiqui>();
+	}
+
+	@PostConstruct
+	public void constructorInicial() {
+		lstClusterProducto = srvServicioProductoTbl.recuperarCluster();
+	}
+
+	public void onRowSelect(SelectEvent event) {
+		System.out.println("onRowSelect");
+//		FacesMessage msg = new FacesMessage("Car Selected", ((ClusterProducto) event.getObject()).getCod_modelo());
+//		FacesContext.getCurrentInstance().addMessage(null, msg);
+		Integer cdDetalle = Integer.valueOf(((ClusterProducto) event.getObject()).getCd_cls_prod_liq());
+		lstDetalleProductoLiqui = srvServicioProductoTbl.recuperarDetalleProductoLiqui(cdDetalle);
+		System.out.println("tam:" + lstDetalleProductoLiqui.size());
+		PrimeFaces.current().ajax().update(":frmClouster:dtDetalleProLiq");
+
+	}
+
+	public void onRowUnselect(UnselectEvent event) {
+		System.out.println("onRowUnselect");
+		FacesMessage msg = new FacesMessage("Car Unselected", ((ClusterProducto) event.getObject()).getCod_modelo());
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+	}
+
+	public void consultaTablaDeta(ClusterProducto obj) {
+		System.out.println("consultaTablaDeta:" + obj.getCd_cls_prod_liq());
+	}
+
+	public List<ClusterProducto> getLstClusterProducto() {
+		return lstClusterProducto;
+	}
+
+	public void setLstClusterProducto(List<ClusterProducto> lstClusterProducto) {
+		this.lstClusterProducto = lstClusterProducto;
+	}
+
+	public ClusterProducto getObjClusterProductoSelected() {
+		return objClusterProductoSelected;
+	}
+
+	public void setObjClusterProductoSelected(ClusterProducto objClusterProductoSelected) {
+		this.objClusterProductoSelected = objClusterProductoSelected;
+	}
+
+	public List<DetalleProductoLiqui> getLstDetalleProductoLiqui() {
+		return lstDetalleProductoLiqui;
+	}
+
+	public void setLstDetalleProductoLiqui(List<DetalleProductoLiqui> lstDetalleProductoLiqui) {
+		this.lstDetalleProductoLiqui = lstDetalleProductoLiqui;
+	}
+
+	public List<ClusterProducto> getLstClusterfilter() {
+		return lstClusterfilter;
+	}
+
+	public void setLstClusterfilter(List<ClusterProducto> lstClusterfilter) {
+		this.lstClusterfilter = lstClusterfilter;
+	}
+	
+	
+
+}

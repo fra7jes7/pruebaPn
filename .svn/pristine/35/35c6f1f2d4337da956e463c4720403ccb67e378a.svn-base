@@ -1,0 +1,269 @@
+package mac.servicios;
+
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
+import mac.entidades.ClusterProducto;
+import mac.entidades.ConectarBaseMAC;
+import mac.entidades.DetalleProductoLiqui;
+
+@Stateless
+public class ServicioProductoTbl {
+
+	@PersistenceContext
+	private EntityManager em;
+
+	@SuppressWarnings("unchecked")
+	public List<ClusterProducto> recuperarCluster(String codUser) {
+		System.out.println("recupera datos de tabla cluster cabecera");
+		String sql = "select * from cluster_producto_liqui_tbl "
+				+ "where num_liquidacion is null and cod_usuario='"+ codUser+"' order by cd_cls_prod_liq";
+		System.out.println("----------------query: " + sql);
+		Query q = em.createNativeQuery(sql, ClusterProducto.class);
+		return q.getResultList();
+
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<DetalleProductoLiqui> recuperarDetalleProductoLiqui(Integer CD_CLS_PROD_LIQ) {
+		System.out.println("recupera datos de tabla detalle producto liqui");
+		String sql = "select * from detalle_producto_liqui_tbl  " + "where cd_cls_prod_liq=" + CD_CLS_PROD_LIQ
+				+ " or (cod_usuario='FLAPP' and centro_1 like '%OD%')  " + "order by cd_det_prod_liq,talla ";
+		System.out.println("----------------query: " + sql);
+		Query q = em.createNativeQuery(sql, DetalleProductoLiqui.class);
+		return q.getResultList();
+
+	}
+
+	public void actualizaCeldas(DetalleProductoLiqui obj) {
+		em.merge(obj);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<DetalleProductoLiqui> obtenerTienda() {
+		System.out.println("Obtener valores de tiendas");
+		String sql = "select  * from detalle_producto_liqui_tbl " + "where cd_det_prod_liq= "
+				+ "(select  min(cd_det_prod_liq)  from detalle_producto_liqui_tbl)";
+		// System.out.println("----------------query: "+ sql);
+		Query q = em.createNativeQuery(sql, DetalleProductoLiqui.class);
+		return q.getResultList();
+
+	}
+
+
+	public void actualizarStockLiqui(Integer id, Integer val) {
+		try {
+			Connection conn;
+			String sql;
+			conn = ConectarBaseMAC.getOracleConnection();
+			sql = "update detalle_producto_liqui_tbl set  lq01=" + val + " where cd_det_prod_liq=" + id;
+			System.out.println("***QUERY: ->" + sql);
+			CallableStatement cs = conn.prepareCall(sql);
+			cs.execute();
+			cs.close();
+			conn.close();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<String> recuperaFiltroLinea() {
+		Connection conn;
+		ResultSet res = null;
+		List<String> lstAux = new ArrayList<String>();
+		String sql = null;
+		try {
+			conn = ConectarBaseMAC.getOracleConnection();
+			System.out.println("filtro linea");
+			sql = "select distinct(linea) from cluster_producto_liqui_tbl "
+					+ "where num_liquidacion is null order by linea";
+			System.out.println("----------------query: " + sql);
+			PreparedStatement cs = conn.prepareStatement(sql);
+			res = cs.executeQuery();
+
+			while (res.next()) {
+				String linea = "";
+				linea = (res.getString(1));
+				lstAux.add(linea);
+			}
+			res.close();
+			cs.close();
+			conn.close();
+
+		} catch (Exception e) {
+			System.out.println("Error: " + e.getMessage());
+		}
+		return lstAux;
+
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<String> recuperaFiltroMarca() {
+		Connection conn;
+		ResultSet res = null;
+		List<String> lstAux = new ArrayList<String>();
+		String sql = null;
+		try {
+			conn = ConectarBaseMAC.getOracleConnection();
+			System.out.println("filtro marca");
+			sql = "select distinct(descrip_marca) from cluster_producto_liqui_tbl "
+					+ "where num_liquidacion is null order by descrip_marca";
+			System.out.println("----------------query: " + sql);
+			PreparedStatement cs = conn.prepareStatement(sql);
+			res = cs.executeQuery();
+
+			while (res.next()) {
+				String linea = "";
+				linea = (res.getString(1));
+				lstAux.add(linea);
+			}
+			res.close();
+			cs.close();
+			conn.close();
+
+		} catch (Exception e) {
+			System.out.println("Error: " + e.getMessage());
+		}
+		return lstAux;
+
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<String> recuperaFiltroGenero() {
+		Connection conn;
+		ResultSet res = null;
+		List<String> lstAux = new ArrayList<String>();
+		String sql = null;
+		try {
+			conn = ConectarBaseMAC.getOracleConnection();
+			System.out.println("filtro genero");
+			sql = "select distinct(genero) from cluster_producto_liqui_tbl "
+					+ "where num_liquidacion is null order by genero";
+			System.out.println("----------------query: " + sql);
+			PreparedStatement cs = conn.prepareStatement(sql);
+			res = cs.executeQuery();
+
+			while (res.next()) {
+				String linea = "";
+				linea = (res.getString(1));
+				lstAux.add(linea);
+			}
+			res.close();
+			cs.close();
+			conn.close();
+
+		} catch (Exception e) {
+			System.out.println("Error: " + e.getMessage());
+		}
+		return lstAux;
+
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<String> recuperaFiltroActividad() {
+		Connection conn;
+		ResultSet res = null;
+		List<String> lstAux = new ArrayList<String>();
+		String sql = null;
+		try {
+			conn = ConectarBaseMAC.getOracleConnection();
+			System.out.println("filtro actividad");
+			sql = "select distinct(descrip_actividad) from cluster_producto_liqui_tbl "
+					+ "where num_liquidacion is null order by descrip_actividad";
+			System.out.println("----------------query: " + sql);
+			PreparedStatement cs = conn.prepareStatement(sql);
+			res = cs.executeQuery();
+
+			while (res.next()) {
+				String linea = "";
+				linea = (res.getString(1));
+				lstAux.add(linea);
+			}
+			res.close();
+			cs.close();
+			conn.close();
+
+		} catch (Exception e) {
+			System.out.println("Error: " + e.getMessage());
+		}
+		return lstAux;
+
+	}
+
+	public void spLiquidacion(String codUsuario) {
+		System.out.println("CodUser: " + codUsuario);
+		Connection conn;
+		// ejecuta el sp
+		try {
+			System.out.println("SP LIQUIDACION");
+			conn = ConectarBaseMAC.getOracleConnection();
+			String proc3StoredProcedure = "{ call SP_LIQUIDACION(?) }";
+			CallableStatement cs = conn.prepareCall(proc3StoredProcedure);
+			cs.setString(1, codUsuario);
+			cs.execute();
+			cs.close();
+			conn.close();
+		} catch (Exception e) {
+			System.out.println("error " + e.getMessage());
+		}
+
+	}
+	
+	public String consultaCodUser(String correoDom){
+		String codUser="";
+		Connection conn;
+		ResultSet res = null;
+		try {
+			conn = ConectarBaseMAC.getOracleConnection();
+			String sql ="select cod_usuario from usuario_tbl where correo_dominio like '%" + correoDom + "%'";
+			System.out.println("***query consultaCodUser" + sql);
+			PreparedStatement cs = conn.prepareStatement(sql);
+			res = cs.executeQuery();
+			while (res.next()) {
+				codUser = res.getString(1);
+			}
+			res.close();
+			cs.close();
+			conn.close();
+			
+		} catch (Exception e) {
+			System.out.println("***error " + e.getMessage());
+		}
+		
+		return codUser;
+	}
+	
+	public int obtenerProceso(String codUsuario){
+		System.out.println("Obtener numero de Proceso");
+		int numLiqui=0;
+		Connection conn;
+		ResultSet res = null;
+		try {
+			conn = ConectarBaseMAC.getOracleConnection();
+			String sql = "select max(num_liquidacion) from liquidaciones_tbl where cod_usuario='"+codUsuario+"'";
+			System.out.println("***query Numero Proceso" + sql);
+			PreparedStatement cs = conn.prepareStatement(sql);
+			res = cs.executeQuery();
+			while (res.next()) {
+				numLiqui = res.getInt(1);
+			}
+			res.close();
+			cs.close();
+			conn.close();
+		} catch (Exception e) {
+			System.out.println("***error " + e.getMessage());
+		}
+		return numLiqui;
+	}
+
+}

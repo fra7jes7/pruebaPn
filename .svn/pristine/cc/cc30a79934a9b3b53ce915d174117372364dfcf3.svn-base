@@ -1,0 +1,654 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/plantillas_ec1/templateMantenimiento.xhtml">
+
+	<ui:define name="title">Producto Liqui</ui:define>
+
+	<ui:define name="head">
+
+		<style type="text/css">
+.oldsierra {
+	background-color: #9bc2e6 !important;
+	background-image: none !important;
+	color: #000000 !important;
+}
+
+.oldcosta {
+	background-color: #ddebf7 !important;
+	background-image: none !important;
+	color: #000000 !important;
+}
+
+.oldliqui {
+	background-color: #d9d9d9 !important;
+	background-image: none !important;
+	color: #000000 !important;
+}
+</style>
+	</ui:define>
+	<ui:define name="content">
+		<p:growl id="growl" showDetail="true" sticky="true" autoUpdate="true" />
+		<h:form id="frmClouster">
+			<p:growl id="growl" showDetail="true" sticky="true" autoUpdate="true" />
+
+			<p:panelGrid styleClass="nba-grid">
+				<p:row>
+					<p:commandButton value="Procesar"
+						style="font-family:Verdana;font-size:12px;"
+						action="#{controladorProductoLiquiTbl.btnProcesar}"
+						update=":frmClouster:dtClouster :frmClouster:dtDetalleProLiq :growl">
+						<p:confirm message="Esta seguro?"
+							icon="pi pi-exclamation-triangle" />
+					</p:commandButton>
+
+					<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+						<p:commandButton value="Si" type="button"
+							styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+						<p:commandButton value="No" type="button"
+							styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+					</p:confirmDialog>
+					<br></br>
+					<br></br>
+					<br></br>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:dataTable id="dtClouster" var="var" scrollable="true"
+							widgetVar="tblCluster" scrollHeight="250" scrollWidth="35%"
+							frozenColumns="2" style="font-family:Verdana; font-size: 10px;"
+							value="#{controladorProductoLiquiTbl.lstClusterProducto}"
+							selectionMode="single"
+							selection="#{controladorProductoLiquiTbl.objClusterProductoSelected}"
+							rowKey="#{var.cd_cls_prod_liq}"
+							filteredValue="#{controladorProductoLiquiTbl.lstClusterfilter}"
+							emptyMessage="No se encontro información">
+
+
+							<p:ajax event="rowSelect"
+								listener="#{controladorProductoLiquiTbl.onRowSelect}"
+								process="@this,:frmClouster:dtDetalleProLiq"
+								update=":frmClouster:growl" />
+							<p:ajax event="rowUnselect"
+								listener="#{controladorProductoLiquiTbl.onRowUnselect}"
+								update=":frmClouster:growl" />
+							<p:ajax event="cellEdit" listener="#{dtEditView.onCellEdit}"
+								update=":frmClouster:growl" />
+
+
+							<p:column headerText="Modelo" style="width:5px"
+								filterBy="#{var.cod_modelo}" filterMatchMode="contains">
+								<h:outputText value="#{var.cod_modelo}" />
+							</p:column>
+
+							<p:column headerText="Descripción" style="width:10px"
+								filterBy="#{var.descrip_modelo}" filterMatchMode="contains">
+								<h:outputText value="#{var.descrip_modelo}" />
+							</p:column>
+
+							<p:column headerText="Linea" style="width:70px;text-align:center"
+								filterBy="#{var.linea}" filterMatchMode="in">
+								<f:facet name="filter">
+									<p:selectCheckboxMenu label="Lineas"
+										onchange="PF('tblCluster').filter()" scrollHeight="150"
+										styleClass="custom-filter">
+										<f:selectItems
+											value="#{controladorProductoLiquiTbl.lineaFiltros}" />
+									</p:selectCheckboxMenu>
+								</f:facet>
+								<h:outputText value="#{var.linea}" />
+							</p:column>
+
+							<p:column headerText="Marca" style="width:120px"
+								filterBy="#{var.descrip_marca}" filterMatchMode="in">
+								<f:facet name="filter">
+									<p:selectCheckboxMenu label="Marcas"
+										onchange="PF('tblCluster').filter()" scrollHeight="150"
+										styleClass="custom-filter">
+										<f:selectItems
+											value="#{controladorProductoLiquiTbl.marcaFiltros}" />
+									</p:selectCheckboxMenu>
+								</f:facet>
+								<h:outputText value="#{var.descrip_marca}" />
+							</p:column>
+
+							<p:column headerText="Genero"
+								style="width:80px;text-align:center" filterBy="#{var.genero}"
+								filterMatchMode="in">
+								<f:facet name="filter">
+									<p:selectCheckboxMenu label="Generos"
+										onchange="PF('tblCluster').filter()" scrollHeight="150"
+										styleClass="custom-filter">
+										<f:selectItems
+											value="#{controladorProductoLiquiTbl.generoFiltros}" />
+									</p:selectCheckboxMenu>
+								</f:facet>
+								<h:outputText value="#{var.genero}" />
+							</p:column>
+
+							<p:column headerText="Actividad" style="width:130px"
+								filterBy="#{var.descrip_actividad}" filterMatchMode="in">
+								<f:facet name="filter">
+									<p:selectCheckboxMenu label="Actividades"
+										onchange="PF('tblCluster').filter()" scrollHeight="150"
+										styleClass="custom-filter">
+										<f:selectItems
+											value="#{controladorProductoLiquiTbl.actividadFiltros}" />
+									</p:selectCheckboxMenu>
+								</f:facet>
+								<h:outputText value="#{var.descrip_actividad}" />
+							</p:column>
+
+							<p:column headerText="BD-R1" filterBy="#{var.cluster_1_bd}"
+								filterFunction="#{controladorProductoLiquiTbl.filtro1}"
+								visible="#{controladorProductoLiquiTbl.flagdb1}"
+								style="width:50px;text-align:center">
+								<h:outputText value="#{var.cluster_1_bd}" />
+							</p:column>
+							<p:column headerText="BD-R2" filterBy="#{var.cluster_2_bd}"
+								filterFunction="#{controladorProductoLiquiTbl.filtro1}"
+								visible="#{controladorProductoLiquiTbl.flagdb2}"
+								style="width:60px;text-align:center">
+								<h:outputText value="#{var.cluster_2_bd}" />
+							</p:column>
+							<p:column headerText="OU-R1" filterBy="#{var.cluster_1_ou}"
+								filterFunction="#{controladorProductoLiquiTbl.filtro1}"
+								visible="#{controladorProductoLiquiTbl.flagou1}"
+								style="width:60px;text-align:center">
+								<h:outputText value="#{var.cluster_1_ou}" />
+							</p:column>
+							<p:column headerText="OU-R2" filterBy="#{var.cluster_2_ou}"
+								filterFunction="#{controladorProductoLiquiTbl.filtro1}"
+								visible="#{controladorProductoLiquiTbl.flagou2}"
+								style="width:60px;text-align:center">
+								<h:outputText value="#{var.cluster_2_ou}" />
+							</p:column>
+							<p:column headerText="Stk-BD" filterBy="#{var.total_stock_bo}"
+								filterFunction="#{controladorProductoLiquiTbl.filtro2}"
+								style="width:100px;text-align:center"
+								visible="#{controladorProductoLiquiTbl.flagdb3}">
+								<h:outputText value="#{var.total_stock_bo}" />
+							</p:column>
+							<p:column headerText="Stk-OU" filterBy="#{var.total_stock_ou}"
+								filterFunction="#{controladorProductoLiquiTbl.filtro2}"
+								style="width:100px;text-align:center"
+								visible="#{controladorProductoLiquiTbl.flagou3}">
+								<h:outputText value="#{var.total_stock_ou}" />
+							</p:column>
+							<p:column headerText="Stk-LQ01"
+								filterBy="#{var.stock_centro_liquidador}"
+								filterFunction="#{controladorProductoLiquiTbl.filtro2}"
+								style="width:100px;text-align:center">
+								<h:outputText value="#{var.stock_centro_liquidador}" />
+							</p:column>
+
+							<p:column headerText="PO-MT" filterBy="#{var.precio_original_mt}"
+								filterFunction="#{controladorProductoLiquiTbl.filtro2}"
+								style="width:100px;text-align:center">
+								<h:outputText value="#{var.precio_original_mt}" />
+							</p:column>
+							<p:column headerText="PP-MT" filterBy="#{var.precio_promo_mt}"
+								filterFunction="#{controladorProductoLiquiTbl.filtro2}"
+								style="width:100px;text-align:center">
+								<h:outputText value="#{var.precio_promo_mt}" />
+							</p:column>
+							<p:column headerText="DSC-MT" filterBy="#{var.descuento_mt}"
+								filterFunction="#{controladorProductoLiquiTbl.filtro2}"
+								style="width:60px;text-align:center">
+								<h:outputText value="#{var.descuento_mt}" />
+							</p:column>
+							<p:column headerText="PO-BD" filterBy="#{var.precio_original_bd}"
+								filterFunction="#{controladorProductoLiquiTbl.filtro2}"
+								style="width:100px;text-align:center"
+								visible="#{controladorProductoLiquiTbl.flagdb4}">
+								<h:outputText value="#{var.precio_original_bd}" />
+							</p:column>
+							<p:column headerText="PP-BD" filterBy="#{var.precio_promo_bd}"
+								filterFunction="#{controladorProductoLiquiTbl.filtro2}"
+								style="width:100px;text-align:center"
+								visible="#{controladorProductoLiquiTbl.flagdb5}">
+								<h:outputText value="#{var.precio_promo_bd}" />
+							</p:column>
+							<p:column headerText="DSC-BD" filterBy="#{var.descuento_bd}"
+								filterFunction="#{controladorProductoLiquiTbl.filtro2}"
+								style="width:75px;text-align:center"
+								visible="#{controladorProductoLiquiTbl.flagdb6}">
+								<h:outputText value="#{var.descuento_bd}" />
+							</p:column>
+							<p:column headerText="PO-OU" filterBy="#{var.precio_original_ou}"
+								filterFunction="#{controladorProductoLiquiTbl.filtro2}"
+								style="width:100px;text-align:center"
+								visible="#{controladorProductoLiquiTbl.flagou4}">
+								<h:outputText value="#{var.precio_original_ou}" />
+							</p:column>
+							<p:column headerText="PP-OU" filterBy="#{var.precio_promo_ou}"
+								filterFunction="#{controladorProductoLiquiTbl.filtro2}"
+								style="width:100px;text-align:center"
+								visible="#{controladorProductoLiquiTbl.flagou5}">
+								<h:outputText value="#{var.precio_promo_ou}" />
+							</p:column>
+							<p:column headerText="DSC-OU" filterBy="#{var.descuento_ou}"
+								filterFunction="#{controladorProductoLiquiTbl.filtro2}"
+								style="width:50px;text-align:center"
+								visible="#{controladorProductoLiquiTbl.flagou6}">
+								<h:outputText value="#{var.descuento_ou}" />
+							</p:column>
+							<p:column headerText="Stk-MT-R1"
+								filterBy="#{var.stock_cluster_1_mt}"
+								filterFunction="#{controladorProductoLiquiTbl.filtro3}"
+								style="width:100px;text-align:center">
+								<h:outputText value="#{var.stock_cluster_1_mt}" />
+							</p:column>
+							<p:column headerText="Stk-MT-R2"
+								filterBy="#{var.stock_cluster_2_mt}"
+								filterFunction="#{controladorProductoLiquiTbl.filtro3}"
+								style="width:100px;text-align:center">
+								<h:outputText value="#{var.stock_cluster_2_mt}" />
+							</p:column>
+						</p:dataTable>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:remoteCommand name="refrescarTabla"
+						action="#{controladorProductoLiquiTbl.refrescaTabla}"
+						update="frmClouster:dtDetalleProLiq" />
+					<p:column style="hight:50px">
+						<pe:sheet id="dtDetalleProLiq" widgetVar="sheetWidget"
+							value="#{controladorProductoLiquiTbl.lstDetalleProductoLiqui}"
+							var="var" fixedCols="1" rowKey="#{var.cd_det_prod_liq}"
+							fixedRows="1" showRowHeaders="true" resizableCols="true"
+							errorMessage="NúmeroNoValido" resizableRows="true"
+							readOnly="false" maxRows="10"
+							filteredValue="#{controladorProductoLiquiTbl.lstDetalleFilter}"
+							sortBy="#{var.cd_det_prod_liq}" sortOrder="ascending">
+
+							<p:ajax event="change"
+								listener="#{controladorProductoLiquiTbl.actualizarStock}"
+								oncomplete="refrescarTabla()" update=":frmClouster:growl" />
+							<f:facet name="footer">
+								
+								
+							</f:facet>
+
+							<pe:sheetcolumn value="#{var.talla}" readOnly="true"
+								headerText="Talla" />
+
+							<pe:sheetcolumn headerText="Material"
+								value="#{var.cod_sap_generico}" readOnly="true" />
+
+							<pe:sheetcolumn headerText="Stk-MT-R1"
+								value="#{var.stock_cluster_1_mt}" readOnly="true" />
+							<pe:sheetcolumn headerText="Stk-MT-R2"
+								value="#{var.stock_cluster_2_mt}" readOnly="true" />
+
+							<pe:sheetcolumn headerText="Stk-MT "
+								value="#{var.stock_cluster_mt_tot}" readOnly="true" />
+
+							<!-- Region Costa -->
+							<pe:sheetcolumn value="#{var.centro_1}" styleClass="oldcosta"
+								colType="numeric" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag1}" />
+							<pe:sheetcolumn value="#{var.centro_2}" styleClass="oldcosta"
+								colType="numeric" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag2}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_3}" styleClass="oldcosta"
+								colType="numeric" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag3}" />
+							<pe:sheetcolumn value="#{var.centro_4}" styleClass="oldcosta"
+								colType="numeric" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag4}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_5}" styleClass="oldcosta"
+								colType="numeric" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag5}" />
+							<pe:sheetcolumn value="#{var.centro_6}" styleClass="oldcosta"
+								colType="numeric" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag6}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_7}" styleClass="oldcosta"
+								colType="numeric" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag7}" />
+							<pe:sheetcolumn value="#{var.centro_8}" styleClass="oldcosta"
+								colType="numeric" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag8}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_9}" styleClass="oldcosta"
+								colType="numeric" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag9}" />
+							<pe:sheetcolumn value="#{var.centro_10}" styleClass="oldcosta"
+								colType="numeric" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag10}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_11}" styleClass="oldcosta"
+								colType="numeric" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag11}" />
+							<pe:sheetcolumn value="#{var.centro_12}" styleClass="oldcosta"
+								colType="numeric" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag12}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_13}" styleClass="oldcosta"
+								colType="numeric" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag13}" />
+							<pe:sheetcolumn value="#{var.centro_14}" styleClass="oldcosta"
+								colType="numeric" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag14}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_15}" styleClass="oldcosta"
+								colType="numeric" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag15}" />
+							<pe:sheetcolumn value="#{var.centro_16}" styleClass="oldcosta"
+								colType="numeric" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag16}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_39}" colType="numeric"
+								styleClass="oldcosta" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag39}" />
+							<pe:sheetcolumn value="#{var.centro_40}" colType="numeric"
+								styleClass="oldcosta" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag40}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_41}" colType="numeric"
+								styleClass="oldcosta" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag41}" />
+							<pe:sheetcolumn value="#{var.centro_42}" colType="numeric"
+								styleClass="oldcosta" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag42}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_43}" colType="numeric"
+								styleClass="oldcosta" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag43}" />
+							<pe:sheetcolumn value="#{var.centro_44}" colType="numeric"
+								styleClass="oldcosta" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag44}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_45}" colType="numeric"
+								styleClass="oldcosta" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag45}" />
+							<pe:sheetcolumn value="#{var.centro_46}" colType="numeric"
+								styleClass="oldcosta" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag46}" readOnly="true" />
+
+							<!-- Region Sierra -->
+							<pe:sheetcolumn value="#{var.centro_17}" styleClass="oldsierra"
+								colType="numeric" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag17}" />
+							<pe:sheetcolumn value="#{var.centro_18}" styleClass="oldsierra"
+								colType="numeric" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag18}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_19}" styleClass="oldsierra"
+								colType="numeric" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag19}" />
+							<pe:sheetcolumn value="#{var.centro_20}" styleClass="oldsierra"
+								colType="numeric" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag20}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_21}" styleClass="oldsierra"
+								colType="numeric" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag21}" />
+							<pe:sheetcolumn value="#{var.centro_22}" styleClass="oldsierra"
+								colType="numeric" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag22}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_23}" styleClass="oldsierra"
+								colType="numeric" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag23}" />
+							<pe:sheetcolumn value="#{var.centro_24}" styleClass="oldsierra"
+								colType="numeric" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag24}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_25}" styleClass="oldsierra"
+								colType="numeric" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag25}" />
+							<pe:sheetcolumn value="#{var.centro_26}" styleClass="oldsierra"
+								colType="numeric" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag26}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_27}" styleClass="oldsierra"
+								colType="numeric" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag27}" />
+							<pe:sheetcolumn value="#{var.centro_28}" styleClass="oldsierra"
+								colType="numeric" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag28}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_29}" styleClass="oldsierra"
+								colType="numeric" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag29}" />
+							<pe:sheetcolumn value="#{var.centro_30}" styleClass="oldsierra"
+								colType="numeric" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag30}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_31}" styleClass="oldsierra"
+								colType="numeric" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag31}" />
+							<pe:sheetcolumn value="#{var.centro_32}" styleClass="oldsierra"
+								colType="numeric" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag32}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_33}" styleClass="oldsierra"
+								colType="numeric" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag33}" />
+							<pe:sheetcolumn value="#{var.centro_34}" styleClass="oldsierra"
+								colType="numeric" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag34}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_35}" styleClass="oldsierra"
+								colType="numeric" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag35}" />
+							<pe:sheetcolumn value="#{var.centro_36}" colType="numeric"
+								styleClass="oldsierra" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag36}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_37}" colType="numeric"
+								styleClass="oldsierra" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag37}" />
+							<pe:sheetcolumn value="#{var.centro_38}" colType="numeric"
+								styleClass="oldsierra" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag38}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_47}" colType="numeric"
+								styleClass="oldsierra" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag47}" />
+							<pe:sheetcolumn value="#{var.centro_48}" colType="numeric"
+								styleClass="oldsierra" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag48}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_49}" colType="numeric"
+								styleClass="oldsierra" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag49}" />
+							<pe:sheetcolumn value="#{var.centro_50}" colType="numeric"
+								styleClass="oldsierra" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag50}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_51}" colType="numeric"
+								styleClass="oldsierra" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag51}" />
+							<pe:sheetcolumn value="#{var.centro_52}" colType="numeric"
+								styleClass="oldsierra" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag52}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_53}" colType="numeric"
+								styleClass="oldsierra" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag53}" />
+							<pe:sheetcolumn value="#{var.centro_54}" colType="numeric"
+								styleClass="oldsierra" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag54}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_55}" colType="numeric"
+								styleClass="oldsierra" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag55}" />
+							<pe:sheetcolumn value="#{var.centro_56}" colType="numeric"
+								styleClass="oldsierra" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag56}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_57}" colType="numeric"
+								styleClass="oldsierra" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag57}" />
+							<pe:sheetcolumn value="#{var.centro_58}" colType="numeric"
+								styleClass="oldsierra" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag58}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_59}" colType="numeric"
+								styleClass="oldsierra" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag59}" />
+							<pe:sheetcolumn value="#{var.centro_60}" colType="numeric"
+								styleClass="oldsierra" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag60}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_61}" colType="numeric"
+								styleClass="oldsierra" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag61}" />
+							<pe:sheetcolumn value="#{var.centro_62}" colType="numeric"
+								styleClass="oldsierra" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag62}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_63}" colType="numeric"
+								styleClass="oldsierra" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag63}" />
+							<pe:sheetcolumn value="#{var.centro_64}" colType="numeric"
+								styleClass="oldsierra" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag64}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_65}" colType="numeric"
+								styleClass="oldsierra" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag65}" />
+							<pe:sheetcolumn value="#{var.centro_66}" colType="numeric"
+								styleClass="oldsierra" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag66}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_67}" colType="numeric"
+								styleClass="oldsierra" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag67}" />
+							<pe:sheetcolumn value="#{var.centro_68}" colType="numeric"
+								styleClass="oldsierra" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag68}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_69}" colType="numeric"
+								styleClass="oldsierra" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag69}" />
+							<pe:sheetcolumn value="#{var.centro_70}" colType="numeric"
+								styleClass="oldsierra" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag70}" readOnly="true" />
+
+
+							<pe:sheetcolumn value="#{var.centro_71}" colType="numeric"
+								styleClass="oldsierra" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag71}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_72}" colType="numeric"
+								styleClass="oldsierra" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag72}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_73}" colType="numeric"
+								styleClass="oldsierra" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag73}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_74}" colType="numeric"
+								styleClass="oldsierra" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag74}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_75}" colType="numeric"
+								styleClass="oldsierra" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag75}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_76}" colType="numeric"
+								styleClass="oldsierra" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag76}" readOnly="true" />
+							<pe:sheetcolumn value="#{var.centro_77}" colType="numeric"
+								styleClass="oldsierra" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag77}" />
+							<pe:sheetcolumn value="#{var.centro_78}" colType="numeric"
+								styleClass="oldsierra" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag78}" />
+							<pe:sheetcolumn value="#{var.centro_79}" colType="numeric"
+								styleClass="oldsierra" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag79}" />
+							<pe:sheetcolumn value="#{var.centro_80}" colType="numeric"
+								styleClass="oldsierra" numericLocale="es-EC" numericPattern="0"
+								required="true" requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flag80}" />
+
+							<!-- LIQUI, BODEGA, OUTLET -->
+							<pe:sheetcolumn value="#{var.lq01}" colType="numeric"
+								headerText="LQ01" styleClass="oldliqui" numericLocale="es-EC"
+								numericPattern="0" required="true"
+								requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flagLiqui}"
+								readOnly="true" />
+							<pe:sheetcolumn value="#{var.bpr2}" colType="numeric"
+								headerText="BPR2" styleClass="oldliqui" numericLocale="es-EC"
+								numericPattern="0" required="true"
+								requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flagBod}"
+								readOnly="true" />
+							<pe:sheetcolumn value="#{var.opr2}" colType="numeric"
+								headerText="OPR2" styleClass="oldliqui" numericLocale="es-EC"
+								numericPattern="0" required="true"
+								requiredMessage="Digite un valor"
+								rendered="#{controladorProductoLiquiTbl.flagOut}"
+								readOnly="true" />
+
+
+							<pe:sheetcolumn headerText="Stk-BD-R1"
+								value="#{var.stock_cluster_1_bd}" readOnly="true" />
+							<pe:sheetcolumn headerText="Stk-BD-R2"
+								value="#{var.stock_cluster_2_bd}" readOnly="true" />
+							<pe:sheetcolumn headerText="Stk-OU-R1"
+								value="#{var.stock_cluster_1_ou}" readOnly="true" />
+							<pe:sheetcolumn headerText="Stk-OU-R2"
+								value="#{var.stock_cluster_2_ou}" readOnly="true" />
+							<pe:sheetcolumn headerText="EAN" value="#{var.ean}"
+								readOnly="true" />
+
+						</pe:sheet>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</h:form>
+	</ui:define>
+</ui:composition>

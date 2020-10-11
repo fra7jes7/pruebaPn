@@ -1,0 +1,78 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/plantillas_ec1/template.xhtml">
+
+	<ui:define name="title">Test Page</ui:define>
+
+	<ui:define name="content">
+        Content goes here
+        <h:form id="formulario">
+			<p:growl></p:growl>
+			<p:panelGrid columns="2" id="panel">
+				<h:outputText value="Contraseña:" />
+				<p:password value="#{controladorLogin.cedula}"></p:password>
+			</p:panelGrid>
+			<p:commandButton ajax="false" value="Ingresar"
+				update=":formulario:panel" action="#{controladorLogin.validar}">
+			</p:commandButton>
+			
+			
+
+
+			<!-- 	<p:commandButton onclick="play_single_sound()" value="Play Sound"></p:commandButton>-->
+
+
+
+		</h:form>
+
+		<p:dialog header="Autenticación" widgetVar="dlgSelection" modal="true"
+			minHeight="40" appendTo="@(body)">
+			<h:form id="frmDglLog">
+				<p:growl id="msgs" showDetail="true" sticky="true" />
+				<h:panelGrid columns="2">
+					<h:outputText value="Concepto" />
+					<p:selectOneMenu id="idGrupo"
+						value="#{controladorLogin.strConcepto}" style="width:150px">
+						<f:selectItem itemLabel="Seleccione..." itemValue="0"
+							noSelectionOption="true" />
+						<f:selectItems value="#{controladorLogin.lstConceptoDet}"
+							var="con" itemValue="#{con.cod_concepto}"
+							itemLabel="#{con.cod_concepto}-#{con.descrip_concepto}"></f:selectItems>
+					</p:selectOneMenu>
+				</h:panelGrid>
+				<p:separator />
+				<p:commandButton value="Aceptar" update="msgs"
+					action="#{controladorLogin.IngresaLogin}" />
+			</h:form>
+		</p:dialog>
+
+		<p:dialog header="Proceso" widgetVar="dlgProceso" modal="true"
+			minHeight="40" appendTo="@(body)">
+			<h:form id="frmDglPro">
+				<p:growl id="msgPro" showDetail="true" sticky="true" />
+				<h:panelGrid columns="1">
+					<p:selectOneMenu id="idProceso"
+						value="#{controladorLogin.strProceso}" style="width:150px">
+						<p:ajax listener="#{controladorLogin.cambiarProceso}"
+							update="frmDglPro:btnProcesoDgl" />
+						<f:selectItem itemLabel="Seleccione..." itemValue="0"
+							noSelectionOption="true" />
+						<f:selectItem itemLabel="Liquidación" itemValue="LIQUIDACION"
+							noSelectionOption="true" />
+						<f:selectItem itemLabel="Consolidación" itemValue="CONSOLIDACION"
+							noSelectionOption="true" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+				<p:separator />
+				<p:commandButton id="btnProcesoDgl" ajax="false" value="Aceptar"
+					update="msgPro" disabled="#{controladorLogin.flagBtnDlgPro}"
+					action="#{controladorLogin.IngresarProceso}" />
+			</h:form>
+		</p:dialog>
+		
+	</ui:define>
+
+</ui:composition>

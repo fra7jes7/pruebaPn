@@ -1,0 +1,84 @@
+package mac.controladores;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+
+import mac.servicios.ServicioLogin;
+
+@ViewScoped
+@ManagedBean
+public class ControladorLogin {
+	
+	private ServicioLogin srvLogin;
+	
+	private String usuario;
+	private String clave;
+	private String dominio;
+	
+
+	public ControladorLogin(){
+		
+		srvLogin = new ServicioLogin();
+		usuario = "";
+		clave = "";
+		dominio= "";
+	}
+	
+
+	public String validar () throws Exception{
+		
+		System.out.println("usuario: "+usuario);
+		System.out.println("clave: "+clave);
+		System.out.println("dominio: "+dominio);
+		Boolean valido = false;
+		Integer perfil =0;
+		
+		valido = srvLogin.validaUsuario(usuario, clave, dominio);
+		System.out.println("valor del servicio: "+  valido);
+		
+		if (valido == true) {
+
+			System.out.println("valor del servicio en verdadero: "+  valido);
+			FacesMessage msg = new FacesMessage("Bienvenido(a)",usuario);
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			return "/menu.jsf";
+		}else {
+			System.out.println("valor del servicio error: "+  valido);
+			FacesMessage msg = new FacesMessage("Datos Incorrectos");
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			return "/LoginMac.jsf";
+		}
+		
+	}
+
+	public String getUsuario() {
+		return usuario;
+	}
+
+	public String getDominio() {
+		return dominio;
+	}
+
+	public void setDominio(String dominio) {
+		this.dominio = dominio;
+	}
+
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
+	}
+
+	public String getClave() {
+		return clave;
+	}
+
+	public void setClave(String clave) {
+		this.clave = clave;
+	}
+
+
+	
+	
+	
+}

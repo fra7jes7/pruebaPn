@@ -1,0 +1,41 @@
+package mac.servicios;
+
+import java.util.List;
+
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
+import mac.entidades.ClusterProducto;
+import mac.entidades.DetalleProductoLiqui;
+
+@Stateless
+public class ServicioProductoTbl {
+	
+	@PersistenceContext
+	private EntityManager em;
+	
+	@SuppressWarnings("unchecked")
+	public List<ClusterProducto> recuperarCluster(){
+		System.out.println("recupera datos de tabla cluster cabecera");
+		String sql = "select * from cluster_producto_liqui_tbl order by cod_modelo desc";
+		System.out.println("----------------query: "+ sql);
+		Query q = em.createNativeQuery(sql,ClusterProducto.class);
+		return q.getResultList();	
+		
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<DetalleProductoLiqui> recuperarDetalleProductoLiqui(Integer CD_CLS_PROD_LIQ){
+		System.out.println("recupera datos de tabla detalle producto liqui");
+		String sql = "select * from detalle_producto_liqui_tbl  "
+				+ "where cd_cls_prod_liq="+CD_CLS_PROD_LIQ+" order by cd_det_prod_liq ";
+		System.out.println("----------------query: "+ sql);
+		Query q = em.createNativeQuery(sql,DetalleProductoLiqui.class);
+		return q.getResultList();	  
+		
+	}
+
+
+}

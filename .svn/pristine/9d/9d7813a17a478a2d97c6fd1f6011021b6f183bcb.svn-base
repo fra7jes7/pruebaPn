@@ -1,0 +1,132 @@
+package mac.servicios;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.List;
+
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
+import mac.entidades.CapacidadBodega;
+import mac.entidades.Centros;
+import mac.entidades.Concepto;
+import mac.entidades.ConectarBaseMAC;
+import mac.entidades.Grupo;
+
+@Stateless
+public class ServicioMantenimiento {
+	
+	@PersistenceContext
+	private EntityManager em;
+	
+	@SuppressWarnings("unchecked")
+	public List<Grupo> recuperaGrupos (){
+		System.out.print("recupera Grupo");
+		String sql = "select * from grupo_tbl Order by DESCRIP_GRUPO";
+		System.out.println("------query: "+ sql);
+		Query q = em.createNativeQuery(sql,Grupo.class);
+		return q.getResultList();
+		
+	}	
+	
+	@SuppressWarnings("unchecked")
+	public List<Concepto> recuperaConcepto (String cod_grupo){
+		System.out.print("recupera Concepto");
+		String sql = "select * from concepto_tbl WHERE CD_GRUPO='" + cod_grupo + "' and (FORMATO='FORMATO_BD' OR FORMATO='FORMATO_OU' OR FORMATO='FORMATO_ON' OR FORMATO='FORMATO_OM')"
+				+ " order by descrip_concepto";
+		System.out.println("------query: "+ sql);
+		Query q = em.createNativeQuery(sql,Concepto.class);
+		return q.getResultList();
+		
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Centros> recuperaCentro (Integer cod_centro){
+		System.out.print("recupera Concepto");
+		String sql = "select * from centros_tbl WHERE CD_concepto=" + cod_centro + " AND REGION IS NOT NULL  order by descrip_centro";
+		System.out.println("------query: "+ sql);
+		Query q = em.createNativeQuery(sql,Centros.class);
+		return q.getResultList();
+		
+	}
+	
+	public int validaDuplicado(String cd_centro,String cod_centro,String cd_grupo, String cod_grupo){
+		System.out.println("Valida duplicados");
+		Connection conn;
+		ResultSet res = null;
+		String conteo =" ";
+		try {
+			conn = ConectarBaseMAC.getOracleConnection();
+			String query = "select count(*) from capacidad_bodega_tbl "
+					+ "where cd_centro='"+cd_centro+"'"+" and cod_centro='"+cod_centro+"'"+" and cd_grupo='"+cd_grupo+"'"+" and cod_grupo='"+cod_grupo+"'";
+			System.out.println("-----query: "+ query);
+			PreparedStatement cs = conn.prepareStatement(query);
+			res = cs.executeQuery();
+			while (res.next()){
+				conteo = res.getString(1);
+			}
+			res.close();
+			cs.close();
+			conn.close();
+		} catch (Exception e) {
+			System.out.println("error: "+ e.getMessage());
+		}
+		if (conteo.equals("0")) {
+			return 0;
+		}else {
+			return 1;
+		}
+	}
+	
+	public void insertarCapacidadBodega(CapacidadBodega col){
+		em.persist(col);
+
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<CapacidadBodega> recuperaCapacidadBodega(){
+		System.out.print("recupera datos de capacidad bodega");
+		String sql = "select * from capacidad_bodega_tbl";
+		System.out.println("------query: "+ sql);
+		Query q = em.createNativeQuery(sql,CapacidadBodega.class);
+		return q.getResultList();		
+	}
+	
+	public void eliminarRegistroCapBodega(CapacidadBodega obj){
+		em.remove(em.merge(obj));
+		
+	}
+	
+	public void actualizaCapBodega(CapacidadBodega obj){
+		em.merge(obj);
+	}
+	
+	public String ObtenerUsuario (String codUsuario){
+		
+		System.out.println("Valida usuario");
+		Connection conn;
+		ResultSet res = null;
+		String codUsu ="";
+		try {
+			conn = ConectarBaseMAC.getOracleConnection();
+			String sql = "select cod_usuario from usuario_tbl where correo_dominio like '%" + codUsuario + "%'";
+			System.out.println("********** query "+ sql);
+			PreparedStatement cs = conn.prepareStatement(sql);
+			res = cs.executeQuery();
+			while (res.next()) {
+				codUsuario=res.getString(1);
+			}
+			res.close();
+			cs.close();
+			conn.close();
+		} catch (Exception e) {
+			System.out.println("*error: "+ e.getMessage());
+		}
+		return codUsu;
+		
+	}
+	
+}

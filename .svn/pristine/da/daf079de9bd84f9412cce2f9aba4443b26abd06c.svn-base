@@ -1,0 +1,175 @@
+package mac.servicios;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
+
+import javax.ejb.Stateless;
+import javax.naming.*;
+import javax.naming.directory.*;
+
+import mac.entidades.ConectarBase;
+import mac.entidades.ConectarBaseJDE;
+import mac.entidades.Centros;
+import mac.entidades.ConectarBaseMAC;
+
+
+@Stateless
+public class ServicioLogin {
+
+	
+	public int validaUsuario(String usuario, String clave, String dominio) throws Exception {
+		
+		System.out.println("usuario servicio: "+usuario);
+		System.out.println("clave servicio: "+clave);
+		System.out.println("dominio servicio: "+dominio);
+		
+		Integer resultado;
+		Hashtable env = new Hashtable ();
+		String[] dc = dominio.split("\\.");		
+		if (dc.length == 2) {			
+			try {
+				env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
+				env.put(Context.PROVIDER_URL, "ldap://" + dominio + ":389/DC=" + dc[0] + ",DC=" + dc[1]);
+				env.put(Context.SECURITY_AUTHENTICATION, "simple");
+				env.put(Context.SECURITY_PRINCIPAL, usuario + "@" + dominio);
+				env.put(Context.SECURITY_CREDENTIALS, clave );			
+				
+			} catch (Exception e) {
+				System.out.println("No se ha ingresado un servidor valido" +  e);
+			}
+		} else {
+			System.out.println("No se ha ingresado un servidor valido");
+		}
+		
+		try {
+			DirContext ctx = new InitialDirContext(env);
+			resultado=1;
+			return resultado;
+		} catch (AuthenticationNotSupportedException ex) {
+			System.out.println("Autentificación inválida para este servidor: "+ ex);
+		}catch (AuthenticationException ex) {
+			if (ex.toString().contains("data 52e")) {
+				System.out.print("Clave o usuario incorrecto: "+ ex);				
+			}else {
+				System.out.println("Clave o usuario incorrecto: "+ ex);
+			}
+				
+		}catch (NamingException ex) {
+			System.out.println("Servidor no encontrado");			
+		}
+		return resultado=0;
+		
+	}
+	
+	public String recuperaEmailUsuario(String usuario, String clave, String dominio) {
+	
+		Hashtable env = new Hashtable ();
+		String domMail = null;
+		String[] dc = dominio.split("\\.");		
+		if (dc.length == 2) {			
+			try {
+				env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
+				env.put(Context.PROVIDER_URL, "ldap://" + dominio + ":389/DC=" + dc[0] + ",DC=" + dc[1]);
+				env.put(Context.SECURITY_AUTHENTICATION, "simple");
+				env.put(Context.SECURITY_PRINCIPAL, usuario + "@" + dominio);
+				env.put(Context.SECURITY_CREDENTIALS, clave );	
+				
+				domMail= (env.put(Context.SECURITY_PRINCIPAL, usuario + "@" + dominio)).toString();
+				System.out.println("Dominio Email:" + domMail);
+						
+			} catch (Exception e) {
+				System.out.println("No se ha ingresado un servidor valido" +  e);
+			}
+		}
+		return domMail;
+	}
+	
+	public int validaCodUser(String cod){
+		String conteo= "";
+		ResultSet res = null;
+		Connection conn;
+		try {
+			conn = ConectarBase.getOracleConnection();
+
+			String query = "SELECT count(nomina_id) FROM nomina where trim(nomina_id) = '"
+                    + cod.trim() + "' and nomina_tipo = 'ADMINISTRADOR' ";
+			System.out.println("***----Query: " + query);
+			
+			PreparedStatement cs = conn.prepareStatement(query);
+			res = cs.executeQuery();
+			
+			while (res.next()) {
+				conteo = res.getString(1);
+			}
+			res.close();
+			cs.close();
+			conn.close();
+		} catch (Exception e) {
+			System.out.println("error " + e.getMessage());
+		}
+		if (conteo.equals("0") ){
+			return 0;
+		}else{
+			return 1;
+		}
+		
+	}
+	
+	public List<Centros> recuperaCentros(){
+		Connection conn;
+		ResultSet res = null;
+		List<Centros> lstCentros = new ArrayList<Centros>();
+		try{
+			conn = ConectarBaseMAC.getOracleConnection();
+			String sql = "select min(cd_centro), cod_centro,descrip_centro, min(cd_concepto),cod_empresa,max(region) from centros_tbl where descrip_centro not like '%CD%' and descrip_centro not like '%EQUINOX%' and descrip_centro not like '%MUNDO DEPORTIVO%' and descrip_centro not like '%SUPERDEPORTE%' and descrip_centro like '%MARATHON%' GROUP BY cod_centro,descrip_centro, cod_empresa order by descrip_centro asc";
+			System.out.println("*-- Query: " + sql);
+
+			PreparedStatement cs = conn.prepareStatement(sql);
+			res = cs.executeQuery();
+			while (res.next()) {
+				Centros objCentros = new Centros();
+				objCentros.setCd_centro(res.getInt(1));
+				objCentros.setCod_centro(res.getString(2));
+				objCentros.setDescrip_centro(res.getString(3));
+				objCentros.setCd_concepto(res.getInt(4));
+				objCentros.setCod_empresa(res.getString(5));
+				objCentros.setRegion(res.getString(6));
+				
+				lstCentros.add(objCentros);
+			}
+			res.close();
+			cs.close();
+			conn.close();
+		}catch (Exception e) {
+			System.out.println("error " + e.getMessage());
+		}
+		return lstCentros;
+	}
+	
+	public String recuperaMcu(Integer codTienda){
+		String mcu = null;
+		ResultSet rs = null;
+		Connection conn;
+		try {
+			conn = ConectarBaseMAC.getOracleConnection();
+			String sql = "select cod_centro FROM centros_tbl where cd_centro = " + codTienda;
+			System.out.println(sql);
+			PreparedStatement cs = conn.prepareStatement(sql);
+			rs = cs.executeQuery();
+			while (rs.next()) {
+				mcu = rs.getString(1);
+			}
+			rs.close();
+			cs.close();
+			conn.close();
+		} catch (Exception e) {
+			System.out.println("error " + e.getMessage());
+		}
+		return mcu;
+	}
+	
+}

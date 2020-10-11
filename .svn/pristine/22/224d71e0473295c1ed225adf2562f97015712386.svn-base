@@ -1,0 +1,61 @@
+package mac.servicios;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
+import mac.entidades.ConectarBaseMAC;
+import mac.entidades.UsuarioTbl;
+import java.util.List;
+import java.util.ArrayList;
+
+
+@Stateless
+public class ServicioLoginUsTbl {
+
+	public Integer validaMailDom(String mail){
+		Integer resultado=0;
+		UsuarioTbl consutaMailDom = new UsuarioTbl();
+		ResultSet rs=null;
+		Connection conn;
+		try{
+			conn = ConectarBaseMAC.getOracleConnection();
+			String sql= "select * from usuario_tbl where correo_dominio='" + mail + "'";
+			System.out.println(sql);
+			PreparedStatement cs = conn.prepareStatement(sql);
+			rs = cs.executeQuery();
+			while (rs.next()) {
+				consutaMailDom.setCd_usuario(rs.getInt(1));
+				consutaMailDom.setCod_usuario(rs.getString(2));
+				consutaMailDom.setNm_usuario(rs.getString(3));
+				consutaMailDom.setAp_usuario(rs.getString(4));
+				consutaMailDom.setCedula_usuarios(rs.getString(5));
+				consutaMailDom.setEstado(rs.getInt(6));
+				consutaMailDom.setProceso_cambio_precio(rs.getString(7));
+				consutaMailDom.setProceso_consolidacion(rs.getString(8));
+				consutaMailDom.setProceso_liquidacion(rs.getString(9));
+				consutaMailDom.setAgrupacion_cambio_precio(rs.getString(10));
+				consutaMailDom.setAgrupacion_consolidacion(rs.getString(11));
+				consutaMailDom.setCorreo_dominio(rs.getString(12));
+				
+				System.out.println("Mail:" + mail);
+				System.out.println("Mail Consultado:" + rs.getString(12));
+
+				resultado = resultado + 1;
+			}
+			rs.close();
+			cs.close();
+			conn.close();
+		} catch (Exception e) {
+			System.out.println("error " + e.getMessage());
+			resultado = 0;
+		}
+		return resultado;
+		}
+
+}

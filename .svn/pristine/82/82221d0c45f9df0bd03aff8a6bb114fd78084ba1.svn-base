@@ -1,0 +1,126 @@
+package mac.entidades;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "usuario_tbl")
+public class UsuarioTbl {
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "secuencia_cd_usuario")
+	@SequenceGenerator(sequenceName = "secuencia_cd_usuario", name = "secuencia_cd_usuario", initialValue = 1, allocationSize = 1000)
+	@Column(name ="cd_usuario")
+	private Integer cd_usuario;
+	@Column(name ="cod_usuario")
+	private String cod_usuario;
+	@Column(name ="nm_usuario")
+	private String nm_usuario;
+	@Column(name ="ap_usuario")
+	private String ap_usuario;
+	@Column(name ="cedula_usuarios")
+	private String cedula_usuarios;
+	@Column(name ="estado")
+	private Integer estado;
+	@Column(name ="proceso_cambio_precio")
+	private String proceso_cambio_precio;
+	@Column(name ="proceso_consolidacion")
+	private String proceso_consolidacion;
+	@Column(name ="proceso_liquidacion")
+	private String proceso_liquidacion;
+	@Column(name ="agrupacion_cambio_precio")
+	private String agrupacion_cambio_precio;
+	@Column(name ="agrupacion_consolidacion")
+	private String agrupacion_consolidacion;
+	@Column(name ="agrupacion_liquidacion")
+	private String agrupacion_liquidacion;
+	@Column(name ="correo_dominio")
+	private String correo_dominio;
+	
+	public Integer getCd_usuario() {
+		return cd_usuario;
+	}
+	public void setCd_usuario(Integer cd_usuario) {
+		this.cd_usuario = cd_usuario;
+	}
+	public String getCod_usuario() {
+		return cod_usuario;
+	}
+	public void setCod_usuario(String cod_usuario) {
+		this.cod_usuario = cod_usuario;
+	}
+	public String getNm_usuario() {
+		return nm_usuario;
+	}
+	public void setNm_usuario(String nm_usuario) {
+		this.nm_usuario = nm_usuario;
+	}
+	public String getAp_usuario() {
+		return ap_usuario;
+	}
+	public void setAp_usuario(String ap_usuario) {
+		this.ap_usuario = ap_usuario;
+	}
+	public String getCedula_usuarios() {
+		return cedula_usuarios;
+	}
+	public void setCedula_usuarios(String cedula_usuarios) {
+		this.cedula_usuarios = cedula_usuarios;
+	}
+	public Integer getEstado() {
+		return estado;
+	}
+	public void setEstado(Integer estado) {
+		this.estado = estado;
+	}
+	public String getProceso_cambio_precio() {
+		return proceso_cambio_precio;
+	}
+	public void setProceso_cambio_precio(String proceso_cambio_precio) {
+		this.proceso_cambio_precio = proceso_cambio_precio;
+	}
+	public String getProceso_consolidacion() {
+		return proceso_consolidacion;
+	}
+	public void setProceso_consolidacion(String proceso_consolidacion) {
+		this.proceso_consolidacion = proceso_consolidacion;
+	}
+	public String getProceso_liquidacion() {
+		return proceso_liquidacion;
+	}
+	public void setProceso_liquidacion(String proceso_liquidacion) {
+		this.proceso_liquidacion = proceso_liquidacion;
+	}
+	public String getAgrupacion_cambio_precio() {
+		return agrupacion_cambio_precio;
+	}
+	public void setAgrupacion_cambio_precio(String agrupacion_cambio_precio) {
+		this.agrupacion_cambio_precio = agrupacion_cambio_precio;
+	}
+	public String getAgrupacion_consolidacion() {
+		return agrupacion_consolidacion;
+	}
+	public void setAgrupacion_consolidacion(String agrupacion_consolidacion) {
+		this.agrupacion_consolidacion = agrupacion_consolidacion;
+	}
+	public String getAgrupacion_liquidacion() {
+		return agrupacion_liquidacion;
+	}
+	public void setAgrupacion_liquidacion(String agrupacion_liquidacion) {
+		this.agrupacion_liquidacion = agrupacion_liquidacion;
+	}
+	public String getCorreo_dominio() {
+		return correo_dominio;
+	}
+	public void setCorreo_dominio(String correo_dominio) {
+		this.correo_dominio = correo_dominio;
+	}
+
+	
+	
+
+}

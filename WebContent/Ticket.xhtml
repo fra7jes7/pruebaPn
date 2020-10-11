@@ -1,0 +1,226 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/plantillas_ec1/template.xhtml">
+
+	<ui:define name="title">Tickets</ui:define>
+
+	<ui:define name="head">
+		<style type="text/css">
+.nba-grid {
+	width: 100%;
+	table-layout: fixed;
+	word-wrap: break-word;
+	margin-top: 15px;
+}
+
+.ui-scrollpanel-content p:first-child {
+	margin: 0;
+}
+</style>
+	</ui:define>
+
+	<ui:define name="content">
+
+		<h:form id="frmTik">
+			<p:growl id="growl" showDetail="true" sticky="true" autoUpdate="true" />
+
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:panelGrid columns="2">
+
+							<p:selectOneMenu id="Filtro" value="#{controladorTickets.filtro}"
+								style="width:125px">
+								<p:ajax listener="#{controladorTickets.filtroTickets}"
+									process="@this,frmTik:tblTicket"
+									update="@this,frmTik:tblTicket" />
+
+								<f:selectItem itemLabel="Seleccione" itemValue="" />
+								<f:selectItem itemLabel="All tickets" itemValue="All tickets" />
+								<f:selectItem itemLabel="Open tickets" itemValue="Open tickets" />
+								<f:selectItem itemLabel="Closed tickets"
+									itemValue="Closed tickets" />
+								<f:selectItem itemLabel="Overdue tickets"
+									itemValue="Overdue tickets" />
+								<f:selectItem itemLabel="Escalated Tickets"
+									itemValue="Escalated Tickets" />
+								<f:selectItem itemLabel="High Priority Tickets"
+									itemValue="High Priority Tickets" />
+							</p:selectOneMenu>
+
+
+							<p:commandButton id="btnNewTicket" value="New tickets"
+								onclick="PF('dlgModReg').show();"></p:commandButton>
+						</h:panelGrid>
+
+						<p:dataTable id="tblTicket" var="var" widgetVar="wdttblTicket"
+							editable="true" style="margin-top: 25px;"
+							value="#{controladorTickets.lstTicket}" scrollable="true"
+							scrollHeight="500">
+
+							<f:facet name="header">
+                                Tickets 
+								</f:facet>
+
+							<p:ajax event="rowEdit"
+								listener="#{controladorTickets.onRowEdit}"
+								update=":frmTik:growl" />
+
+							<p:ajax event="rowEditCancel"
+								listener="#{controladorTickets.onRowCancel}"
+								update=":frmTik:growl" />
+
+							<p:column headerText="Id">
+								<h:outputText value="#{var.id_tickets}" />
+							</p:column>
+
+							<p:column headerText="Descripción">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{var.descripcion}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText value="#{var.descripcion}" />
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column headerText="estado">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{var.estado}" />
+									</f:facet>
+									<f:facet name="input">
+										<h:selectOneMenu id="estEdita" value="#{var.estado}"
+											style="width:125px">
+											<f:selectItem itemLabel="Abierto" itemValue="Abierto" />
+											<f:selectItem itemLabel="Cerrado" itemValue="Cerrado" />
+											<f:selectItem itemLabel="Escalado" itemValue="Escalado" />
+										</h:selectOneMenu>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column headerText="prioridad">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{var.prioridad}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:selectOneMenu id="priEdita" value="#{var.prioridad}"
+											style="width:125px">
+											<f:selectItem itemLabel="Alto" itemValue="Alto" />
+											<f:selectItem itemLabel="Medio" itemValue="Medio" />
+											<f:selectItem itemLabel="Bajo" itemValue="Bajo" />
+										</p:selectOneMenu>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column headerText="duenio_caso">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{var.duenio_caso}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText value="#{var.duenio_caso}" />
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column headerText="fecha_vencimiento">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{var.fecha_vencimiento}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:calendar value="#{var.fecha_vencimiento}" />
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column headerText="ofertas">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{var.ofertas}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText value="#{var.ofertas}" />
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column style="width:35px">
+								<p:rowEditor />
+							</p:column>
+
+							<p:column headerText="Eliminar Registro">
+								<p:commandButton id="btnDeleMod" value="Borrar"
+									icon="fa fa-trash"
+									actionListener="#{controladorTickets.eliminarRegistro(var)}"
+									process="@this,frmTik:tblTicket"
+									update="@this,frmTik:tblTicket">
+								</p:commandButton>
+							</p:column>
+
+						</p:dataTable>
+
+
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+		<p:dialog header="Modelos ya registrados" widgetVar="dlgModReg"
+			width="800" height="500" closable="true" maximizable="true"
+			minimizable="true" modal="true">
+
+
+			<h:form id="frmIngreso">
+
+				<p:outputLabel value="Ingrese un nuevo ticket"></p:outputLabel>
+
+				<h:panelGrid columns="2">
+					<p:outputLabel value="Descripción:"></p:outputLabel>
+					<p:inputText id="inpDescripcion"
+						value="#{controladorTickets.objTicketIngreso.descripcion}"></p:inputText>
+
+					<p:outputLabel value="Prioridad:"></p:outputLabel>
+					<p:selectOneMenu id="menPrioridad"
+						value="#{controladorTickets.objTicketIngreso.prioridad}"
+						style="width:125px">
+						<f:selectItem itemLabel="Seleccione Una" itemValue="" />
+						<f:selectItem itemLabel="Alta" itemValue="Alta" />
+						<f:selectItem itemLabel="Media" itemValue="Media" />
+						<f:selectItem itemLabel="Baja" itemValue="Baja" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="Dueño del caso:"></p:outputLabel>
+					<p:inputText id="inpDuenioCaso"
+						value="#{controladorTickets.objTicketIngreso.duenio_caso}"></p:inputText>
+
+					<p:outputLabel value="Fecha de vencimiento:"></p:outputLabel>
+					<p:calendar id="inpFechaVen"
+						value="#{controladorTickets.objTicketIngreso.fecha_vencimiento}" />
+
+
+					<p:outputLabel value="Ofertas"></p:outputLabel>
+					<p:inputText id="inpOfertas"
+						value="#{controladorTickets.objTicketIngreso.ofertas}"></p:inputText>
+
+					<p:commandButton id="btnGuardar" value="Guardar"
+						actionListener="#{controladorTickets.guardarTicket}"></p:commandButton>
+
+				</h:panelGrid>
+
+
+			</h:form>
+		</p:dialog>
+
+	</ui:define>
+
+</ui:composition>
+

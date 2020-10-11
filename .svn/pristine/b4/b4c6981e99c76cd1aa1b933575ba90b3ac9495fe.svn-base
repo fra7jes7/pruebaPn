@@ -1,0 +1,81 @@
+package mac.entidades;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "centros_tbl")
+public class Centros {
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "SECUENCIA_CD_CENTRO")
+	@SequenceGenerator(sequenceName = "SECUENCIA_CD_CENTRO", name = "SECUENCIA_CD_CENTRO", initialValue = 1, allocationSize = 1000)
+	@Column(name = "cd_centro")
+	private Integer cd_centro;
+	@Column(name = "cod_centro")
+	private String cod_centro;
+	@Column(name = "descrip_centro")
+	private String descrip_centro;
+	@Column(name = "cd_concepto")
+	private Integer cd_concepto;
+	@Column(name = "cod_empresa")
+	private String cod_empresa;
+	@Column(name = "region")
+	private String region;
+
+	public Integer getCd_centro() {
+		return cd_centro;
+	}
+
+	public void setCd_centro(Integer cd_centro) {
+		this.cd_centro = cd_centro;
+	}
+
+	public String getCod_centro() {
+		return cod_centro;
+	}
+
+	public void setCod_centro(String cod_centro) {
+		this.cod_centro = cod_centro;
+	}
+
+	public String getDescrip_centro() {
+		return descrip_centro;
+	}
+
+	public void setDescrip_centro(String descrip_centro) {
+		this.descrip_centro = descrip_centro;
+	}
+
+	public Integer getCd_concepto() {
+		return cd_concepto;
+	}
+
+	public void setCd_concepto(Integer cd_concepto) {
+		this.cd_concepto = cd_concepto;
+	}
+
+
+	public String getCod_empresa() {
+		return cod_empresa;
+	}
+
+	public void setCod_empresa(String cod_empresa) {
+		this.cod_empresa = cod_empresa;
+	}
+
+
+
+	public String getRegion() {
+		return region;
+	}
+
+	public void setRegion(String region) {
+		this.region = region;
+	}
+
+}

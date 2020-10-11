@@ -1,0 +1,94 @@
+package mac.entidades;
+
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "liquidaciones_tbl")
+public class LiquidacionesTienda {
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "secuencia_cd_liquidacion")
+	@SequenceGenerator(sequenceName = "secuencia_cd_liquidacion", name = "secuencia_cd_liquidacion", initialValue = 1, allocationSize = 1000)
+	@Column(name = "cd_liquidacion")
+	private Integer cd_liquidacion;
+	@Column(name = "num_liquidacion")
+	private Integer num_liquidacion;
+	@Column(name = "codigo_sap_generico")
+	private String codigo_sap_generico;
+	@Column(name = "cod_modelo")
+	private String cod_modelo;
+	@Column(name = "tienda_origen")
+	private String tienda_origen;
+	@Column(name = "tienda_destino")
+	private String tienda_destino;
+	@Column(name = "cantidad")
+	private Integer cantidad;
+	@Column(name = "fecha_proceso")
+	private Date fecha_proceso;
+	@Column(name = "cod_usuario")
+	private String cod_usuario;
+	public Integer getCd_liquidacion() {
+		return cd_liquidacion;
+	}
+	public void setCd_liquidacion(Integer cd_liquidacion) {
+		this.cd_liquidacion = cd_liquidacion;
+	}
+	public Integer getNum_liquidacion() {
+		return num_liquidacion;
+	}
+	public void setNum_liquidacion(Integer num_liquidacion) {
+		this.num_liquidacion = num_liquidacion;
+	}
+	public String getCodigo_sap_generico() {
+		return codigo_sap_generico;
+	}
+	public void setCodigo_sap_generico(String codigo_sap_generico) {
+		this.codigo_sap_generico = codigo_sap_generico;
+	}
+	public String getCod_modelo() {
+		return cod_modelo;
+	}
+	public void setCod_modelo(String cod_modelo) {
+		this.cod_modelo = cod_modelo;
+	}
+	public String getTienda_origen() {
+		return tienda_origen;
+	}
+	public void setTienda_origen(String tienda_origen) {
+		this.tienda_origen = tienda_origen;
+	}
+	public String getTienda_destino() {
+		return tienda_destino;
+	}
+	public void setTienda_destino(String tienda_destino) {
+		this.tienda_destino = tienda_destino;
+	}
+	public Integer getCantidad() {
+		return cantidad;
+	}
+	public void setCantidad(Integer cantidad) {
+		this.cantidad = cantidad;
+	}
+	public Date getFecha_proceso() {
+		return fecha_proceso;
+	}
+	public void setFecha_proceso(Date fecha_proceso) {
+		this.fecha_proceso = fecha_proceso;
+	}
+	public String getCod_usuario() {
+		return cod_usuario;
+	}
+	public void setCod_usuario(String cod_usuario) {
+		this.cod_usuario = cod_usuario;
+	}
+	
+	
+	
+}

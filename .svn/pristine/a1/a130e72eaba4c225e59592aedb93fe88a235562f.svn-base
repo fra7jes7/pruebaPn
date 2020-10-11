@@ -1,0 +1,78 @@
+package mac.entidades;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "concepto_tbl")
+public class Concepto {
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "SECUENCIA_CD_CONCEPTO")
+	@SequenceGenerator(sequenceName = "SECUENCIA_CD_CONCEPTO", name = "SECUENCIA_CD_CONCEPTO", initialValue = 1, allocationSize = 1000)
+	@Column(name = "cd_concepto")
+	private Integer cd_concepto;
+	@Column(name = "descrip_concepto")
+	private String descrip_concepto;
+	@Column(name = "cd_grupo")
+	private Integer cd_grupo;
+	@Column(name = "cod_concepto")
+	private String cod_concepto;
+	@Column(name = "cd_compania")
+	private Integer cd_compania;
+	@Column(name = "formato")
+	private String formato;
+
+	public Integer getCd_concepto() {
+		return cd_concepto;
+	}
+
+	public void setCd_concepto(Integer cd_concepto) {
+		this.cd_concepto = cd_concepto;
+	}
+
+	public String getDescrip_concepto() {
+		return descrip_concepto;
+	}
+
+	public void setDescrip_concepto(String descrip_concepto) {
+		this.descrip_concepto = descrip_concepto;
+	}
+
+	public Integer getCd_grupo() {
+		return cd_grupo;
+	}
+
+	public void setCd_grupo(Integer cd_grupo) {
+		this.cd_grupo = cd_grupo;
+	}
+
+	public String getCod_concepto() {
+		return cod_concepto;
+	}
+
+	public void setCod_concepto(String cod_concepto) {
+		this.cod_concepto = cod_concepto;
+	}
+
+	public Integer getCd_compania() {
+		return cd_compania;
+	}
+
+	public void setCd_compania(Integer cd_compania) {
+		this.cd_compania = cd_compania;
+	}
+
+	public String getFormato() {
+		return formato;
+	}
+
+	public void setFormato(String formato) {
+		this.formato = formato;
+	}
+
+}

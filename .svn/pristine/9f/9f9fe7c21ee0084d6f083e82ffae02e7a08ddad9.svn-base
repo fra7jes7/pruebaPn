@@ -1,0 +1,98 @@
+package mac.servicios;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.List;
+
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
+import mac.entidades.Concepto;
+import mac.entidades.ConectarBaseMAC;
+import mac.entidades.ModelosAliquidar;
+import mac.entidades.ViewModAliqUsuarios;
+
+@Stateless
+public class ServicioModelosAliquidar {
+	@PersistenceContext
+	private EntityManager em;
+
+	@SuppressWarnings("unchecked")
+	public List<Concepto> recuperaConcepto() {
+		String sql = "SELECT * FROM concepto_tbl";
+		System.out.println("---query: " + sql);
+		Query q = em.createNativeQuery(sql, Concepto.class);
+		return q.getResultList();
+	}
+
+	public void insertar(ModelosAliquidar obj) {
+		em.persist(obj);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<ModelosAliquidar> recuperaModelosPendientes(String cod_usuario) {
+		String sql = "SELECT * FROM modelos_a_liquidar_tbl where cod_usuario='" + cod_usuario
+				+ "' AND ESTADO='PENDIENTE' " + "ORDER BY CD_MODLIQ ASC";
+		System.out.println("---query: " + sql);
+		Query q = em.createNativeQuery(sql, ModelosAliquidar.class);
+		return q.getResultList();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<ModelosAliquidar> recuperaModelosPendientesMes(Integer mes) {
+		String sql = "select * from modelos_a_liquidar_tbl where  MES_CARGA=" + mes + " and estado='PENDIENTE'";
+		System.out.println("---query: " + sql);
+		Query q = em.createNativeQuery(sql, ModelosAliquidar.class);
+		return q.getResultList();
+	}
+
+	public void eliminarModPenAliquidar(ModelosAliquidar obj) {
+		em.remove(em.merge(obj));
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<ViewModAliqUsuarios> recuperaModelosUsuariosInsert(Integer mesCarga, String codUsuario, String lstCod) {
+		String sql = "select * from mod_a_liq_usuarios where mes_carga=" + mesCarga + " and cod_usuario='" + codUsuario
+				+ "' and cod_modelo in (" + lstCod + ")";
+		System.out.println("---query: " + sql);
+		Query q = em.createNativeQuery(sql, ViewModAliqUsuarios.class);
+		return q.getResultList();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<ModelosAliquidar> controlSubidaModelos(Integer mesCarga) {
+		String sql = "SELECT * FROM modelos_a_liquidar_tbl WHERE mes_carga=" + mesCarga
+				+ "  AND TO_CHAR(FECHA_CARGA,'YYYY')=TO_CHAR(SYSDATE,'YYYY')";
+		System.out.println("---query: " + sql);
+		Query q = em.createNativeQuery(sql, ModelosAliquidar.class);
+		return q.getResultList();
+	}
+	
+	public String obtenerUsuario(String codUsuario){
+		String codUser="";
+		Connection conn;
+		ResultSet res = null;
+		try {
+			conn = ConectarBaseMAC.getOracleConnection();
+			String sql ="select cod_usuario from usuario_tbl where correo_dominio like '%" + codUsuario + "%'";
+			System.out.println("***query consultaCodUser" + sql);
+			PreparedStatement cs = conn.prepareStatement(sql);
+			res = cs.executeQuery();
+			while (res.next()) {
+				codUser = res.getString(1);
+			}
+			res.close();
+			cs.close();
+			conn.close();
+			
+		} catch (Exception e) {
+			System.out.println("***error " + e.getMessage());
+		}
+		
+		return codUser;
+	}
+
+}

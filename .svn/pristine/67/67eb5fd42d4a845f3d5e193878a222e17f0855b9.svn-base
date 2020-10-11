@@ -1,0 +1,85 @@
+package mac.controladores;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+
+import org.apache.taglibs.standard.lang.jstl.BooleanLiteral;
+import org.primefaces.PrimeFaces;
+
+import mac.servicios.ServicioLiquidacionesTienda;
+import mac.entidades.LiquidacionesTienda;
+
+
+@ManagedBean
+@ViewScoped	
+public class ControladorLiquidacionesTienda {
+	
+	@EJB
+	private ServicioLiquidacionesTienda srvLiquiTiendas;
+	private String mcu;
+	private List<LiquidacionesTienda> lstLiquidaciones;
+	private List<LiquidacionesTienda> lstLiquiSelected;
+	private Integer liquiSelected;
+	
+	
+	public ControladorLiquidacionesTienda(){
+		mcu=FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("Tienda").toString();
+		lstLiquidaciones = new ArrayList<LiquidacionesTienda>();
+		liquiSelected =0;
+		lstLiquiSelected = new ArrayList<LiquidacionesTienda>();
+	}
+	
+	@PostConstruct
+	public void inicia(){
+		System.out.println("mcu: " + mcu);		
+		lstLiquidaciones= srvLiquiTiendas.recuperaNumLiqui(mcu);
+	}
+	
+	
+	public void recuperaLiquidacion(){
+		System.out.println("Liquidacion número: " + getLiquiSelected());
+		lstLiquiSelected= srvLiquiTiendas.recuperaLiquidaciones(mcu, getLiquiSelected());
+	}
+
+	
+	public String getMcu() {
+		return mcu;
+	}
+
+	public void setMcu(String mcu) {
+		this.mcu = mcu;
+	}
+
+	public List<LiquidacionesTienda> getLstLiquidaciones() {
+		return lstLiquidaciones;
+	}
+
+	public void setLstLiquidaciones(List<LiquidacionesTienda> lstLiquidaciones) {
+		this.lstLiquidaciones = lstLiquidaciones;
+	}
+
+	public Integer getLiquiSelected() {
+		return liquiSelected;
+	}
+
+	public void setLiquiSelected(Integer liquiSelected) {
+		this.liquiSelected = liquiSelected;
+	}
+
+	public List<LiquidacionesTienda> getLstLiquiSelected() {
+		return lstLiquiSelected;
+	}
+
+	public void setLstLiquiSelected(List<LiquidacionesTienda> lstLiquiSelected) {
+		this.lstLiquiSelected = lstLiquiSelected;
+	}
+
+
+	
+}

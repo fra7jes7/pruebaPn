@@ -1,0 +1,57 @@
+package mac.servicios;
+
+import java.util.Hashtable;
+
+import javax.ejb.Stateless;
+import javax.naming.*;
+import javax.naming.directory.*;
+
+
+@Stateless
+public class ServicioLogin {
+
+	
+	public static boolean validaUsuario(String usuario, String clave, String dominio) throws Exception {
+		
+		
+		System.out.println("usuario servicio: "+usuario);
+		System.out.println("clave servicio: "+clave);
+		System.out.println("dominio servicio: "+dominio);
+		
+		Hashtable env = new Hashtable ();
+		String[] dc = dominio.split("\\.");		
+		if (dc.length == 2) {			
+			try {
+				env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
+				env.put(Context.PROVIDER_URL, "ldap://" + dominio + ":389/DC=" + dc[0] + ",DC=" + dc[1]);
+				env.put(Context.SECURITY_AUTHENTICATION, "simple");
+				env.put(Context.SECURITY_PRINCIPAL, usuario + "@" + dominio);
+				env.put(Context.SECURITY_CREDENTIALS, clave );			
+				
+			} catch (Exception e) {
+				System.out.println("No se ha ingresado un servidor vallido" +  e);
+			}
+		} else {
+			System.out.println("No se ha ingresado un servidor vallido");
+		}
+		
+		try {
+			DirContext ctx = new InitialDirContext(env);
+			return true;
+		} catch (AuthenticationNotSupportedException ex) {
+			System.out.println("Autentificación inválida para este servidor: "+ ex);
+		}catch (AuthenticationException ex) {
+			if (ex.toString().contains("data 52e")) {
+				System.out.print("clave o usuario incorrecto: "+ ex);				
+			}else {
+				System.out.println("clave o usuario incorrecto: "+ ex);
+			}
+				
+		}catch (NamingException ex) {
+			System.out.println("Servidor no encontrado");			
+		}
+		return false;
+		
+	}
+
+}

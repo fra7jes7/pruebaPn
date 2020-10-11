@@ -1,0 +1,48 @@
+package mac.entidades;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "grupo_tbl")
+public class Grupo {
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "SECUENCIA_CD_GRUPO")
+	@SequenceGenerator(sequenceName = "SECUENCIA_CD_GRUPO", name = "SECUENCIA_CD_GRUPO", initialValue = 1, allocationSize = 1000)
+	@Column(name = "cd_grupo")
+	private Integer cd_grupo;
+	@Column(name = "cod_grupo")
+	private String cod_grupo;
+	@Column(name = "descrip_grupo")
+	private String descrip_grupo;
+
+	public Integer getCd_grupo() {
+		return cd_grupo;
+	}
+
+	public void setCd_grupo(Integer cd_grupo) {
+		this.cd_grupo = cd_grupo;
+	}
+
+	public String getCod_grupo() {
+		return cod_grupo;
+	}
+
+	public void setCod_grupo(String cod_grupo) {
+		this.cod_grupo = cod_grupo;
+	}
+
+	public String getDescrip_grupo() {
+		return descrip_grupo;
+	}
+
+	public void setDescrip_grupo(String descrip_grupo) {
+		this.descrip_grupo = descrip_grupo;
+	}
+
+}

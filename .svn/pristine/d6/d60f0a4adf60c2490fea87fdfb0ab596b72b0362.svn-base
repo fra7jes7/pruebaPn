@@ -1,0 +1,379 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/plantillas_ec1/template.xhtml">
+
+	<ui:define name="title">Producto Liq</ui:define>
+
+	<ui:define name="head">
+
+	</ui:define>
+
+	<ui:define name="content">
+
+		<p:growl id="growl" showDetail="true" sticky="true" autoUpdate="true" />
+
+
+		<h:form id="frmClouster">
+			<p:growl id="growl" showDetail="true" sticky="true" autoUpdate="true" />
+			<p:dataTable id="dtClouster" var="var"
+				value="#{controladorProductoLiquiTbl.lstClusterProducto}"
+				selectionMode="single"
+				selection="#{controladorProductoLiquiTbl.objClusterProductoSelected}"
+				rowKey="#{var.cd_cls_prod_liq}">
+
+				<p:ajax event="rowSelect"
+					listener="#{controladorProductoLiquiTbl.onRowSelect}"
+					process="@this,:dtDetalle:dtDetalleProLiq"
+					update=":frmClouster:growl" />
+				<p:ajax event="rowUnselect"
+					listener="#{controladorProductoLiquiTbl.onRowUnselect}"
+					update=":frmClouster:growl" />
+
+				<p:column headerText="Codigo Modelo">
+					<h:outputText value="#{var.cod_modelo}" />
+				</p:column>
+
+				<p:column headerText="Descripción Modelo">
+					<h:outputText value="#{var.descrip_modelo}" />
+				</p:column>
+
+				<p:column>
+					<h:outputText value="#{var.cluster_1}" />
+				</p:column>
+
+				<p:column>
+					<h:outputText value="#{var.cluster_2}" />
+				</p:column>
+
+				<p:column headerText="Codigo concepto">
+					<h:outputText value="#{var.cod_concepto}" />
+				</p:column>
+
+			</p:dataTable>
+
+		</h:form>
+		<BR />
+
+		<h:form id="dtDetalle">
+
+			<h:panelGrid columns="1">
+
+				<p:dataTable id="dtDetalleProLiq" var="var"
+					value="#{controladorProductoLiquiTbl.lstDetalleProductoLiqui}">
+
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.cd_det_prod_liq}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.cd_cls_prod_liq}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.cod_usuario}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.cod_concepto}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.cod_sap_generico}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_1}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_2}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_3}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_4}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_5}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_6}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_7}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_8}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_9}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_10}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_11}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_12}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_13}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_14}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_15}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_16}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_17}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_18}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_19}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_20}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_21}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_22}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_23}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_24}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_25}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_26}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_27}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_28}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_29}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_30}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_31}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_32}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_33}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_34}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_35}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_36}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_37}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_38}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_39}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_40}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_41}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_42}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_43}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_44}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_45}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_46}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_47}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_48}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_49}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_50}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_51}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_52}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_53}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_54}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_55}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_56}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_57}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_58}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_59}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_60}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_61}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_62}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_63}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_64}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_65}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_66}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_67}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_68}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_69}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_70}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_71}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_72}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_73}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_74}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_75}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_76}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_77}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_78}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_79}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.centro_80}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.cod_centro}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.cod_almacen}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.region}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.cod_marca}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.descrip_marca}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.linea}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.genero}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.cod_actividad}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.ean}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.talla}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.pvp}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.dscto_porc}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.pvp_final}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.cod_grupo}" />
+					</p:column>
+					<p:column style="width:75px;">
+						<h:outputText value="#{var.selltrough}" />
+					</p:column>
+
+				</p:dataTable>
+
+			</h:panelGrid>
+
+
+		</h:form>
+
+
+	</ui:define>
+
+</ui:composition>
+

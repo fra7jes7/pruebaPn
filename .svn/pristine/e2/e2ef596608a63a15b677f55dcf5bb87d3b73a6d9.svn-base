@@ -1,0 +1,24 @@
+package mac.entidades;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+public class ConectarBaseJDE {
+	public static Connection getOracleConnection() throws Exception {
+
+		String driver = "oracle.jdbc.OracleDriver";
+	    String url = "jdbc:oracle:thin:@192.168.2.136:1521:jde";
+	    String username = "PRODDTA";
+	    String password = "PRODUJDE";
+	    Class.forName(driver).newInstance();
+	    Connection conn = DriverManager.getConnection(url, username, password);
+	    conn.setAutoCommit(false);
+	    return conn;
+	  }
+	
+	
+	  
+	
+	
+	
+}

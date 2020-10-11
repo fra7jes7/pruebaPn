@@ -1,0 +1,485 @@
+package mac.controladores;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+
+import org.primefaces.PrimeFaces;
+import org.primefaces.event.FileUploadEvent;
+//import org.primefaces.model.UploadedFile;
+import org.primefaces.model.file.UploadedFile;
+
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
+
+import mac.entidades.Concepto;
+import mac.entidades.ModelosAliquidar;
+import mac.entidades.ViewModAliqUsuarios;
+import mac.servicios.ServicioModelosAliquidar;
+
+@ViewScoped
+@ManagedBean
+public class ControladorModelosAliquidar {
+
+	@EJB
+	ServicioModelosAliquidar srvModelosAliquidar;
+
+	private List<Concepto> lstConcepto;
+	private String descripcionConcepto;
+	private Integer mesLiq;
+	private String codUsuario;
+	private String ruta;
+	private String modelosExistMesPen;
+	private ModelosAliquidar objModelosAliquidarDele;
+
+	private List<ModelosAliquidar> lstModelosAliquidar;
+	private List<ModelosAliquidar> lstModelosAliquidarFilter;
+	private List<ViewModAliqUsuarios> lstViewModAliqUsuarios;
+
+	public ControladorModelosAliquidar() {
+		lstConcepto = new ArrayList<Concepto>();
+		descripcionConcepto = new String();
+		mesLiq = 0;
+		codUsuario = new String("FLAPP");
+		ruta = null;
+		lstModelosAliquidar = new ArrayList<ModelosAliquidar>();
+		lstModelosAliquidarFilter = new ArrayList<ModelosAliquidar>();
+		modelosExistMesPen = new String("");
+		objModelosAliquidarDele = new ModelosAliquidar();
+		lstViewModAliqUsuarios = new ArrayList<ViewModAliqUsuarios>();
+	}
+
+	@PostConstruct
+	public void constructorInicial() {
+		conceptosAcargar();
+//		lstModelosAliquidar = srvModelosAliquidar.recuperaModelosPendientes(codUsuario);
+	}
+
+	public void conceptosAcargar() {
+		lstConcepto = srvModelosAliquidar.recuperaConcepto();
+		// Elimina conceptos duplicados
+		Map<String, Concepto> mapConcepto = new HashMap<String, Concepto>(lstConcepto.size());
+		for (Concepto p : lstConcepto) {
+			mapConcepto.put(p.getDescrip_concepto(), p);
+		}
+		lstConcepto = new ArrayList<Concepto>();
+		for (Entry<String, Concepto> p : mapConcepto.entrySet()) {
+			lstConcepto.add(p.getValue());
+		}
+		// NOMBRES EN MAYUSCULAS
+		for (Concepto objUp : lstConcepto) {
+			objUp.setDescrip_concepto(objUp.getDescrip_concepto().toUpperCase());
+		}
+		// SOLO BODEGAS Y OUTLETS
+		for (Concepto objLike : lstConcepto) {
+			if (objLike.getDescrip_concepto().contains("BODEGA") || objLike.getDescrip_concepto().contains("OUTLET")) {
+				objLike.setFormato("yes");
+			} else {
+				objLike.setFormato("no");
+			}
+		}
+
+		Iterator<Concepto> it = lstConcepto.iterator();
+		while (it.hasNext()) {
+			try {
+				if (it.next().getFormato().equals("no")) {
+					it.remove();
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+
+		}
+	}
+
+	public void subirArchivoModeloLiquidacion(FileUploadEvent evt) {
+		System.out.println("subirArchivoModeloLiquidacion");
+		System.out.println("codUsuario:" + codUsuario);
+		// UploadedFile miArchivo; // aqui se va a guardar el archivo que
+		// escogemos en el componente
+		String extension = "";
+		SimpleDateFormat formatoDos;
+		String patronDos = "dd-MM-yyyy";
+		formatoDos = new SimpleDateFormat(patronDos);
+
+		UploadedFile miArchivo = evt.getFile();
+		long tamanio = miArchivo.getSize();// tamaño del archivo
+		byte[] contenido = miArchivo.getContent();// contenido del archivo
+		String tipoDeArchivo = miArchivo.getContentType();// que tipo de
+															// archivo
+		String nombre = codUsuario + "_" + miArchivo.getFileName();
+		// concatenar con fecha
+		String nombreSinEspacios = "";
+		nombreSinEspacios = controlNombreEspaciosActivosExe(nombre);
+		Date fechaSubidaD = new Date();
+		String fechaSubida = convertirDateAstringSoloFechaHora2(fechaSubidaD);
+		String nombreConFecha = fechaSubida.concat(nombreSinEspacios);
+		nombre = nombreConFecha;
+
+		extension = nombre.substring(nombre.lastIndexOf('.'));
+		nombre = nombre.substring(0, nombre.lastIndexOf('.'));
+
+		nombre = nombre.replaceAll("[^\\p{Alpha}\\p{Digit}]+", "_") + extension;
+
+		if (nombre != null && !nombre.isEmpty()) {
+			System.out.println("-*****------- Tamaño: " + tamanio);
+			System.out.println("-*****------- Contenido: " + contenido);
+			System.out.println("-*****------- Tipo de Archivo: " + tipoDeArchivo);
+			System.out.println("********** Nombre: " + nombre);
+			guardarArchivoModeloLiquidacion(nombre, contenido);
+
+			ruta = "C:/java/wildfly-9.0.2.Final/welcome-content/uploads/modelosLiquidacion/";
+			ruta = ruta.concat(nombre);
+			System.out.println("***ruta " + ruta);
+
+			FacesMessage msgProcedimiento12 = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito",
+					"El archivo .csv se cargo correctamente");
+			FacesContext.getCurrentInstance().addMessage(null, msgProcedimiento12);
+
+		} else {
+			FacesMessage msgProcedimiento12 = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error",
+					"El archivo .csv no se cargo correctamente");
+			FacesContext.getCurrentInstance().addMessage(null, msgProcedimiento12);
+		}
+
+	}
+
+	public void guardarArchivoModeloLiquidacion(String nombre, byte[] contenido) {
+		System.out.println("nombre:" + nombre);
+		System.out.println("nombre:" + contenido);
+		FileOutputStream fos = null; // esta clase no sirve para escribir en el
+										// archivo creado, xq maneja los byte
+		File carpetaPrincipal = new File("C:\\java\\wildfly-9.0.2.Final\\welcome-content\\uploads\\modelosLiquidacion");// tenemos
+		// un
+		// objeto
+		// de
+		// tipo file, aqui no se
+		// crea el archivo
+		carpetaPrincipal.mkdir(); // se crea la carpeta
+		File miArchivo = new File(
+				"C:\\java\\wildfly-9.0.2.Final\\welcome-content\\uploads\\modelosLiquidacion/" + nombre);
+
+		try {
+
+			miArchivo.createNewFile();// se crea el archivo
+			fos = new FileOutputStream(miArchivo);
+			fos.write(contenido); // en memoria se escribe el archivo
+			fos.flush();// escribir en el disco y tambien
+			System.out.println("path donde se guardo " + carpetaPrincipal.getAbsolutePath());
+
+		} catch (IOException e) {
+			System.out.println("Error al crear");
+
+			e.printStackTrace();
+		} finally {
+			try {
+				fos.close();// permite liberar el archivo
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+
+		}
+
+	}
+
+	public void subirInformacion() {
+		System.out.println("subirInformacion");
+
+		// CONTROL DE SUBIDA CUANDO NO SE HAYA PROCESADO LA INFORMACION
+		List<ModelosAliquidar> lstConMod = new ArrayList<ModelosAliquidar>();
+		lstConMod = srvModelosAliquidar.controlSubidaModelos(mesLiq);
+		Boolean strProcesado = false, strPendiente = false, strVacia = false;
+
+		int contador = 0;
+		int tamanioLstCon = lstConMod.size();
+		for (ModelosAliquidar obj : lstConMod) {
+			if (obj.getEstado().equals("PENDIENTE")) {
+				contador++;
+			}
+		}
+		if (contador == tamanioLstCon) {
+			strPendiente = true;
+		}
+
+		contador = 0;
+		tamanioLstCon = lstConMod.size();
+		if (tamanioLstCon != 0) {
+			for (ModelosAliquidar obj : lstConMod) {
+				if (obj.getEstado().equals("PROCESADO")) {
+					contador++;
+				}
+			}
+			
+			if (contador == tamanioLstCon) {
+				strProcesado = true;
+			}
+		}
+
+		if (tamanioLstCon == 0) {
+			strVacia = true;
+		}
+
+		if (strProcesado == true) {
+			FacesMessage mensaje = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+					"No se puede cargar la información por que ya ha sido procesada la liquidación de este mes");
+			FacesContext.getCurrentInstance().addMessage(null, mensaje);
+			return;
+		}
+
+		if (ruta == null) {
+			FacesMessage mensaje = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+					"Es obligatorio adjuntar un archivo .csv que contenga modelos");
+			FacesContext.getCurrentInstance().addMessage(null, mensaje);
+			return;
+		}
+
+		try {
+			leerCsvModelos(ruta);
+
+			descripcionConcepto = null;
+			mesLiq = null;
+			ruta = null;
+			modelosExistMesPen = "";
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void leerCsvModelos(String path) throws IOException {
+		System.out.println("leerCsvModelos");
+		String archCSV = path;
+		CSVReader csvReader = new CSVReader(new FileReader(archCSV));
+		String[] fila = null;
+		List<ModelosAliquidar> lstModelosAliquidar = new ArrayList<ModelosAliquidar>();
+		ModelosAliquidar objMode = new ModelosAliquidar();
+		try {
+			int cont = 0;
+			while ((fila = csvReader.readNext()) != null) {
+				objMode.setCod_modelo(funExtraerDato(Arrays.toString(fila)));
+				if (cont > 0) {
+					lstModelosAliquidar.add(objMode);
+				}
+				cont++;
+				objMode = new ModelosAliquidar();
+			}
+		} catch (CsvValidationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		for (ModelosAliquidar obj : lstModelosAliquidar) {
+			obj.setDescrip_concepto(descripcionConcepto);
+			obj.setCod_usuario(codUsuario);
+			obj.setMes_carga(mesLiq);
+		}
+
+		// CONTROL DE MODELOS EXISTENTES
+		List<ModelosAliquidar> lstModelosAliquidarExt = new ArrayList<ModelosAliquidar>();
+		lstModelosAliquidarExt = srvModelosAliquidar.recuperaModelosPendientesMes(mesLiq);
+
+		for (ModelosAliquidar objAIngresar : lstModelosAliquidar) {
+			for (ModelosAliquidar objModBase : lstModelosAliquidarExt) {
+				if (objAIngresar.getCod_modelo().equals(objModBase.getCod_modelo().trim())) {
+					objAIngresar.setEstado("Existe");
+					modelosExistMesPen = modelosExistMesPen.concat(objAIngresar.getCod_modelo());
+					modelosExistMesPen = modelosExistMesPen + ";";
+				}
+			}
+		}
+
+		for (ModelosAliquidar obj : lstModelosAliquidar) {
+			if (obj.getEstado() == null) {
+				srvModelosAliquidar.insertar(obj);
+			}
+		}
+
+		csvReader.close();
+
+		if (!(modelosExistMesPen.equals(""))) {
+			System.out.println("Modelos ya ingresados:" + modelosExistMesPen);
+//			FacesMessage mensaje = new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia",
+//					"Los siguientes modelos ya estan cargados: " + modelosExistMesPen);
+//			FacesContext.getCurrentInstance().addMessage(null, mensaje);
+
+			// MOSTRAR DIALOGO DE MODELOS INGRESADOS
+			String lstcodModIng = funCodModeloIngresado(modelosExistMesPen);
+			lstViewModAliqUsuarios = srvModelosAliquidar.recuperaModelosUsuariosInsert(mesLiq, codUsuario,
+					lstcodModIng);
+			PrimeFaces.current().executeScript("PF('dlgModReg').show();");
+			PrimeFaces.current().ajax().update(":frmDglModReg:dtModelosIng");
+
+		}
+
+		if (modelosExistMesPen.equals("")) {
+			FacesMessage msgProcedimiento12 = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito",
+					"La informacion se cargo correctamente");
+			FacesContext.getCurrentInstance().addMessage(null, msgProcedimiento12);
+		}
+		Integer tamModExis = modelosExistMesPen.length();
+		if (tamModExis > 1) {
+			FacesMessage msgProcedimiento12 = new FacesMessage(FacesMessage.SEVERITY_INFO, "Advertencia",
+					"No se cargo toda la información");
+			FacesContext.getCurrentInstance().addMessage(null, msgProcedimiento12);
+		}
+
+	}
+
+	public String funExtraerDato(String val) {
+		val = val.trim();
+		int tam = val.length();
+		val = val.substring(1, tam - 1);
+		String[] splitted = val.split(";");
+		String result = "";
+		int cont = 0;
+		for (String obj : splitted) {
+			if (cont == 0)
+				result = obj;
+			cont++;
+		}
+
+		return result;
+	}
+
+	private String funCodModeloIngresado(String strLisCod) {
+		// TODO Auto-generated method stub
+		String[] splitted = strLisCod.split(";");
+		String resultado = "";
+		for (String objStr : splitted) {
+			resultado = resultado.concat("'".concat(objStr).concat("',"));
+		}
+		int tam = 0;
+		tam = resultado.length();
+		resultado = resultado.substring(0, tam - 1);
+		return resultado;
+	}
+
+	public String controlNombreEspaciosActivosExe(String nombre) {
+		String extension = "";
+		extension = nombre.substring(nombre.lastIndexOf('.'));
+		nombre = nombre.substring(0, nombre.lastIndexOf('.'));
+		nombre = nombre.replaceAll("[^\\p{Alpha}\\p{Digit}]+", "_") + extension;
+
+		return nombre;
+	}
+
+	public String convertirDateAstringSoloFechaHora2(Date fechaD) {
+		SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-ddHH-mm-ss");
+		String fechaString = "";
+		fechaString = formatoFecha.format(fechaD);
+		return fechaString;
+	}
+
+	public void recuperarModelosPendientes() {
+		System.out.println("recuperarModelosPendientes");
+		lstModelosAliquidar = new ArrayList<ModelosAliquidar>();
+		lstModelosAliquidar = srvModelosAliquidar.recuperaModelosPendientes(codUsuario);
+		PrimeFaces.current().ajax().update("frmDataModeloAli:tableModelosPen");
+	}
+
+	public void eliminarRegistrosPendientes(ModelosAliquidar obj) {
+		System.out.println("eliminarRegistrosPendientes");
+		System.out.println("cod-modelos:" + obj.getCod_modelo());
+		System.out.println("cd_modliq:" + obj.getCd_modliq());
+
+		srvModelosAliquidar.eliminarModPenAliquidar(obj);
+
+		lstModelosAliquidar = new ArrayList<ModelosAliquidar>();
+		lstModelosAliquidar = srvModelosAliquidar.recuperaModelosPendientes(codUsuario);
+		PrimeFaces.current().ajax().update("frmDataModeloAli:tableModelosPen");
+
+		FacesMessage msgProcedimiento12 = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Eliminacion Exitosa");
+		FacesContext.getCurrentInstance().addMessage(null, msgProcedimiento12);
+
+	}
+
+	public void borrarLosFiltros() {
+		System.out.println("borrarLosFiltros");
+	}
+
+	public List<Concepto> getLstConcepto() {
+		return lstConcepto;
+	}
+
+	public void setLstConcepto(List<Concepto> lstConcepto) {
+		this.lstConcepto = lstConcepto;
+	}
+
+	public String getDescripcionConcepto() {
+		return descripcionConcepto;
+	}
+
+	public void setDescripcionConcepto(String descripcionConcepto) {
+		this.descripcionConcepto = descripcionConcepto;
+	}
+
+	public Integer getMesLiq() {
+		return mesLiq;
+	}
+
+	public void setMesLiq(Integer mesLiq) {
+		this.mesLiq = mesLiq;
+	}
+
+	public List<ModelosAliquidar> getLstModelosAliquidar() {
+		return lstModelosAliquidar;
+	}
+
+	public void setLstModelosAliquidar(List<ModelosAliquidar> lstModelosAliquidar) {
+		this.lstModelosAliquidar = lstModelosAliquidar;
+	}
+
+	public String getModelosExistMesPen() {
+		return modelosExistMesPen;
+	}
+
+	public void setModelosExistMesPen(String modelosExistMesPen) {
+		this.modelosExistMesPen = modelosExistMesPen;
+	}
+
+	public List<ModelosAliquidar> getLstModelosAliquidarFilter() {
+		return lstModelosAliquidarFilter;
+	}
+
+	public void setLstModelosAliquidarFilter(List<ModelosAliquidar> lstModelosAliquidarFilter) {
+		this.lstModelosAliquidarFilter = lstModelosAliquidarFilter;
+	}
+
+	public ModelosAliquidar getObjModelosAliquidarDele() {
+		return objModelosAliquidarDele;
+	}
+
+	public void setObjModelosAliquidarDele(ModelosAliquidar objModelosAliquidarDele) {
+		this.objModelosAliquidarDele = objModelosAliquidarDele;
+	}
+
+	public List<ViewModAliqUsuarios> getLstViewModAliqUsuarios() {
+		return lstViewModAliqUsuarios;
+	}
+
+	public void setLstViewModAliqUsuarios(List<ViewModAliqUsuarios> lstViewModAliqUsuarios) {
+		this.lstViewModAliqUsuarios = lstViewModAliqUsuarios;
+	}
+
+}

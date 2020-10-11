@@ -1,0 +1,201 @@
+package mac.controladores;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+
+import org.primefaces.PrimeFaces;
+
+import mac.entidades.Centros;
+import mac.servicios.ServicioLogin;
+import mac.servicios.ServicioLoginUsTbl;
+
+@ViewScoped
+@ManagedBean
+public class ControladorLogin {
+	@EJB
+	private ServicioLogin srvLogin;
+	
+	@EJB
+	private ServicioLoginUsTbl srvLoginUsTbl;
+	
+	private String usuario;
+	private String clave;
+	private String dominio;
+	private String enviaDomMail;
+	private Integer validoUTbl;
+	private String tipoUserSelected;
+	private Boolean deshabilitarPass;
+	private Boolean deshabilitarDom;
+	private List<Centros> lstTiendas;
+	private String mcu; 
+
+	public ControladorLogin(){
+		
+		srvLogin = new ServicioLogin();
+		usuario = "";
+		clave = "";
+		dominio= "";
+		enviaDomMail="";
+		tipoUserSelected = "";
+		deshabilitarPass=false;
+		deshabilitarDom=false;
+		lstTiendas = new ArrayList<Centros>();
+		mcu="";
+		
+	}
+	
+	@PostConstruct
+	public void ini(){
+		usuario=new String();
+		deshabilitarPass=false;
+		deshabilitarDom=false;
+		lstTiendas = srvLogin.recuperaCentros();
+	}
+	
+
+	public String validar () throws Exception{	
+		Integer valido=0;
+		Integer validoTienda = 0;
+		valido = srvLogin.validaUsuario(usuario, clave, dominio);
+		
+		enviaDomMail=srvLogin.recuperaEmailUsuario(usuario, clave, dominio);
+		System.out.println("Dominio mail env a srvutbl:" + enviaDomMail);
+
+		if(getTipoUserSelected().equals("administrativo")){
+			if (valido == 1) {
+				validoUTbl= srvLoginUsTbl.validaMailDom(enviaDomMail);
+				System.out.println("Valido srvutbl:" + validoUTbl);
+				
+				if(validoUTbl==1){ 
+					FacesMessage msg = new FacesMessage("Bienvenido(a)",usuario);
+					FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("Usuario", usuario);
+					FacesContext.getCurrentInstance().addMessage(null, msg);
+					return "/modelosAliquidar.jsf";
+					}
+				else{
+					FacesMessage msg =  new FacesMessage(FacesMessage.SEVERITY_ERROR, "¡ERROR!","No se encuentra registrado");
+					FacesContext.getCurrentInstance().addMessage(null, msg);	
+					return "/LoginMac.jsf";
+				}
+			}else {
+				FacesMessage msg =  new FacesMessage(FacesMessage.SEVERITY_ERROR, "¡ERROR!","Datos Incorrectos");
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+				return "/LoginMac.jsf";
+			}
+		}else{
+			try{
+				if(usuario.isEmpty() || usuario.equals(null)){
+					FacesMessage msg =  new FacesMessage(FacesMessage.SEVERITY_ERROR, "¡ERROR!","Usuario no puede estar en blanco");
+					FacesContext.getCurrentInstance().addMessage(null, msg);
+					return "/LoginMac.jsf";
+				} 
+				else{
+					validoTienda= srvLogin.validaCodUser(usuario);
+					System.out.println("Valido Tienda: " + validoTienda);
+					if (validoTienda==1){
+						mcu= srvLogin.recuperaMcu(Integer.parseInt(getTipoUserSelected()));
+						System.out.println("Código seleccionado: " + getTipoUserSelected() + " mcu: " + mcu);
+						FacesMessage msg = new FacesMessage("Bienvenidos ",mcu);
+						FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("Tienda", mcu);
+						FacesContext.getCurrentInstance().addMessage(null, msg);
+						return "/liquidacionesTienda.jsf";
+					}
+					else{
+						FacesMessage msg =  new FacesMessage(FacesMessage.SEVERITY_ERROR, "¡ERROR!","Usuario no existe");
+						FacesContext.getCurrentInstance().addMessage(null, msg);
+						return "/LoginMac.jsf";
+					}
+				}
+			} catch (Exception e) {
+				FacesMessage msg =  new FacesMessage(FacesMessage.SEVERITY_ERROR, "¡ERROR!","Usuario no puede estar en blanco!");
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+				return null;
+			}
+		}
+		
+	}
+	
+
+	public void tipoLogin(){
+		System.out.println("Tipo login seleccionado: " + getTipoUserSelected());
+		
+		if(getTipoUserSelected().equals("administrativo")){
+			deshabilitarPass=false;
+			deshabilitarDom=false;
+			PrimeFaces.current().ajax().update("frmLogin:password");
+			PrimeFaces.current().ajax().update("frmLogin:console");
+			
+		}else{
+			deshabilitarPass=true;
+			deshabilitarDom=true;
+			PrimeFaces.current().ajax().update("frmLogin:password");
+			PrimeFaces.current().ajax().update("frmLogin:console");
+		}
+		
+	}
+	
+	public String getUsuario() {
+		return usuario;
+	}
+
+	public String getDominio() {
+		return dominio;
+	}
+
+	public void setDominio(String dominio) {
+		this.dominio = dominio;
+	}
+
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
+	}
+
+	public String getClave() {
+		return clave;
+	}
+
+	public void setClave(String clave) {
+		this.clave = clave;
+	}
+
+	public String getTipoUserSelected() {
+		return tipoUserSelected;
+	}
+
+	public void setTipoUserSelected(String tipoUserSelected) {
+		this.tipoUserSelected = tipoUserSelected;
+	}
+
+	public Boolean getDeshabilitarPass() {
+		return deshabilitarPass;
+	}
+
+	public void setDeshabilitarPass(Boolean deshabilitarPass) {
+		this.deshabilitarPass = deshabilitarPass;
+	}
+
+	public Boolean getDeshabilitarDom() {
+		return deshabilitarDom;
+	}
+
+	public void setDeshabilitarDom(Boolean deshabilitarDom) {
+		this.deshabilitarDom = deshabilitarDom;
+	}
+
+	public List<Centros> getLstTiendas() {
+		return lstTiendas;
+	}
+
+	public void setLstTiendas(List<Centros> lstTiendas) {
+		this.lstTiendas = lstTiendas;
+	}
+	
+	
+}

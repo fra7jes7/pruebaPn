@@ -1,0 +1,96 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/plantillas_ec1/templateMantenimiento.xhtml">
+
+	<ui:define name="title">LiquidacionesUsuario</ui:define>
+
+	<ui:define name="head">
+		<style type="text/css">
+.nba-grid {
+	width: 100%;
+	table-layout: fixed;
+	word-wrap: break-word;
+	margin-top: 15px;
+}
+
+.ui-scrollpanel-content p:first-child {
+	margin: 0;
+}
+</style>
+	</ui:define>
+	<ui:define name="content">
+		<p:growl id="growl" showDetail="true" sticky="true" autoUpdate="true" />
+		<h:form id="frmLiquiUser">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<p:panelGrid id="pnParametros"
+							style="margin-top:20pxk; width:300px;" styleClass="nba-grid">
+							<f:facet name="header">
+								<p:row>
+									<p:column>Seleccionar</p:column>
+								</p:row>
+							</f:facet>
+							<p:row>
+								<p:column style="font-weight: bold;">
+									<h:panelGrid columns="1" styleClass="nba-grid">
+										<p:selectOneMenu id="numLiqui"
+											value="#{controladorVerLiquidaciones.liquiSelected}"
+											required="true"
+											requiredMessage="Es obligatorio seleccionar una liquidación"
+											styleClass="nba-grid">
+											<p:ajax
+												listener="#{controladorVerLiquidaciones.recuperaLiquidacion}"
+												update="@this,:frmDataTable:tblLiquidaciones"
+												process="@this,:frmDataTable:tblLiquidaciones" />
+											<f:selectItem itemLabel="SELECCIONE LIQUIDACIÓN" itemValue="" />
+											<f:selectItems
+												value="#{controladorVerLiquidaciones.lstLiquidaciones}"
+												var="liqui"
+												itemLabel="Liquidación: #{liqui.num_liquidacion} - Fecha: #{liqui.fecha_proceso}"
+												itemValue="#{liqui.num_liquidacion}" />
+										</p:selectOneMenu>
+									</h:panelGrid>
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+					</div>
+				</div>
+			</div>
+		</h:form>
+		<h:form id="frmDataTable">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h3 class="first">Liquidaciones Realizadas</h3>
+						<p:dataTable id="tblLiquidaciones" var="nliq"
+							value="#{controladorVerLiquidaciones.lstLiquiSelected}"
+							sortBy="#{nliq.cod_modelo}" editable="true">
+							<p:headerRow>
+								<p:column colspan="4">
+									<h:outputText value="Modelo: #{nliq.cod_modelo}" />
+								</p:column>
+							</p:headerRow>
+							<p:column headerText="Código SAP">
+								<h:outputText value="#{nliq.codigo_sap_generico}" />
+							</p:column>
+							<p:column headerText="Tienda Origen">
+								<h:outputText value="#{nliq.tienda_origen}" />
+							</p:column>
+							<p:column headerText="Cantidad">
+								<h:outputText value="#{nliq.cantidad}" />
+							</p:column>
+							<p:column headerText="Tienda Destino">
+								<h:outputText value="#{nliq.tienda_destino}" />
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

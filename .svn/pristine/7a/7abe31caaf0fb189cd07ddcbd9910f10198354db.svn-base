@@ -1,0 +1,67 @@
+package mac.servicios;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
+import mac.entidades.ConectarBaseMAC;
+import mac.entidades.LiquidacionesTienda;
+
+@Stateless
+public class ServicioLiquidacionesTienda {
+	@PersistenceContext
+	private EntityManager em;
+	
+	public List<LiquidacionesTienda> recuperaNumLiqui(String mcu){
+		Connection conn;
+		ResultSet res = null;
+		List<LiquidacionesTienda> lstNumLiqui = new ArrayList<LiquidacionesTienda>();
+		try{
+			conn = ConectarBaseMAC.getOracleConnection();
+			String sql = "select  min(cd_liquidacion), num_liquidacion, min(codigo_sap_generico), min(cod_modelo), tienda_origen, min(tienda_destino), " +
+					" min(cantidad), to_date(fecha_proceso), min(cod_usuario) "
+					+ "from liquidaciones_tbl "
+					+ "where  num_liquidacion is not null and tienda_origen='" + 
+					mcu + "' group by num_liquidacion, tienda_origen, fecha_proceso "
+							+ "order by num_liquidacion desc ";
+			System.out.println("*-- Query: " + sql);
+			PreparedStatement cs = conn.prepareStatement(sql);
+			res = cs.executeQuery();
+			while (res.next()) {
+				LiquidacionesTienda objNumLiqui = new LiquidacionesTienda();
+				objNumLiqui.setCd_liquidacion(res.getInt(1));
+				objNumLiqui.setNum_liquidacion(res.getInt(2));
+				objNumLiqui.setCodigo_sap_generico(res.getString(3));
+				objNumLiqui.setCod_modelo(res.getString(4));
+				objNumLiqui.setTienda_origen(res.getString(5));
+				objNumLiqui.setTienda_destino(res.getString(6));
+				objNumLiqui.setCantidad(res.getInt(7));
+				objNumLiqui.setFecha_proceso(res.getDate(8));
+				objNumLiqui.setCod_usuario(res.getString(9));
+				
+				lstNumLiqui.add(objNumLiqui);
+			}
+			res.close();
+			cs.close();
+			conn.close();
+		}catch (Exception e) {
+			System.out.println("error " + e.getMessage());
+		}
+		return lstNumLiqui;	
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<LiquidacionesTienda> recuperaLiquidaciones(String mcu, Integer numLiqui){
+		String sql = "select * from liquidaciones_tbl where tienda_origen = '" + mcu + "' and num_liquidacion=" + numLiqui;
+		System.out.println("*----Query: " + sql);
+		Query q=em.createNativeQuery(sql, LiquidacionesTienda.class);
+		return q.getResultList();
+	}
+}

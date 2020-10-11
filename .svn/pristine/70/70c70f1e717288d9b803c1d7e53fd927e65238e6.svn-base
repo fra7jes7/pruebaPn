@@ -1,0 +1,78 @@
+package mac.entidades;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "capacidad_bodega_tbl")
+public class CapacidadBodega {
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "SECUENCIA_CD_CAPACIDAD")
+	@SequenceGenerator(sequenceName = "SECUENCIA_CD_CAPACIDAD", name = "SECUENCIA_CD_CAPACIDAD", initialValue = 1, allocationSize = 1000)
+	@Column(name = "cd_capacidad")
+	Integer cd_capacidad;
+	@Column(name = "cd_centro")
+	Integer cd_centro;
+	@Column(name = "cod_centro")
+	String cod_centro;
+	@Column(name = "cd_grupo")
+	Integer cd_grupo;
+	@Column(name = "cod_grupo")
+	String cod_grupo;
+	@Column(name = "val_capacidad")
+	Integer val_capacidad;
+
+	public Integer getCd_capacidad() {
+		return cd_capacidad;
+	}
+
+	public void setCd_capacidad(Integer cd_capacidad) {
+		this.cd_capacidad = cd_capacidad;
+	}
+
+	public Integer getCd_centro() {
+		return cd_centro;
+	}
+
+	public void setCd_centro(Integer cd_centro) {
+		this.cd_centro = cd_centro;
+	}
+
+	public String getCod_centro() {
+		return cod_centro;
+	}
+
+	public void setCod_centro(String cod_centro) {
+		this.cod_centro = cod_centro;
+	}
+
+	public Integer getCd_grupo() {
+		return cd_grupo;
+	}
+
+	public void setCd_grupo(Integer cd_grupo) {
+		this.cd_grupo = cd_grupo;
+	}
+
+	public String getCod_grupo() {
+		return cod_grupo;
+	}
+
+	public void setCod_grupo(String cod_grupo) {
+		this.cod_grupo = cod_grupo;
+	}
+
+	public Integer getVal_capacidad() {
+		return val_capacidad;
+	}
+
+	public void setVal_capacidad(Integer val_capacidad) {
+		this.val_capacidad = val_capacidad;
+	}
+
+}

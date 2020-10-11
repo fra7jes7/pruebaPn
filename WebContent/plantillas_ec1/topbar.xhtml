@@ -1,0 +1,34 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<div class="layout-topbar">
+		<a href="#" id="topbar-menu-button"> <i
+			class="fa fa-angle-left arrow"></i> <i class="fa fa-angle-up mobile"></i>
+		</a>
+
+		<div class="search-input">
+			<i class="fa fa-search icon-search"></i> <input type="text"></input>
+		</div>
+
+		<h:link outcome="/menu" styleClass="logo-container">
+		</h:link>
+
+		<a id="topbar-profile-menu-button" href="#"> <span><h:outputText
+					value="#{controladorLogin.usuario}"></h:outputText></span> <p:graphicImage
+				name="images/run.png" library="ecuador-layout"
+				styleClass="topbar-profile" /> <i class="fa fa-angle-down"></i>
+		</a>
+
+		<ul id="topbar-usermenu">
+			<li><a href="/MSMac2/LoginMac.jsf"> <i
+					class="fa fa-fw fa-sign-out"></i> <span class="topbar-item-name">Cerrar
+						Sesión </span>
+			</a></li>
+		</ul>
+
+	</div>
+
+</ui:composition>

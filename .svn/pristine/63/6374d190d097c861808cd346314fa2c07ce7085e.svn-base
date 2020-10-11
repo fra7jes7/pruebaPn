@@ -1,0 +1,152 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/plantillas_ec1/templateMantenimiento.xhtml">
+
+	<ui:define name="title">CapacidadBodega</ui:define>
+	<ui:define name="viewname">
+		<li>Components</li>
+		<li>/</li>
+		<li><p:link outcome="/menu">Menus</p:link></li>
+	</ui:define>
+
+	<ui:define name="head">
+		<style type="text/css">
+.ui-steps .ui-steps-item {
+	width: 25%;
+}
+</style>
+	</ui:define>
+	<ui:define name="content">
+		<h:form id="frm">
+			<div class="ui-g ui-fluid">
+				<div class="ui-g-12 ui-lg-6">
+						<p:growl id="msgs" showDetail="true"
+							skipDetailIfEqualsSummary="true" />
+						<p:panel header="Capacidad Bodega" style="width:700px" id="panel">
+							<p:panelGrid columns="2" cellpadding="5">
+								<p:outputLabel for="grupo" value="Seleccione Grupo: " />
+								<p:selectOneMenu id="grupo"
+									value="#{controladorMantenimiento.cod_grupo}"
+									style="width:150px">
+									<p:ajax listener="#{controladorMantenimiento.recuperaConcepto}"
+										update="@this,:frm:concepto"
+										process="@this,:frm:concepto" />
+									<f:selectItem itemLabel="seleccione" itemValue=""
+										noSelectionOption="true" />
+									<f:selectItems value="#{controladorMantenimiento.lstGrupo}"
+										var="grup" itemLabel="#{grup.descrip_grupo}"
+										itemValue="#{grup.cd_grupo}-#{grup.cod_grupo}" />
+
+								</p:selectOneMenu>
+
+								<p:outputLabel for="concepto" value="Seleccione Concepto: " />
+								<p:selectOneMenu id="concepto"
+									value="#{controladorMantenimiento.cod_concepto}"
+									style="width:150px">
+									<f:selectItem itemLabel="seleccione" itemValue=""
+										noSelectionOption="true" />
+									<f:selectItems value="#{controladorMantenimiento.lstConcepto}"
+										var="con" itemLabel="#{con.descrip_concepto}"
+										itemValue="#{con.cd_concepto}" />
+									<p:ajax listener="#{controladorMantenimiento.recuperaCentro}"
+										update="centro" />
+								</p:selectOneMenu>
+
+								<p:outputLabel for="centro" value="Seleccione Centro: " />
+								<p:selectOneMenu id="centro"
+									value="#{controladorMantenimiento.cod_centro}"
+									style="width:150px">
+									<f:selectItem itemLabel="seleccione" itemValue=""
+										noSelectionOption="true" />
+									<f:selectItems value="#{controladorMantenimiento.lstCentros}"
+										var="cen" itemLabel="#{cen.descrip_centro}"
+										itemValue="#{cen.cd_centro}-#{cen.cod_centro}" />
+									<p:ajax listener="#{controladorMantenimiento.recuperaCentro}"
+										update="otro" />
+								</p:selectOneMenu>
+
+								<p:outputLabel for="otro" value="Seleccione Centro: "
+									rendered="false" />
+								<p:selectOneMenu id="otro" rendered="false" style="width:150px">
+									<f:selectItem itemLabel="" itemValue=""
+										noSelectionOption="true" />
+									<f:selectItems value="#{controladorMantenimiento.lstCentros}"
+										var="cen" itemLabel="#{cen.descrip_centro}" />
+								</p:selectOneMenu>
+
+
+								<p:outputLabel value="Cantidad: " />
+								<p:inputNumber required="true" style="width:50px"
+									placeholder="cantidad"
+									value="#{controladorMantenimiento.cantidad}" />
+								<p:outputLabel value=" " />
+								<p:commandButton value="Añadir" id="btnGuardar" update="msgs"
+									action="#{controladorMantenimiento.validar}"
+									styleClass="ui-priority-primary" />
+								<p:outputLabel value=" " />
+								<p:commandButton value="Consultar" id="btnConsultar"
+									action="#{controladorMantenimiento.obtenerCapacidaBodega}"
+									update="@this" process="@this" styleClass="ui-priority-primary" />
+							</p:panelGrid>
+						</p:panel>
+						<p:separator style="width:700px" />
+
+					
+						<p:panel id="pnlMantenimiento" style="width:700px">
+							<p:dataTable id="tabCapacidad" var="cap"
+								value="#{controladorMantenimiento.lstCapacidadBodega}" rows="10"
+								paginator="true"
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+								rowsPerPageTemplate="5,10,15">
+
+								<p:ajax event="rowEdit" listener="#{dtEditView.onRowEdit}" />
+								<p:ajax event="rowEditCancel"
+									listener="#{dtEditView.onRowCancel}" />
+
+								<p:column headerText="CD CENTRO" style="width:80px"
+									filterBy="#{cap.cd_centro}" filterMatchMode="contains">
+									<h:outputText value="#{cap.cd_centro}" />
+								</p:column>
+
+								<p:column headerText="COD CENTRO" style="width:90px"
+									filterBy="#{cap.cod_centro}" filterMatchMode="contains">
+									<h:outputText value="#{cap.cod_centro}" />
+								</p:column>
+
+								<p:column headerText="CD GRUPO" style="width:80px"
+									filterBy="#{cap.cd_grupo}" filterMatchMode="contains">
+									<h:outputText value="#{cap.cd_grupo}" />
+								</p:column>
+
+								<p:column headerText="COD GRUPO" style="width:80px"
+									filterBy="#{cap.cod_grupo}" filterMatchMode="contains">
+									<h:outputText value="#{cap.cod_grupo}" />
+								</p:column>
+
+								<p:column headerText="CAPACIDAD" style="width:80px"
+									filterBy="#{cap.val_capacidad}" filterMatchMode="contains">
+									<h:outputText value="#{cap.val_capacidad}" />
+								</p:column>
+
+								<f:facet name="paginatorTopLeft">
+									<p:commandButton type="button" icon="pi pi-refresh" />
+								</f:facet>
+
+								<f:facet name="paginatorBottomRight">
+									<p:commandButton type="button" icon="pi pi-cloud-upload" />
+								</f:facet>
+
+								<p:column style="width:35px">
+									<p:rowEditor />
+								</p:column>
+							</p:dataTable>
+						</p:panel>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

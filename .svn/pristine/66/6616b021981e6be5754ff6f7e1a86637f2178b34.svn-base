@@ -1,0 +1,33 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ecuador">
+
+	<div class="layout-sidebar">
+		<div class="nano">
+			<div class="nano-content menu-scroll-content">
+				<h:form id="menuform">
+					<div class="layout-menu-title">MAIN MENU</div>
+					<pe:menu widgetVar="me">
+						<p:menuitem id="om_dashboard1" value="Login"
+							icon="fa fa-fw fa-dashboard" outcome="LoginMac" />
+						<p:submenu id="om_customization_mode" label="Mantenimiento"
+							icon="fa fa-fw fa-cog" >
+							<p:menuitem id="om_dashboard2" value="Capacidad Bodega"
+								icon="fa fa-fw fa-dashboard" outcome="Mantenimiento"/>
+						</p:submenu>
+						<p:submenu id="om_customization" label="Produccion"
+							icon="fa fa-fw fa-cog" >
+							<p:menuitem id="om_dashboard3" value="Modelos a Liquidar"
+								icon="fa fa-fw fa-dashboard" outcome="modelosAliquidar"/>
+							<p:menuitem id="om_dashboard4" value="Producto a Liquidar"
+								icon="fa fa-fw fa-dashboard" outcome="productoLiquiTbl"/>
+						</p:submenu>
+					</pe:menu>
+				</h:form>
+			</div>
+		</div>
+	</div>
+</ui:composition>

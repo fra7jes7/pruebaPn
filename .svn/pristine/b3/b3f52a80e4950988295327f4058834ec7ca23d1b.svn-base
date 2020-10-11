@@ -1,0 +1,24 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ecuador">
+
+	<div class="layout-sidebar">
+		<div class="nano">
+			<div class="nano-content menu-scroll-content">
+				<h:form id="menuform">
+					<div class="layout-menu-title">MAIN MENU</div>
+					<pe:menu widgetVar="me">
+						<p:menuitem id="om_dashboard1" value="Login"
+							icon="fa fa-fw fa-dashboard" outcome="LoginMac" />
+						<p:menuitem id="om_dashboard5" label= "Liquidaciones Tienda" value="Liquidaciones Tienda"
+							icon="fa fa-fw fa-shopping-bag" outcome="liquidacionesTienda">
+						</p:menuitem>
+					</pe:menu>
+				</h:form>
+			</div>
+		</div>
+	</div>
+</ui:composition>

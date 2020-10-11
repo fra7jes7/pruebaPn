@@ -1,0 +1,2433 @@
+package mac.controladores;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+
+import org.primefaces.PrimeFaces;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
+import org.primefaces.extensions.component.sheet.Sheet;
+import org.primefaces.extensions.event.SheetEvent;
+import org.primefaces.extensions.model.sheet.SheetUpdate;
+
+import mac.entidades.ClusterProducto;
+import mac.entidades.DetalleProductoLiqui;
+import mac.servicios.ServicioProductoTbl;
+
+@ViewScoped
+@ManagedBean
+public class ControladorProductoLiquiTbl implements Serializable {
+
+	@EJB
+	ServicioProductoTbl srvServicioProductoTbl;
+
+	private List<ClusterProducto> lstClusterProducto;
+	private List<ClusterProducto> lstClusterfilter;
+	private List<DetalleProductoLiqui> lstDetalleProductoLiqui;
+	private List<DetalleProductoLiqui> lstObtenerTiendas;
+	private List<DetalleProductoLiqui> lstDetalleFilter;
+	private ClusterProducto objClusterProductoSelected;
+	private DetalleProductoLiqui objIdDetalle;
+
+	private List<String> lineaFiltros;
+	private List<String> marcaFiltros;
+	private List<String> generoFiltros;
+	private List<String> actividadFiltros;
+
+	private static final long serialVersionUID = 20120224L;
+
+	private Boolean flag1;
+	private Boolean flag2;
+	private Boolean flag3;
+	private Boolean flag4;
+	private Boolean flag5;
+	private Boolean flag6;
+	private Boolean flag7;
+	private Boolean flag8;
+	private Boolean flag9;
+	private Boolean flag10;
+	private Boolean flag11;
+	private Boolean flag12;
+	private Boolean flag13;
+	private Boolean flag14;
+	private Boolean flag15;
+	private Boolean flag16;
+	private Boolean flag17;
+	private Boolean flag18;
+	private Boolean flag19;
+	private Boolean flag20;
+	private Boolean flag21;
+	private Boolean flag22;
+	private Boolean flag23;
+	private Boolean flag24;
+	private Boolean flag25;
+	private Boolean flag26;
+	private Boolean flag27;
+	private Boolean flag28;
+	private Boolean flag29;
+	private Boolean flag30;
+	private Boolean flag31;
+	private Boolean flag32;
+	private Boolean flag33;
+	private Boolean flag34;
+	private Boolean flag35;
+	private Boolean flag36;
+	private Boolean flag37;
+	private Boolean flag38;
+	private Boolean flag39;
+	private Boolean flag40;
+	private Boolean flag41;
+	private Boolean flag42;
+	private Boolean flag43;
+	private Boolean flag44;
+	private Boolean flag45;
+	private Boolean flag46;
+	private Boolean flag47;
+	private Boolean flag48;
+	private Boolean flag49;
+	private Boolean flag50;
+	private Boolean flag51;
+	private Boolean flag52;
+	private Boolean flag53;
+	private Boolean flag54;
+	private Boolean flag55;
+	private Boolean flag56;
+	private Boolean flag57;
+	private Boolean flag58;
+	private Boolean flag59;
+	private Boolean flag60;
+	private Boolean flag61;
+	private Boolean flag62;
+	private Boolean flag63;
+	private Boolean flag64;
+	private Boolean flag65;
+	private Boolean flag66;
+	private Boolean flag67;
+	private Boolean flag68;
+	private Boolean flag69;
+	private Boolean flag70;
+	private Boolean flag71;
+	private Boolean flag72;
+	private Boolean flag73;
+	private Boolean flag74;
+	private Boolean flag75;
+	private Boolean flag76;
+	private Boolean flag77;
+	private Boolean flag78;
+	private Boolean flag79;
+	private Boolean flag80;
+	private Boolean flagLiqui = true;
+	private Boolean flagBod = true;
+	private Boolean flagOut = true;
+
+	private Boolean flagdb1;
+	private Boolean flagdb2;
+	private Boolean flagdb3;
+	private Boolean flagdb4;
+	private Boolean flagdb5;
+	private Boolean flagdb6;
+
+	private Boolean flagou1;
+	private Boolean flagou2;
+	private Boolean flagou3;
+	private Boolean flagou4;
+	private Boolean flagou5;
+	private Boolean flagou6;
+
+	private String mixto = "mixto";
+	private String bod = "bodega";
+	private String out = "outlet";
+	
+	private Boolean flgBtnLiquidacion;
+
+	public ControladorProductoLiquiTbl() {
+		lstClusterProducto = new ArrayList<ClusterProducto>();
+		objClusterProductoSelected = new ClusterProducto();
+		// lstClusterfilter = new ArrayList<ClusterProducto>();
+		lstObtenerTiendas = new ArrayList<DetalleProductoLiqui>();
+		lstDetalleProductoLiqui = new ArrayList<DetalleProductoLiqui>();
+		lineaFiltros = new ArrayList<String>();
+		marcaFiltros = new ArrayList<String>();
+		generoFiltros = new ArrayList<String>();
+		actividadFiltros = new ArrayList<String>();
+
+		encerar();
+	}
+
+	public void encerarDetalle() {
+		lstDetalleProductoLiqui = new ArrayList<DetalleProductoLiqui>();
+	}
+
+	public void encerar() {
+		flag1 = false;
+		flag2 = false;
+		flag3 = false;
+		flag4 = false;
+		flag5 = false;
+		flag6 = false;
+		flag7 = false;
+		flag8 = false;
+		flag9 = false;
+		flag10 = false;
+		flag11 = false;
+		flag12 = false;
+		flag13 = false;
+		flag14 = false;
+		flag15 = false;
+		flag16 = false;
+		flag17 = false;
+		flag18 = false;
+		flag19 = false;
+		flag20 = false;
+		flag21 = false;
+		flag22 = false;
+		flag23 = false;
+		flag24 = false;
+		flag25 = false;
+		flag26 = false;
+		flag27 = false;
+		flag28 = false;
+		flag29 = false;
+		flag30 = false;
+		flag31 = false;
+		flag32 = false;
+		flag33 = false;
+		flag34 = false;
+		flag35 = false;
+		flag36 = false;
+		flag37 = false;
+		flag38 = false;
+		flag39 = false;
+		flag40 = false;
+		flag41 = false;
+		flag42 = false;
+		flag43 = false;
+		flag44 = false;
+		flag45 = false;
+		flag46 = false;
+		flag47 = false;
+		flag48 = false;
+		flag49 = false;
+		flag50 = false;
+		flag51 = false;
+		flag52 = false;
+		flag53 = false;
+		flag54 = false;
+		flag55 = false;
+		flag56 = false;
+		flag57 = false;
+		flag58 = false;
+		flag59 = false;
+		flag60 = false;
+		flag61 = false;
+		flag62 = false;
+		flag63 = false;
+		flag64 = false;
+		flag65 = false;
+		flag66 = false;
+		flag67 = false;
+		flag68 = false;
+		flag69 = false;
+		flag70 = false;
+		flag71 = false;
+		flag72 = false;
+		flag73 = false;
+		flag74 = false;
+		flag75 = false;
+		flag76 = false;
+		flag77 = false;
+		flag78 = false;
+		flag79 = false;
+		flag80 = false;
+
+		flagLiqui = true;
+		flagBod = true;
+		flagOut = true;
+
+		flagdb1 = false;
+		flagdb2 = false;
+		flagdb3 = false;
+		flagdb4 = false;
+		flagdb5 = false;
+		flagdb6 = false;
+		flagou1 = false;
+		flagou2 = false;
+		flagou3 = false;
+		flagou4 = false;
+		flagou5 = false;
+		flagou6 = false;
+	}
+
+	@PostConstruct
+	public void constructorInicial() {
+		lstClusterProducto = srvServicioProductoTbl.recuperarCluster();
+		lineaFiltros = srvServicioProductoTbl.recuperaFiltroLinea();
+		marcaFiltros = srvServicioProductoTbl.recuperaFiltroMarca();
+		generoFiltros = srvServicioProductoTbl.recuperaFiltroGenero();
+		actividadFiltros = srvServicioProductoTbl.recuperaFiltroActividad();
+		columnasConcepto();
+		flgBtnLiquidacion=false;
+	}
+
+	public void onRowSelect(SelectEvent event) {
+		System.out.println("onRowSelect");
+		// FacesMessage msg = new FacesMessage("Car Selected",
+		// ((ClusterProducto) event.getObject()).getCod_modelo());
+		// FacesContext.getCurrentInstance().addMessage(null, msg);
+		Integer cdDetalle = Integer.valueOf(((ClusterProducto) event.getObject()).getCd_cls_prod_liq());
+		lstDetalleProductoLiqui = srvServicioProductoTbl.recuperarDetalleProductoLiqui(cdDetalle);
+		activarColumnas();
+		System.out.println("tam:" + lstDetalleProductoLiqui.size());
+		PrimeFaces.current().ajax().update(":frmClouster:dtDetalleProLiq");
+
+	}
+
+	public void onRowUnselect(UnselectEvent event) {
+		System.out.println("onRowUnselect");
+		FacesMessage msg = new FacesMessage("Car Unselected", ((ClusterProducto) event.getObject()).getCod_modelo());
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+	}
+
+	public void consultaTablaDeta(ClusterProducto obj) {
+		System.out.println("consultaTablaDeta:" + obj.getCd_cls_prod_liq());
+	}
+
+	public void columnasConcepto() {
+		int auxbd = 0, auxou = 0, tamLst;
+		tamLst = lstClusterProducto.size() - 2;
+		for (ClusterProducto objCluster : lstClusterProducto) {
+			// System.out.println("consulta concepto:" +
+			// objCluster.getCod_concepto_sistema());
+			if (objCluster.getCod_concepto_sistema().equals("BD")) {
+				auxbd++;
+			}
+			if (objCluster.getCod_concepto_sistema().equals("OU")) {
+				auxou++;
+			}
+		}
+		if (auxbd == tamLst) {
+			flagdb1 = true;
+			flagdb2 = true;
+			flagdb3 = true;
+			flagdb4 = true;
+			flagdb5 = true;
+			flagdb6 = true;
+
+		} else {
+			if (auxou == tamLst) {
+				flagou1 = true;
+				flagou2 = true;
+				flagou3 = true;
+				flagou4 = true;
+				flagou5 = true;
+				flagou6 = true;
+			} else {
+				flagdb1 = true;
+				flagdb2 = true;
+				flagdb3 = true;
+				flagdb4 = true;
+				flagdb5 = true;
+				flagdb6 = true;
+				flagou1 = true;
+				flagou2 = true;
+				flagou3 = true;
+				flagou4 = true;
+				flagou5 = true;
+				flagou6 = true;
+			}
+		}
+		System.out.println("auxbd: " + auxbd);
+		System.out.println("auxou: " + auxou);
+		System.out.println("tamaño lista: " + tamLst);
+
+	}
+
+	public void activarColumnas() {
+		encerar();
+		int cont = 0;
+		int tamLst1;
+		tamLst1 = lstClusterProducto.size() - 1;
+
+		for (DetalleProductoLiqui objDetalleLiqui : lstDetalleProductoLiqui) {
+
+			if (cont >= 0) {
+				if (objDetalleLiqui.getCentro_1() != null) {
+					System.out.println("valor getcentro: " + objDetalleLiqui.getCod_concepto());
+
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag1 = true;
+						System.out.println("valor de flag mixto: " + flag1);
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag1 = false;
+						System.out.println("valor de flag bod: " + flag1);
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag1 = true;
+						System.out.println("valor de flag out: " + flag1);
+					}
+
+				}
+				if (objDetalleLiqui.getCentro_2() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag2 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag2 = false;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag2 = true;
+					}
+				}
+				if (objDetalleLiqui.getCentro_3() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag3 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag3 = false;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag3 = true;
+					}
+				}
+				if (objDetalleLiqui.getCentro_4() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag4 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag4 = false;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag4 = true;
+					}
+				}
+				if (objDetalleLiqui.getCentro_5() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag5 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag5 = false;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag5 = true;
+					}
+				}
+				if (objDetalleLiqui.getCentro_6() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag6 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag6 = false;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag6 = true;
+					}
+				}
+				if (objDetalleLiqui.getCentro_7() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag7 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag7 = false;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag7 = true;
+					}
+				}
+				if (objDetalleLiqui.getCentro_8() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag8 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag8 = false;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag8 = true;
+					}
+				}
+				if (objDetalleLiqui.getCentro_9() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag9 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag9 = false;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag9 = true;
+					}
+				}
+				if (objDetalleLiqui.getCentro_10() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag10 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag10 = false;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag10 = true;
+					}
+				}
+				if (objDetalleLiqui.getCentro_11() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag11 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag11 = false;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag11 = true;
+					}
+				}
+				if (objDetalleLiqui.getCentro_12() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag12 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag12 = false;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag12 = true;
+					}
+				}
+				if (objDetalleLiqui.getCentro_13() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag13 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag13 = false;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag13 = true;
+					}
+				}
+				if (objDetalleLiqui.getCentro_14() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag14 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag14 = false;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag14 = true;
+					}
+				}
+				if (objDetalleLiqui.getCentro_15() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag15 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag15 = false;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag15 = true;
+					}
+				}
+				if (objDetalleLiqui.getCentro_16() != null) {
+
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag16 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag16 = false;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag16 = true;
+					}
+				}
+				if (objDetalleLiqui.getCentro_17() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag17 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag17 = false;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag17 = true;
+					}
+				}
+				if (objDetalleLiqui.getCentro_18() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag18 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag18 = false;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag18 = true;
+					}
+				}
+				if (objDetalleLiqui.getCentro_19() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag19 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag19 = false;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag19 = true;
+					}
+				}
+				if (objDetalleLiqui.getCentro_20() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag20 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag20 = false;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag20 = true;
+					}
+				}
+				if (objDetalleLiqui.getCentro_21() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag21 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag21 = false;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag21 = true;
+					}
+				}
+				if (objDetalleLiqui.getCentro_22() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag22 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag22 = false;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag22 = true;
+					}
+				}
+				if (objDetalleLiqui.getCentro_23() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag23 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag23 = false;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag23 = true;
+					}
+				}
+				if (objDetalleLiqui.getCentro_24() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag24 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag24 = false;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag24 = true;
+					}
+				}
+				if (objDetalleLiqui.getCentro_25() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag25 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag25 = false;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag25 = true;
+					}
+				}
+				if (objDetalleLiqui.getCentro_26() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag26 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag26 = false;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag26 = true;
+					}
+				}
+				if (objDetalleLiqui.getCentro_27() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag27 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag27 = false;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag27 = true;
+					}
+				}
+				if (objDetalleLiqui.getCentro_28() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag28 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag28 = false;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag28 = true;
+					}
+				}
+				if (objDetalleLiqui.getCentro_29() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag29 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag29 = false;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag29 = true;
+					}
+				}
+				if (objDetalleLiqui.getCentro_30() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag30 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag30 = false;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag30 = true;
+					}
+				}
+				if (objDetalleLiqui.getCentro_31() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag31 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag31 = false;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag31 = true;
+					}
+				}
+				if (objDetalleLiqui.getCentro_32() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag32 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag32 = false;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag32 = true;
+					}
+				}
+				if (objDetalleLiqui.getCentro_33() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag33 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag33 = false;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag33 = true;
+					}
+				}
+				if (objDetalleLiqui.getCentro_34() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag34 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag34 = false;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag34 = true;
+					}
+				}
+				if (objDetalleLiqui.getCentro_35() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag35 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag35 = false;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag35 = true;
+					}
+				}
+				if (objDetalleLiqui.getCentro_36() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag36 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag36 = false;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag36 = true;
+					}
+				}
+				if (objDetalleLiqui.getCentro_37() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag37 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag37 = false;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag37 = true;
+					}
+				}
+				if (objDetalleLiqui.getCentro_38() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag38 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag38 = false;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag38 = true;
+					}
+				}
+
+				// CONCEPTO BODEGAS
+				if (objDetalleLiqui.getCentro_39() != null) {
+
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag39 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag39 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag39 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_40() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag40 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag40 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag40 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_41() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag41 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag41 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag41 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_42() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag42 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag42 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag42 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_43() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag43 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag43 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag43 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_44() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag44 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag44 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag44 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_45() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag45 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag45 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag45 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_46() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag46 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag46 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag46 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_47() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag47 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag47 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag47 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_48() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag48 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag48 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag48 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_49() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag49 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag49 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag49 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_50() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag50 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag50 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag50 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_51() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag51 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag51 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag51 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_52() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag52 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag52 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag52 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_53() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag53 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag53 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag53 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_54() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag54 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag54 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag54 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_55() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag55 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag55 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag55 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_56() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag56 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag56 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag56 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_57() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag57 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag57 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag57 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_58() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag58 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag58 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag58 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_59() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag59 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag59 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag59 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_60() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag60 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag60 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag60 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_61() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag61 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag61 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag61 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_62() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag62 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag62 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag62 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_63() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag63 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag63 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag63 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_64() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag64 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag64 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag64 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_65() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag65 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag65 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag65 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_66() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag66 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag66 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag66 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_67() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag67 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag67 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag67 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_68() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag68 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag68 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag68 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_69() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag69 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag69 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag69 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_70() != null) {
+
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag70 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag70 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag70 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_71() != null) {
+
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag70 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag70 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag70 = false;
+					}
+
+				}
+				if (objDetalleLiqui.getCentro_72() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag70 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag70 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag70 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_73() != null) {
+
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag70 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag70 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag70 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_74() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag70 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag70 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag70 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_75() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag70 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag70 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag70 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_76() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag70 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag70 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag70 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_77() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag70 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag70 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag70 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_78() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag70 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag70 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag70 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_79() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag70 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag70 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag70 = false;
+					}
+				}
+				if (objDetalleLiqui.getCentro_80() != null) {
+					if (objDetalleLiqui.getCod_concepto().equals(mixto)) {
+						flag70 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(bod)) {
+						flag70 = true;
+					}
+					if (objDetalleLiqui.getCod_concepto().equals(out)) {
+						flag70 = false;
+					}
+				}
+
+			}
+			cont++;
+		}
+
+	}
+
+	@SuppressWarnings("deprecation")
+	public void actualizarStock(SheetEvent event) {
+
+		Sheet sheet = event.getSheet();
+		List<SheetUpdate> updates = sheet.getUpdates();
+		HashSet<DetalleProductoLiqui> processed = new HashSet<DetalleProductoLiqui>();
+		int rowUpdates = 0;
+
+		for (SheetUpdate update : updates) {
+			// obtener valor nuevo y validar si entero y positivo
+			Double valorNuevo;
+			// controla si es nulo el valor nuevo
+			if (update.getNewValue() == null) {
+				valorNuevo = (double) 0;
+			} else {
+				valorNuevo = Double.valueOf((String) update.getNewValue());
+			}
+
+			Double valorAnterior;
+			// controla si es nulo el valor anterior
+			if (update.getOldValue() == null) {
+				valorAnterior = (double) 0;
+			} else {
+				valorAnterior = Double.valueOf((String) update.getOldValue());
+			}
+
+			int valida = validarNumero(valorNuevo); // valida numero sea Entero
+													// // y Positivo
+			int idCd = 0;
+
+			if (valida == 1) {
+
+				DetalleProductoLiqui detalle = (DetalleProductoLiqui) update.getRowData();
+				if (processed.contains(detalle)) {
+					continue;
+				}
+
+				int id = detalle.getCd_det_prod_liq();
+				idCd = detalle.getCd_cls_prod_liq();
+				int totalTienda = 0;
+				totalTienda = sumaStockTiendas(id);
+				System.out.println("Valor totaltienda: " + totalTienda);
+
+				int valorClusterTotal;
+
+				if (detalle.getStock_cluster_mt_tot() != null) {
+					valorClusterTotal = Integer.valueOf(detalle.getStock_cluster_mt_tot());
+					System.out.println("Valor valorClusterTotal: " + valorClusterTotal);
+				} else {
+					valorClusterTotal = 0;
+					System.out.println("Valor valorClusterTotal NULL: " + valorClusterTotal);
+				}
+
+				int valIniciLiq = Integer.valueOf(detalle.getLq01());
+				int valorLiqui = 0;
+				int liqui = 0;
+
+				if ((valorClusterTotal < totalTienda) && Integer.valueOf(detalle.getLq01()) == 0) {
+					System.out.println("no aplica");
+					liqui = 0;
+				} else {
+
+					if (detalle.getLq01() == 0) { // inicia
+						System.out.println("Valor getLq01: " + detalle.getLq01());
+
+						totalTienda = totalTienda + (valorAnterior.intValue() - valorNuevo.intValue());
+						System.out.println("Valor total tienda 2: " + totalTienda);
+
+						if (totalTienda == 0) {
+							liqui = valorClusterTotal;
+							System.out.println("Valor liqui al iniciar sin valores en tienda: " + liqui);
+
+							valorLiqui = liqui - valorNuevo.intValue();
+							System.out.println("Valor final de liqui restando valor nuevo: " + valorLiqui);
+
+						} else {
+
+							if (valorNuevo <= valorAnterior) {
+								
+								liqui = valorClusterTotal - (totalTienda - valorNuevo.intValue());
+								System.out.println("Valor liqui al iniciar con valores en tienda: " + liqui);
+
+								if (Integer.valueOf(detalle.getLq01()) == 0) {
+									
+									totalTienda=totalTienda-valorAnterior.intValue();
+									totalTienda=totalTienda+valorNuevo.intValue();
+									valorLiqui = valorClusterTotal-totalTienda;
+									System.out.println(
+											"Valor liqui restando val nuevo y sumando val anterior**: " + valorLiqui);
+
+								} else {
+									valorLiqui = valorClusterTotal - (valorAnterior.intValue() - valorNuevo.intValue());
+									System.out.println(
+											"Valor liqui restando val nuevo y sumando val anterior...: " + valorLiqui);
+								}
+
+							} else {
+
+								liqui = valorClusterTotal - (totalTienda - valorNuevo.intValue());
+								System.out.println("Valor liqui al iniciar con valores en tienda2: " + liqui);
+
+								valorLiqui = valorClusterTotal - (valorNuevo.intValue() + valorAnterior.intValue());
+								System.out.println(
+										"Valor liqui restando val nuevo y sumando val anterior2: " + valorLiqui);
+							}
+						}
+					} else {
+						valorLiqui = Integer.valueOf(detalle.getLq01());
+						System.out.println("Valorliqui: " + valorLiqui);
+
+						if (valorNuevo < valorAnterior) {
+							liqui = valorAnterior.intValue();
+							System.out.println("si valor nuevo es menor al anterior liqui: " + liqui);
+						} else {
+							liqui = valorLiqui + valorAnterior.intValue();
+							System.out.println("liqui si valor nuevo es mayor: " + liqui);
+						}
+
+						valorLiqui = (valorLiqui - valorNuevo.intValue()) + valorAnterior.intValue();
+						System.out.println("Valor de liqui restado: " + valorLiqui);
+					} // termina
+				}
+
+				System.out.println("Valor anterio: " + valorAnterior);
+				System.out.println("Valor nuevo: " + valorNuevo);
+
+				if (valorNuevo <= liqui) {
+					srvServicioProductoTbl.actualizaCeldas(detalle);
+					/*
+					 * FacesMessage msgs = new FacesMessage(
+					 * "Registro Editado Exitosamente");
+					 * FacesContext.getCurrentInstance().addMessage(null, msgs);
+					 */
+					actualizaStockLiqui(id, valorLiqui);
+					rowUpdates++;
+				} else {
+					FacesMessage msgs2 = new FacesMessage(" Error, No hay suficiente stock");
+					FacesContext.getCurrentInstance().addMessage(null, msgs2);
+					lstDetalleProductoLiqui = srvServicioProductoTbl.recuperarDetalleProductoLiqui(idCd);
+					refrescaTabla();
+				}
+
+			} else {
+				PrimeFaces.current().ajax().update("frmClouster:dtDetalleProLiq");
+				refrescaTabla();
+			}
+
+		} // valor de for
+
+		sheet.commitUpdates();
+		FacesContext.getCurrentInstance().addMessage(null,
+				new FacesMessage("Actualización Exitosa", Integer.toString(rowUpdates) + " filas actualizadas"));
+		refrescaTabla();
+	}
+
+	public int validarNumero(Double numero) {
+		System.out.println("valor que recibe en celda: " + numero);
+		if (numero >= 0) {
+
+			if (numero % 1 == 0) {
+				return 1;
+			} else {
+				FacesMessage msgs = new FacesMessage("Error, No se permite valores decimales");
+				FacesContext.getCurrentInstance().addMessage(null, msgs);
+				return 0;
+			}
+		} else {
+			FacesMessage msgs = new FacesMessage("Error, No se permite valores menores a cero");
+			FacesContext.getCurrentInstance().addMessage(null, msgs);
+			return 0;
+		}
+
+	}
+
+	public void actualizaStockLiqui(int id, int canti) {
+		srvServicioProductoTbl.actualizarStockLiqui(id, canti);
+		int idCd = 0;
+		for (DetalleProductoLiqui detalleLiqui : lstDetalleProductoLiqui) {
+			if (detalleLiqui.getCd_det_prod_liq().equals(id)) {
+				System.out.println("get:" + detalleLiqui.getLq01());
+				idCd = detalleLiqui.getCd_cls_prod_liq();
+			}
+		}
+		lstDetalleProductoLiqui = srvServicioProductoTbl.recuperarDetalleProductoLiqui(idCd);
+		PrimeFaces.current().ajax().update("frmClouster:dtDetalleProLiq");
+	}
+
+	public void refrescaTabla() {
+		PrimeFaces.current().ajax().update("frmClouster:dtDetalleProLiq");
+	}
+
+	public int sumaStockTiendas(int id) {
+		int total = 0;
+		for (DetalleProductoLiqui detalleLiqui : lstDetalleProductoLiqui) {
+
+			// System.out.println("detalleLiqui.getCd_det_prod_liq():" +
+			// detalleLiqui.getCd_det_prod_liq());
+			if (detalleLiqui.getCd_det_prod_liq().equals(id)) {
+
+				// Tiendas Region Costa
+				total = funNullDetalle(detalleLiqui.getCentro_1()) + funNullDetalle(detalleLiqui.getCentro_3())
+						+ funNullDetalle(detalleLiqui.getCentro_5()) + funNullDetalle(detalleLiqui.getCentro_7())
+						+ funNullDetalle(detalleLiqui.getCentro_9()) + funNullDetalle(detalleLiqui.getCentro_11())
+						+ funNullDetalle(detalleLiqui.getCentro_13()) + funNullDetalle(detalleLiqui.getCentro_15())
+						+ funNullDetalle(detalleLiqui.getCentro_39()) + funNullDetalle(detalleLiqui.getCentro_41())
+						+ funNullDetalle(detalleLiqui.getCentro_43()) + funNullDetalle(detalleLiqui.getCentro_45())
+						// tiendas Region Sierra
+						+ funNullDetalle(detalleLiqui.getCentro_17()) + funNullDetalle(detalleLiqui.getCentro_19())
+						+ funNullDetalle(detalleLiqui.getCentro_21()) + funNullDetalle(detalleLiqui.getCentro_23())
+						+ funNullDetalle(detalleLiqui.getCentro_25()) + funNullDetalle(detalleLiqui.getCentro_27())
+						+ funNullDetalle(detalleLiqui.getCentro_29()) + funNullDetalle(detalleLiqui.getCentro_31())
+						+ funNullDetalle(detalleLiqui.getCentro_33()) + funNullDetalle(detalleLiqui.getCentro_35())
+						+ funNullDetalle(detalleLiqui.getCentro_37()) + funNullDetalle(detalleLiqui.getCentro_47())
+						+ funNullDetalle(detalleLiqui.getCentro_49()) + funNullDetalle(detalleLiqui.getCentro_51())
+						+ funNullDetalle(detalleLiqui.getCentro_53()) + funNullDetalle(detalleLiqui.getCentro_55())
+						+ funNullDetalle(detalleLiqui.getCentro_57()) + funNullDetalle(detalleLiqui.getCentro_59())
+						+ funNullDetalle(detalleLiqui.getCentro_61()) + funNullDetalle(detalleLiqui.getCentro_63())
+						+ funNullDetalle(detalleLiqui.getCentro_65()) + funNullDetalle(detalleLiqui.getCentro_67())
+						+ funNullDetalle(detalleLiqui.getCentro_69());
+			}
+
+		}
+		return total;
+
+	}
+
+	public int funNullDetalle(String valIng) {
+		int val = 0;
+		try {
+			if (valIng != null) {
+				val = Integer.valueOf(valIng);
+			}
+		} catch (Exception e) {
+
+			val = 0;
+		}
+
+		return val;
+	}
+
+	// filtro para campos tipo String
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public boolean filtro1(Object value, Object filter, Locale locale) {
+		String filterText = (filter == null) ? null : filter.toString().trim();
+		if (filterText == null || filterText.equals("") || filterText.equals(".") || filterText.equals(",")
+				|| filterText.equals("-")) {
+			return true;
+		}
+
+		if (value == null) {
+			return false;
+		}
+
+		filterText = filterText.replaceAll("[\\-\\+\\,\\.\\$\\#\\%\\<\\<\\!\\^:,]", "");
+		return ((Comparable) Integer.parseInt((String) value)).compareTo(Integer.parseInt(filterText)) >= 0;
+	}
+
+	// filtro para campos tipo Double o Integer
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public boolean filtro2(Object value, Object filter, Locale locale) {
+		String filterText = (filter == null) ? null : filter.toString().trim();
+		if (filterText == null || filterText.equals("") || filterText.equals(".") || filterText.equals(",")
+				|| filterText.equals("-")) {
+			return true;
+		}
+
+		if (value == null) {
+			return false;
+		}
+		filterText = filterText.replaceAll("[\\-\\+\\,\\$\\#\\%\\<\\<\\!\\^:,]", ".");
+		return ((Comparable) value).compareTo(Double.valueOf(filterText)) >= 0;
+	}
+
+	// filtro para campos tipo Number
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public boolean filtro3(Object value, Object filter, Locale locale) {
+		String filterText = (filter == null) ? null : filter.toString().trim();
+		if (filterText == null || filterText.equals("") || filterText.equals(".") || filterText.equals(",")
+				|| filterText.equals("-")) {
+			return true;
+		}
+
+		if (value == null) {
+			return false;
+		}
+
+		filterText = filterText.replaceAll("[\\-\\+\\,\\.\\$\\#\\%\\<\\<\\!\\^:,]", "");
+		return ((Comparable) value).compareTo(Integer.parseInt(filterText)) >= 0;
+	}
+	
+	public void btnProcesar(){
+		System.out.println("boton ejecutar sp liquidacion");		
+		srvServicioProductoTbl.spLiquidacion();
+		encerarProcesado();
+		//flgBtnLiquidacion=true;
+		//System.out.println("desactivar boton");
+		FacesMessage msgs = new FacesMessage("Proceso Cerrado");
+		FacesContext.getCurrentInstance().addMessage(null, msgs);
+		flgBtnLiquidacion=true;
+	}
+	
+	public void encerarProcesado() {
+		lstClusterProducto = srvServicioProductoTbl.recuperarCluster();
+		lstDetalleProductoLiqui = srvServicioProductoTbl.recuperarDetalleProductoLiqui(0);
+		refrescaTabla();
+
+	}
+
+
+	public List<ClusterProducto> getLstClusterProducto() {
+
+		return lstClusterProducto;
+	}
+
+	public void setLstClusterProducto(List<ClusterProducto> lstClusterProducto) {
+		this.lstClusterProducto = lstClusterProducto;
+	}
+
+	public ClusterProducto getObjClusterProductoSelected() {
+		return objClusterProductoSelected;
+	}
+
+	public void setObjClusterProductoSelected(ClusterProducto objClusterProductoSelected) {
+		this.objClusterProductoSelected = objClusterProductoSelected;
+	}
+
+	public List<DetalleProductoLiqui> getLstDetalleProductoLiqui() {
+		return lstDetalleProductoLiqui;
+	}
+
+	public void setLstDetalleProductoLiqui(List<DetalleProductoLiqui> lstDetalleProductoLiqui) {
+		this.lstDetalleProductoLiqui = lstDetalleProductoLiqui;
+	}
+
+	public List<ClusterProducto> getLstClusterfilter() {
+		return lstClusterfilter;
+	}
+
+	public void setLstClusterfilter(List<ClusterProducto> lstClusterfilter) {
+		this.lstClusterfilter = lstClusterfilter;
+	}
+
+	public Boolean getFlag1() {
+		return flag1;
+	}
+
+	public void setFlag1(Boolean flag1) {
+		this.flag1 = flag1;
+	}
+
+	public Boolean getFlag2() {
+		return flag2;
+	}
+
+	public void setFlag2(Boolean flag2) {
+		this.flag2 = flag2;
+	}
+
+	public Boolean getFlag3() {
+		return flag3;
+	}
+
+	public void setFlag3(Boolean flag3) {
+		this.flag3 = flag3;
+	}
+
+	public Boolean getFlag4() {
+		return flag4;
+	}
+
+	public void setFlag4(Boolean flag4) {
+		this.flag4 = flag4;
+	}
+
+	public Boolean getFlag5() {
+		return flag5;
+	}
+
+	public void setFlag5(Boolean flag5) {
+		this.flag5 = flag5;
+	}
+
+	public Boolean getFlag6() {
+		return flag6;
+	}
+
+	public void setFlag6(Boolean flag6) {
+		this.flag6 = flag6;
+	}
+
+	public Boolean getFlag7() {
+		return flag7;
+	}
+
+	public void setFlag7(Boolean flag7) {
+		this.flag7 = flag7;
+	}
+
+	public Boolean getFlag8() {
+		return flag8;
+	}
+
+	public void setFlag8(Boolean flag8) {
+		this.flag8 = flag8;
+	}
+
+	public Boolean getFlag9() {
+		return flag9;
+	}
+
+	public void setFlag9(Boolean flag9) {
+		this.flag9 = flag9;
+	}
+
+	public Boolean getFlag10() {
+		return flag10;
+	}
+
+	public void setFlag10(Boolean flag10) {
+		this.flag10 = flag10;
+	}
+
+	public Boolean getFlag11() {
+		return flag11;
+	}
+
+	public void setFlag11(Boolean flag11) {
+		this.flag11 = flag11;
+	}
+
+	public Boolean getFlag12() {
+		return flag12;
+	}
+
+	public void setFlag12(Boolean flag12) {
+		this.flag12 = flag12;
+	}
+
+	public Boolean getFlag13() {
+		return flag13;
+	}
+
+	public void setFlag13(Boolean flag13) {
+		this.flag13 = flag13;
+	}
+
+	public Boolean getFlag14() {
+		return flag14;
+	}
+
+	public void setFlag14(Boolean flag14) {
+		this.flag14 = flag14;
+	}
+
+	public Boolean getFlag15() {
+		return flag15;
+	}
+
+	public void setFlag15(Boolean flag15) {
+		this.flag15 = flag15;
+	}
+
+	public Boolean getFlag16() {
+		return flag16;
+	}
+
+	public void setFlag16(Boolean flag16) {
+		this.flag16 = flag16;
+	}
+
+	public Boolean getFlag17() {
+		return flag17;
+	}
+
+	public void setFlag17(Boolean flag17) {
+		this.flag17 = flag17;
+	}
+
+	public Boolean getFlag18() {
+		return flag18;
+	}
+
+	public void setFlag18(Boolean flag18) {
+		this.flag18 = flag18;
+	}
+
+	public Boolean getFlag19() {
+		return flag19;
+	}
+
+	public void setFlag19(Boolean flag19) {
+		this.flag19 = flag19;
+	}
+
+	public Boolean getFlag20() {
+		return flag20;
+	}
+
+	public void setFlag20(Boolean flag20) {
+		this.flag20 = flag20;
+	}
+
+	public Boolean getFlag21() {
+		return flag21;
+	}
+
+	public void setFlag21(Boolean flag21) {
+		this.flag21 = flag21;
+	}
+
+	public Boolean getFlag22() {
+		return flag22;
+	}
+
+	public void setFlag22(Boolean flag22) {
+		this.flag22 = flag22;
+	}
+
+	public Boolean getFlag23() {
+		return flag23;
+	}
+
+	public void setFlag23(Boolean flag23) {
+		this.flag23 = flag23;
+	}
+
+	public Boolean getFlag24() {
+		return flag24;
+	}
+
+	public void setFlag24(Boolean flag24) {
+		this.flag24 = flag24;
+	}
+
+	public Boolean getFlag25() {
+		return flag25;
+	}
+
+	public void setFlag25(Boolean flag25) {
+		this.flag25 = flag25;
+	}
+
+	public Boolean getFlag26() {
+		return flag26;
+	}
+
+	public void setFlag26(Boolean flag26) {
+		this.flag26 = flag26;
+	}
+
+	public Boolean getFlag27() {
+		return flag27;
+	}
+
+	public void setFlag27(Boolean flag27) {
+		this.flag27 = flag27;
+	}
+
+	public Boolean getFlag28() {
+		return flag28;
+	}
+
+	public void setFlag28(Boolean flag28) {
+		this.flag28 = flag28;
+	}
+
+	public Boolean getFlag29() {
+		return flag29;
+	}
+
+	public void setFlag29(Boolean flag29) {
+		this.flag29 = flag29;
+	}
+
+	public Boolean getFlag30() {
+		return flag30;
+	}
+
+	public void setFlag30(Boolean flag30) {
+		this.flag30 = flag30;
+	}
+
+	public Boolean getFlag31() {
+		return flag31;
+	}
+
+	public void setFlag31(Boolean flag31) {
+		this.flag31 = flag31;
+	}
+
+	public Boolean getFlag32() {
+		return flag32;
+	}
+
+	public void setFlag32(Boolean flag32) {
+		this.flag32 = flag32;
+	}
+
+	public Boolean getFlag33() {
+		return flag33;
+	}
+
+	public void setFlag33(Boolean flag33) {
+		this.flag33 = flag33;
+	}
+
+	public Boolean getFlag34() {
+		return flag34;
+	}
+
+	public void setFlag34(Boolean flag34) {
+		this.flag34 = flag34;
+	}
+
+	public Boolean getFlag35() {
+		return flag35;
+	}
+
+	public void setFlag35(Boolean flag35) {
+		this.flag35 = flag35;
+	}
+
+	public Boolean getFlag36() {
+		return flag36;
+	}
+
+	public void setFlag36(Boolean flag36) {
+		this.flag36 = flag36;
+	}
+
+	public Boolean getFlag37() {
+		return flag37;
+	}
+
+	public void setFlag37(Boolean flag37) {
+		this.flag37 = flag37;
+	}
+
+	public Boolean getFlag38() {
+		return flag38;
+	}
+
+	public void setFlag38(Boolean flag38) {
+		this.flag38 = flag38;
+	}
+
+	public Boolean getFlag39() {
+		return flag39;
+	}
+
+	public void setFlag39(Boolean flag39) {
+		this.flag39 = flag39;
+	}
+
+	public Boolean getFlag40() {
+		return flag40;
+	}
+
+	public void setFlag40(Boolean flag40) {
+		this.flag40 = flag40;
+	}
+
+	public Boolean getFlag41() {
+		return flag41;
+	}
+
+	public void setFlag41(Boolean flag41) {
+		this.flag41 = flag41;
+	}
+
+	public Boolean getFlag42() {
+		return flag42;
+	}
+
+	public void setFlag42(Boolean flag42) {
+		this.flag42 = flag42;
+	}
+
+	public Boolean getFlag43() {
+		return flag43;
+	}
+
+	public void setFlag43(Boolean flag43) {
+		this.flag43 = flag43;
+	}
+
+	public Boolean getFlag44() {
+		return flag44;
+	}
+
+	public void setFlag44(Boolean flag44) {
+		this.flag44 = flag44;
+	}
+
+	public Boolean getFlag45() {
+		return flag45;
+	}
+
+	public void setFlag45(Boolean flag45) {
+		this.flag45 = flag45;
+	}
+
+	public Boolean getFlag46() {
+		return flag46;
+	}
+
+	public void setFlag46(Boolean flag46) {
+		this.flag46 = flag46;
+	}
+
+	public Boolean getFlag47() {
+		return flag47;
+	}
+
+	public void setFlag47(Boolean flag47) {
+		this.flag47 = flag47;
+	}
+
+	public Boolean getFlag48() {
+		return flag48;
+	}
+
+	public void setFlag48(Boolean flag48) {
+		this.flag48 = flag48;
+	}
+
+	public Boolean getFlag49() {
+		return flag49;
+	}
+
+	public void setFlag49(Boolean flag49) {
+		this.flag49 = flag49;
+	}
+
+	public Boolean getFlag50() {
+		return flag50;
+	}
+
+	public void setFlag50(Boolean flag50) {
+		this.flag50 = flag50;
+	}
+
+	public Boolean getFlag51() {
+		return flag51;
+	}
+
+	public void setFlag51(Boolean flag51) {
+		this.flag51 = flag51;
+	}
+
+	public Boolean getFlag52() {
+		return flag52;
+	}
+
+	public void setFlag52(Boolean flag52) {
+		this.flag52 = flag52;
+	}
+
+	public Boolean getFlag53() {
+		return flag53;
+	}
+
+	public void setFlag53(Boolean flag53) {
+		this.flag53 = flag53;
+	}
+
+	public Boolean getFlag54() {
+		return flag54;
+	}
+
+	public void setFlag54(Boolean flag54) {
+		this.flag54 = flag54;
+	}
+
+	public Boolean getFlag55() {
+		return flag55;
+	}
+
+	public void setFlag55(Boolean flag55) {
+		this.flag55 = flag55;
+	}
+
+	public Boolean getFlag56() {
+		return flag56;
+	}
+
+	public void setFlag56(Boolean flag56) {
+		this.flag56 = flag56;
+	}
+
+	public Boolean getFlag57() {
+		return flag57;
+	}
+
+	public void setFlag57(Boolean flag57) {
+		this.flag57 = flag57;
+	}
+
+	public Boolean getFlag58() {
+		return flag58;
+	}
+
+	public void setFlag58(Boolean flag58) {
+		this.flag58 = flag58;
+	}
+
+	public Boolean getFlag59() {
+		return flag59;
+	}
+
+	public void setFlag59(Boolean flag59) {
+		this.flag59 = flag59;
+	}
+
+	public Boolean getFlag60() {
+		return flag60;
+	}
+
+	public void setFlag60(Boolean flag60) {
+		this.flag60 = flag60;
+	}
+
+	public Boolean getFlagdb1() {
+		return flagdb1;
+	}
+
+	public void setFlagdb1(Boolean flagdb1) {
+		this.flagdb1 = flagdb1;
+	}
+
+	public Boolean getFlagdb2() {
+		return flagdb2;
+	}
+
+	public void setFlagdb2(Boolean flagdb2) {
+		this.flagdb2 = flagdb2;
+	}
+
+	public Boolean getFlagdb3() {
+		return flagdb3;
+	}
+
+	public void setFlagdb3(Boolean flagdb3) {
+		this.flagdb3 = flagdb3;
+	}
+
+	public Boolean getFlagou1() {
+		return flagou1;
+	}
+
+	public void setFlagou1(Boolean flagou1) {
+		this.flagou1 = flagou1;
+	}
+
+	public Boolean getFlagou2() {
+		return flagou2;
+	}
+
+	public void setFlagou2(Boolean flagou2) {
+		this.flagou2 = flagou2;
+	}
+
+	public Boolean getFlagou3() {
+		return flagou3;
+	}
+
+	public void setFlagou3(Boolean flagou3) {
+		this.flagou3 = flagou3;
+	}
+
+	public Boolean getFlagdb4() {
+		return flagdb4;
+	}
+
+	public void setFlagdb4(Boolean flagdb4) {
+		this.flagdb4 = flagdb4;
+	}
+
+	public Boolean getFlagdb5() {
+		return flagdb5;
+	}
+
+	public void setFlagdb5(Boolean flagdb5) {
+		this.flagdb5 = flagdb5;
+	}
+
+	public Boolean getFlagdb6() {
+		return flagdb6;
+	}
+
+	public void setFlagdb6(Boolean flagdb6) {
+		this.flagdb6 = flagdb6;
+	}
+
+	public Boolean getFlagou4() {
+		return flagou4;
+	}
+
+	public void setFlagou4(Boolean flagou4) {
+		this.flagou4 = flagou4;
+	}
+
+	public Boolean getFlagou5() {
+		return flagou5;
+	}
+
+	public void setFlagou5(Boolean flagou5) {
+		this.flagou5 = flagou5;
+	}
+
+	public Boolean getFlagou6() {
+		return flagou6;
+	}
+
+	public void setFlagou6(Boolean flagou6) {
+		this.flagou6 = flagou6;
+	}
+
+	public DetalleProductoLiqui getObjIdDetalle() {
+		return objIdDetalle;
+	}
+
+	public void setObjIdDetalle(DetalleProductoLiqui objIdDetalle) {
+		this.objIdDetalle = objIdDetalle;
+	}
+
+	public List<DetalleProductoLiqui> getLstObtenerTiendas() {
+		return lstObtenerTiendas;
+	}
+
+	public void setLstObtenerTiendas(List<DetalleProductoLiqui> lstObtenerTiendas) {
+		this.lstObtenerTiendas = lstObtenerTiendas;
+	}
+
+	public List<String> getLineaFiltros() {
+		return lineaFiltros;
+	}
+
+	public void setLineaFiltros(List<String> lineaFiltros) {
+		this.lineaFiltros = lineaFiltros;
+	}
+
+	public List<String> getMarcaFiltros() {
+		return marcaFiltros;
+	}
+
+	public void setMarcaFiltros(List<String> marcaFiltros) {
+		this.marcaFiltros = marcaFiltros;
+	}
+
+	public List<String> getGeneroFiltros() {
+		return generoFiltros;
+	}
+
+	public void setGeneroFiltros(List<String> generoFiltros) {
+		this.generoFiltros = generoFiltros;
+	}
+
+	public List<String> getActividadFiltros() {
+		return actividadFiltros;
+	}
+
+	public void setActividadFiltros(List<String> actividadFiltros) {
+		this.actividadFiltros = actividadFiltros;
+	}
+
+	public List<DetalleProductoLiqui> getLstDetalleFilter() {
+		return lstDetalleFilter;
+	}
+
+	public void setLstDetalleFilter(List<DetalleProductoLiqui> lstDetalleFilter) {
+		this.lstDetalleFilter = lstDetalleFilter;
+	}
+
+	public Boolean getFlag61() {
+		return flag61;
+	}
+
+	public void setFlag61(Boolean flag61) {
+		this.flag61 = flag61;
+	}
+
+	public Boolean getFlag62() {
+		return flag62;
+	}
+
+	public void setFlag62(Boolean flag62) {
+		this.flag62 = flag62;
+	}
+
+	public Boolean getFlag63() {
+		return flag63;
+	}
+
+	public void setFlag63(Boolean flag63) {
+		this.flag63 = flag63;
+	}
+
+	public Boolean getFlag64() {
+		return flag64;
+	}
+
+	public void setFlag64(Boolean flag64) {
+		this.flag64 = flag64;
+	}
+
+	public Boolean getFlag65() {
+		return flag65;
+	}
+
+	public void setFlag65(Boolean flag65) {
+		this.flag65 = flag65;
+	}
+
+	public Boolean getFlag66() {
+		return flag66;
+	}
+
+	public void setFlag66(Boolean flag66) {
+		this.flag66 = flag66;
+	}
+
+	public Boolean getFlag67() {
+		return flag67;
+	}
+
+	public void setFlag67(Boolean flag67) {
+		this.flag67 = flag67;
+	}
+
+	public Boolean getFlag68() {
+		return flag68;
+	}
+
+	public void setFlag68(Boolean flag68) {
+		this.flag68 = flag68;
+	}
+
+	public Boolean getFlag69() {
+		return flag69;
+	}
+
+	public void setFlag69(Boolean flag69) {
+		this.flag69 = flag69;
+	}
+
+	public Boolean getFlag70() {
+		return flag70;
+	}
+
+	public void setFlag70(Boolean flag70) {
+		this.flag70 = flag70;
+	}
+
+	public Boolean getFlag71() {
+		return flag71;
+	}
+
+	public void setFlag71(Boolean flag71) {
+		this.flag71 = flag71;
+	}
+
+	public Boolean getFlag72() {
+		return flag72;
+	}
+
+	public void setFlag72(Boolean flag72) {
+		this.flag72 = flag72;
+	}
+
+	public Boolean getFlag73() {
+		return flag73;
+	}
+
+	public void setFlag73(Boolean flag73) {
+		this.flag73 = flag73;
+	}
+
+	public Boolean getFlag74() {
+		return flag74;
+	}
+
+	public void setFlag74(Boolean flag74) {
+		this.flag74 = flag74;
+	}
+
+	public Boolean getFlag75() {
+		return flag75;
+	}
+
+	public void setFlag75(Boolean flag75) {
+		this.flag75 = flag75;
+	}
+
+	public Boolean getFlag76() {
+		return flag76;
+	}
+
+	public void setFlag76(Boolean flag76) {
+		this.flag76 = flag76;
+	}
+
+	public Boolean getFlag77() {
+		return flag77;
+	}
+
+	public void setFlag77(Boolean flag77) {
+		this.flag77 = flag77;
+	}
+
+	public Boolean getFlag78() {
+		return flag78;
+	}
+
+	public void setFlag78(Boolean flag78) {
+		this.flag78 = flag78;
+	}
+
+	public Boolean getFlag79() {
+		return flag79;
+	}
+
+	public void setFlag79(Boolean flag79) {
+		this.flag79 = flag79;
+	}
+
+	public Boolean getFlag80() {
+		return flag80;
+	}
+
+	public void setFlag80(Boolean flag80) {
+		this.flag80 = flag80;
+	}
+
+	public Boolean getFlagLiqui() {
+		return flagLiqui;
+	}
+
+	public void setFlagLiqui(Boolean flagLiqui) {
+		this.flagLiqui = flagLiqui;
+	}
+
+	public Boolean getFlagBod() {
+		return flagBod;
+	}
+
+	public void setFlagBod(Boolean flagBod) {
+		this.flagBod = flagBod;
+	}
+
+	public Boolean getFlagOut() {
+		return flagOut;
+	}
+
+	public void setFlagOut(Boolean flagOut) {
+		this.flagOut = flagOut;
+	}
+
+	public Boolean getFlgBtnLiquidacion() {
+		return flgBtnLiquidacion;
+	}
+
+	public void setFlgBtnLiquidacion(Boolean flgBtnLiquidacion) {
+		this.flgBtnLiquidacion = flgBtnLiquidacion;
+	}
+	
+	
+
+}

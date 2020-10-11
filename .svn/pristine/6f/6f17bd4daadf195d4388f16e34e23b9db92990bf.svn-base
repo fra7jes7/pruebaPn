@@ -1,0 +1,298 @@
+package mac.entidades;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "cluster_producto_liqui_tbl")
+public class ClusterProducto {
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "SECUENCIA_CD_CLS_PROD_LIQ")
+	@SequenceGenerator(sequenceName = "SECUENCIA_CD_CLS_PROD_LIQ", name = "SECUENCIA_CD_CLS_PROD_LIQ", initialValue = 1, allocationSize = 1000)
+	@Column(name = "cd_cls_prod_liq")
+	Integer cd_cls_prod_liq;
+	@Column(name = "cod_usuario")
+	String cod_usuario;
+	@Column(name = "cod_modelo")
+	String cod_modelo;
+	@Column(name = "descrip_modelo")
+	String descrip_modelo;
+	@Column(name = "cluster_1_bd")
+	String cluster_1_bd;
+	@Column(name = "cluster_2_bd")
+	String cluster_2_bd;
+	@Column(name = "cluster_1_ou")
+	String cluster_1_ou;
+	@Column(name = "cluster_2_ou")
+	String cluster_2_ou;
+	@Column(name = "total_stock_bo")
+	Double total_stock_bo;
+	@Column(name = "total_stock_ou")
+	Double total_stock_ou;
+	@Column(name = "stock_centro_liquidador")
+	Double stock_centro_liquidador;
+	@Column(name = "cod_concepto")
+	String cod_concepto;
+	@Column(name = "cod_concepto_sistema")
+	String cod_concepto_sistema;
+	@Column(name = "precio_original_mt")
+	Double precio_original_mt;
+	@Column(name = "precio_promo_mt")
+	Double precio_promo_mt;
+	@Column(name = "descuento_mt")
+	Double descuento_mt;
+	@Column(name = "precio_original_bd")
+	Double precio_original_bd;
+	@Column(name = "precio_promo_bd")
+	Double precio_promo_bd;
+	@Column(name = "descuento_bd")
+	Double descuento_bd;
+	@Column(name = "precio_original_ou")
+	Double precio_original_ou;
+	@Column(name = "precio_promo_ou")
+	Double precio_promo_ou;
+	@Column(name = "descuento_ou")
+	Double descuento_ou;
+	@Column(name = "stock_cluster_1_mt")
+	Integer stock_cluster_1_mt;
+	@Column(name = "stock_cluster_2_mt")
+	Integer stock_cluster_2_mt;
+	@Column(name = "linea")
+	String linea;
+	@Column(name = "descrip_marca")
+	String descrip_marca;
+	@Column(name = "genero")
+	String genero;
+	@Column(name = "descrip_actividad")
+	String descrip_actividad;
+
+	public Integer getCd_cls_prod_liq() {
+		return cd_cls_prod_liq;
+	}
+
+	public void setCd_cls_prod_liq(Integer cd_cls_prod_liq) {
+		this.cd_cls_prod_liq = cd_cls_prod_liq;
+	}
+
+	public String getCod_usuario() {
+		return cod_usuario;
+	}
+
+	public void setCod_usuario(String cod_usuario) {
+		this.cod_usuario = cod_usuario;
+	}
+
+	public String getCod_modelo() {
+		return cod_modelo;
+	}
+
+	public void setCod_modelo(String cod_modelo) {
+		this.cod_modelo = cod_modelo;
+	}
+
+	public String getDescrip_modelo() {
+		return descrip_modelo;
+	}
+
+	public void setDescrip_modelo(String descrip_modelo) {
+		this.descrip_modelo = descrip_modelo;
+	}
+
+	public String getCluster_1_bd() {
+		return cluster_1_bd;
+	}
+
+	public void setCluster_1_bd(String cluster_1_bd) {
+		this.cluster_1_bd = cluster_1_bd;
+	}
+
+	public String getCluster_2_bd() {
+		return cluster_2_bd;
+	}
+
+	public void setCluster_2_bd(String cluster_2_bd) {
+		this.cluster_2_bd = cluster_2_bd;
+	}
+
+	public String getCluster_1_ou() {
+		return cluster_1_ou;
+	}
+
+	public void setCluster_1_ou(String cluster_1_ou) {
+		this.cluster_1_ou = cluster_1_ou;
+	}
+
+	public String getCluster_2_ou() {
+		return cluster_2_ou;
+	}
+
+	public void setCluster_2_ou(String cluster_2_ou) {
+		this.cluster_2_ou = cluster_2_ou;
+	}
+
+	public Double getTotal_stock_bo() {
+		return total_stock_bo;
+	}
+
+	public void setTotal_stock_bo(Double total_stock_bo) {
+		this.total_stock_bo = total_stock_bo;
+	}
+
+	public Double getTotal_stock_ou() {
+		return total_stock_ou;
+	}
+
+	public void setTotal_stock_ou(Double total_stock_ou) {
+		this.total_stock_ou = total_stock_ou;
+	}
+
+	public Double getStock_centro_liquidador() {
+		return stock_centro_liquidador;
+	}
+
+	public void setStock_centro_liquidador(Double stock_centro_liquidador) {
+		this.stock_centro_liquidador = stock_centro_liquidador;
+	}
+
+	public String getCod_concepto() {
+		return cod_concepto;
+	}
+
+	public void setCod_concepto(String cod_concepto) {
+		this.cod_concepto = cod_concepto;
+	}
+
+	public String getCod_concepto_sistema() {
+		return cod_concepto_sistema;
+	}
+
+	public void setCod_concepto_sistema(String cod_concepto_sistema) {
+		this.cod_concepto_sistema = cod_concepto_sistema;
+	}
+
+	public Double getPrecio_original_mt() {
+		return precio_original_mt;
+	}
+
+	public void setPrecio_original_mt(Double precio_original_mt) {
+		this.precio_original_mt = precio_original_mt;
+	}
+
+	public Double getPrecio_promo_mt() {
+		return precio_promo_mt;
+	}
+
+	public void setPrecio_promo_mt(Double precio_promo_mt) {
+		this.precio_promo_mt = precio_promo_mt;
+	}
+
+	public Double getDescuento_mt() {
+		return descuento_mt;
+	}
+
+	public void setDescuento_mt(Double descuento_mt) {
+		this.descuento_mt = descuento_mt;
+	}
+
+	public Double getPrecio_original_bd() {
+		return precio_original_bd;
+	}
+
+	public void setPrecio_original_bd(Double precio_original_bd) {
+		this.precio_original_bd = precio_original_bd;
+	}
+
+	public Double getPrecio_promo_bd() {
+		return precio_promo_bd;
+	}
+
+	public void setPrecio_promo_bd(Double precio_promo_bd) {
+		this.precio_promo_bd = precio_promo_bd;
+	}
+
+	public Double getDescuento_bd() {
+		return descuento_bd;
+	}
+
+	public void setDescuento_bd(Double descuento_bd) {
+		this.descuento_bd = descuento_bd;
+	}
+
+	public Double getPrecio_original_ou() {
+		return precio_original_ou;
+	}
+
+	public void setPrecio_original_ou(Double precio_original_ou) {
+		this.precio_original_ou = precio_original_ou;
+	}
+
+	public Double getPrecio_promo_ou() {
+		return precio_promo_ou;
+	}
+
+	public void setPrecio_promo_ou(Double precio_promo_ou) {
+		this.precio_promo_ou = precio_promo_ou;
+	}
+
+	public Double getDescuento_ou() {
+		return descuento_ou;
+	}
+
+	public void setDescuento_ou(Double descuento_ou) {
+		this.descuento_ou = descuento_ou;
+	}
+
+	public Integer getStock_cluster_1_mt() {
+		return stock_cluster_1_mt;
+	}
+
+	public void setStock_cluster_1_mt(Integer stock_cluster_1_mt) {
+		this.stock_cluster_1_mt = stock_cluster_1_mt;
+	}
+
+	public Integer getStock_cluster_2_mt() {
+		return stock_cluster_2_mt;
+	}
+
+	public void setStock_cluster_2_mt(Integer stock_cluster_2_mt) {
+		this.stock_cluster_2_mt = stock_cluster_2_mt;
+	}
+
+	public String getLinea() {
+		return linea;
+	}
+
+	public void setLinea(String linea) {
+		this.linea = linea;
+	}
+
+	public String getDescrip_marca() {
+		return descrip_marca;
+	}
+
+	public void setDescrip_marca(String descrip_marca) {
+		this.descrip_marca = descrip_marca;
+	}
+
+	public String getGenero() {
+		return genero;
+	}
+
+	public void setGenero(String genero) {
+		this.genero = genero;
+	}
+
+	public String getDescrip_actividad() {
+		return descrip_actividad;
+	}
+
+	public void setDescrip_actividad(String descrip_actividad) {
+		this.descrip_actividad = descrip_actividad;
+	}
+
+}

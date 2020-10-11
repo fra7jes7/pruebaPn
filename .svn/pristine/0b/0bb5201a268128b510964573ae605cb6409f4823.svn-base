@@ -1,0 +1,303 @@
+package mac.controladores;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+
+import org.mozilla.javascript.commonjs.module.provider.ParsedContentType;
+import org.primefaces.PrimeFaces;
+
+import jxl.biff.formula.ParseContext;
+import mac.entidades.CapacidadBodega;
+import mac.entidades.Centros;
+import mac.entidades.Concepto;
+import mac.entidades.Grupo;
+import mac.servicios.ServicioMantenimiento;
+
+@ManagedBean
+@ViewScoped
+public class ControladorMantenimiento {
+
+	@EJB
+	private ServicioMantenimiento srvMantenimiento;
+
+	private List<Grupo> lstGrupo;
+	private List<Concepto> lstConcepto;
+	private List<Centros> lstCentros;
+	private List<CapacidadBodega> lstCapacidadBodega;
+
+	private String cod_grupo;
+	private Integer cod_concepto;
+	private String cod_centro;
+	private Integer cantidad;
+	private String strCdGrupo;
+	private String strCodGrupo;
+	private String strCdCentro;
+	private String strCodCentro;
+	private CapacidadBodega bodega;
+
+	public ControladorMantenimiento() {
+
+		lstGrupo = new ArrayList<Grupo>();
+		lstConcepto = new ArrayList<Concepto>();
+		lstCentros = new ArrayList<Centros>();
+		lstCapacidadBodega = new ArrayList<CapacidadBodega>();
+		cod_grupo = null;
+		cod_concepto = null;
+		cod_centro = "0-0";
+		strCdGrupo = null;
+		strCodGrupo = null;
+		strCdCentro = null;
+		strCodCentro = null;
+		bodega = new CapacidadBodega();
+	}
+
+	@PostConstruct
+	public void seleccionarGrupo() {
+		lstGrupo = srvMantenimiento.recuperaGrupos();
+		lstCapacidadBodega = srvMantenimiento.recuperaCapacidadBodega();
+	}
+	
+	@SuppressWarnings("deprecation")
+	public void obtenerCapacidaBodega(){
+		lstCapacidadBodega = srvMantenimiento.recuperaCapacidadBodega();
+		PrimeFaces.current().ajax().update("frmTablaMantenimiento:pnlMantenimiento");
+	}
+
+	@SuppressWarnings("deprecation")
+	public void recuperaConcepto() {
+		System.out.println("grupo id: " + cod_grupo);
+		String strCdGrupo = separarString(cod_grupo);
+		String strCodGrupo = separarStringDos(cod_grupo);
+		lstConcepto = srvMantenimiento.recuperaConcepto(strCdGrupo);
+		PrimeFaces.current().ajax().update("frmMantenimiento:concepto");
+	}
+
+	@SuppressWarnings("deprecation")
+	public void recuperaCentro() {
+		System.out.println("concepto id: " + cod_concepto);
+		lstCentros = srvMantenimiento.recuperaCentro(cod_concepto);
+		PrimeFaces.current().ajax().update("frmMantenimiento:centro");
+	}
+
+	public String separarString(String cadena) {
+
+		String[] splitted = cadena.split("-");
+		String result = "";
+		int cont = 0;
+		for (String obj : splitted) {
+			if (cont == 0)
+				result = obj;
+			cont++;
+		}
+		return result;
+	}
+
+	public String separarStringDos(String cadena) {
+
+		String[] splitted = cadena.split("-");
+		String result = "";
+		int cont = 0;
+		for (String obj : splitted) {
+			if (cont == 1)
+				result = obj;
+			cont++;
+		}
+		return result;
+	}
+
+	public int entero(double valor) {
+
+		if (valor >0) {
+
+			if (valor % 1 == 0) {
+				return 1;
+					///valor entero
+			} else {
+				return 0;
+				//valor decimal
+			}
+
+		} else {
+			return 0;
+			//numero menor a 0
+		}
+
+	}
+
+	public void validar() {
+
+		String strCdGrupo = separarString(cod_grupo);
+		String strCodGrupo = separarStringDos(cod_grupo);
+		String strCdCentro = separarString(cod_centro);
+		String strCodCentro = separarStringDos(cod_centro);
+		Integer validaCantidad = entero(cantidad);
+
+		bodega.setCd_centro(Integer.parseInt(strCdCentro));
+		bodega.setCod_centro(strCodCentro);
+		bodega.setCd_grupo(Integer.parseInt(strCdGrupo));
+		bodega.setCod_grupo(strCodGrupo);
+		bodega.setVal_capacidad(cantidad);
+
+		if (validaCantidad.equals(1)) {
+			Integer valido = 0;
+			valido = srvMantenimiento.validaDuplicado(strCdCentro, strCodCentro, strCdGrupo, strCodGrupo);
+			if (valido.equals(0)) {
+				srvMantenimiento.insertarCapacidadBodega(bodega);
+				FacesMessage msgs = new FacesMessage("Se registro la información Exitosamente.");
+				FacesContext.getCurrentInstance().addMessage(null, msgs);
+				encerar();
+			} else {
+				FacesMessage msgs = new FacesMessage("Error al Guardar, ya existe un registro con esos valores.");
+				FacesContext.getCurrentInstance().addMessage(null, msgs);
+				encerar();
+			}
+
+		} else {
+			FacesMessage msgs = new FacesMessage("Error en cantidad, Cantidad Incorrecta.");
+			FacesContext.getCurrentInstance().addMessage(null, msgs);
+		}
+
+	}
+	
+	public void encerar(){
+		lstConcepto = new ArrayList<Concepto>();
+		lstCentros = new ArrayList<Centros>();
+		cod_grupo = null;
+		cod_concepto = null;
+		cod_centro = "0-0";
+		strCdGrupo = null;
+		strCodGrupo = null;
+		strCdCentro = null;
+		strCodCentro = null;
+		bodega = new CapacidadBodega();
+		lstCapacidadBodega = new ArrayList<CapacidadBodega>();		
+	}
+
+	public List<Grupo> getLstGrupo() {
+		return lstGrupo;
+	}
+
+	public void setLstGrupo(List<Grupo> lstGrupo) {
+		this.lstGrupo = lstGrupo;
+	}
+
+	public List<Concepto> getLstConcepto() {
+		return lstConcepto;
+	}
+
+	public void setLstConcepto(List<Concepto> lstConcepto) {
+		this.lstConcepto = lstConcepto;
+	}
+
+	public List<Centros> getLstCentros() {
+		return lstCentros;
+	}
+
+	public void setLstCentros(List<Centros> lstCentros) {
+		this.lstCentros = lstCentros;
+	}
+
+	public String getCod_grupo() {
+		return cod_grupo;
+	}
+
+	public void setCod_grupo(String cod_grupo) {
+		this.cod_grupo = cod_grupo;
+	}
+
+	public Integer getCod_concepto() {
+		return cod_concepto;
+	}
+
+	public void setCod_concepto(Integer cod_concepto) {
+		this.cod_concepto = cod_concepto;
+	}
+
+	public String getCod_centro() {
+		return cod_centro;
+	}
+
+	public void setCod_centro(String cod_centro) {
+		this.cod_centro = cod_centro;
+	}
+
+	public Integer getCantidad() {
+		return cantidad;
+	}
+
+	public void setCantidad(Integer cantidad) {
+		this.cantidad = cantidad;
+	}
+
+	public String getStrCdGrupo() {
+		return strCdGrupo;
+	}
+
+	public void setStrCdGrupo(String strCdGrupo) {
+		this.strCdGrupo = strCdGrupo;
+	}
+
+	public String getStrCodGrupo() {
+		return strCodGrupo;
+	}
+
+	public void setStrCodGrupo(String strCodGrupo) {
+		this.strCodGrupo = strCodGrupo;
+	}
+
+	public String getSrtCdCentro() {
+		return strCdCentro;
+	}
+
+	public void setSrtCdCentro(String srtCdCentro) {
+		this.strCdCentro = srtCdCentro;
+	}
+
+	public String getSrtCodCentro() {
+		return strCodCentro;
+	}
+
+	public void setSrtCodCentro(String srtCodCentro) {
+		this.strCodCentro = srtCodCentro;
+	}
+
+	public List<CapacidadBodega> getLstCapacidadBodega() {
+		return lstCapacidadBodega;
+	}
+
+	public void setLstCapacidadBodega(List<CapacidadBodega> lstCapacidadBodega) {
+		this.lstCapacidadBodega = lstCapacidadBodega;
+	}
+
+	public String getStrCdCentro() {
+		return strCdCentro;
+	}
+
+	public void setStrCdCentro(String strCdCentro) {
+		this.strCdCentro = strCdCentro;
+	}
+
+	public String getStrCodCentro() {
+		return strCodCentro;
+	}
+
+	public void setStrCodCentro(String strCodCentro) {
+		this.strCodCentro = strCodCentro;
+	}
+
+	public CapacidadBodega getBodega() {
+		return bodega;
+	}
+
+	public void setBodega(CapacidadBodega bodega) {
+		this.bodega = bodega;
+	}
+	
+}
